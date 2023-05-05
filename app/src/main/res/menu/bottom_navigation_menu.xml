@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_time"
+        android:enabled="true"
+        android:icon="@drawable/baseline_access_time_24"
+        android:title="@string/menu_time"/>
+    <item
+        android:id="@+id/item_home"
+        android:enabled="true"
+        android:icon="@drawable/baseline_home_24"
+        android:title="@string/menu_home"/>
+    <item
+        android:id="@+id/item_cats"
+        android:enabled="true"
+        android:icon="@drawable/baseline_card_giftcard_24"
+        android:title="@string/menu_cats"/>
+</menu>

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ScreenlessCats</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_cats">Cats</string>
+    <string name="menu_time">Time</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
