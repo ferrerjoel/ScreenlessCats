@@ -55,7 +55,7 @@ class Register : AppCompatActivity() {
     }
 
     private fun signUp(){
-        auth.createUserWithEmailAndPassword(email.toString(), password.toString())
+        auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
@@ -70,7 +70,9 @@ class Register : AppCompatActivity() {
                         "Authentication failed.",
                         Toast.LENGTH_SHORT,
                     ).show()
+                    Log.d("Message tag", email.text.toString() + " pass: " + password.text.toString() + " task: " + task.exception)
                 }
+
             }
     }
 
