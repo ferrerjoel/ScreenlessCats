@@ -3,6 +3,11 @@
     <string name="menu_home">Home</string>
     <string name="menu_cats">Cats</string>
     <string name="menu_time">Time</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="time_management_bar">Time management</string>
+    <string name="home_bar">Home</string>
+    <string name="cats_bar">Cats</string>
+    <string name="set_time_button">Set time</string>
+    <string name="TimeTemplate">%1$d hours and %2$d minutes</string>
+    <string name="zero_time_limit_msg">No time!</string>
 </resources>
