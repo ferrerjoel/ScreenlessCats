@@ -1,31 +1,39 @@
 package com.example.screenlesscats
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class Home : AppCompatActivity() {
+    private lateinit var bottomNavigationBar: BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val homeFragment = HomeFragment()
+        bottomNavigationBar = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-        NavigationBarView.OnItemSelectedListener { item ->
+        val homeFragment = HomeFragment()
+        val timeFragment = TimeManagementFragment()
+        val catsFragment = CatsFragment()
+
+        setCurrentFragment(homeFragment)
+
+        bottomNavigationBar.selectedItemId = R.id.item_home
+
+        bottomNavigationBar.setOnItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.item_time -> {
-                    Log.d("DEBUG", "HOME CLICKED")
+                    setCurrentFragment(timeFragment)
                     true
                 }
                 R.id.item_home -> {
-                    Log.d("DEBUG", "HOME CLICKED")
                     setCurrentFragment(homeFragment)
                     true
                 }
                 R.id.item_cats -> {
-                    Log.d("DEBUG", "HOME CLICKED")
+                    setCurrentFragment(catsFragment)
                     true
                 }
                 else -> false
@@ -38,6 +46,4 @@ class Home : AppCompatActivity() {
             replace(R.id.flFragment,fragment)
             commit()
         }
-
-
 }
