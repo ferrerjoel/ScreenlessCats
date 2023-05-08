@@ -21,7 +21,6 @@
         <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/login_register_box"
             app:alignItems="center"
             app:flexDirection="column">
 
@@ -35,7 +34,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Your Name"
+                    android:hint="Username"
                     app:endIconMode="clear_text"
                     app:startIconContentDescription="Name"
                     app:startIconDrawable="@drawable/ic_user_24dp">
@@ -49,7 +48,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="example@gmail.com"
+                    android:hint="Email"
                     app:endIconMode="clear_text"
                     app:startIconContentDescription="Mail"
                     app:startIconDrawable="@drawable/ic_mail_24dp">
@@ -65,6 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:endIconMode="password_toggle"
+                    android:hint="Password"
                     app:startIconContentDescription="Password"
                     app:startIconDrawable="@drawable/ic_lock_24dp">
 

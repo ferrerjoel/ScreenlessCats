@@ -56,28 +56,23 @@ class Login : AppCompatActivity() {
     }
 
     private fun signIn() {
-        //Check that the email camp is a mail and tries to log in
-        if (!Patterns.EMAIL_ADDRESS.matcher(email.toString()).matches()) {
-            Toast.makeText(baseContext, "Mail not valid", Toast.LENGTH_SHORT).show()
-        } else {
-            auth.signInWithEmailAndPassword(email.toString(), password.toString())
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithEmail:success")
-                        val intent = Intent(this, Home::class.java)
-                        startActivity(intent)
-                        finish()
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail:failure", task.exception)
-                        Toast.makeText(
-                            baseContext, "Authentication failed.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+        auth.signInWithEmailAndPassword(email.text.toString(), password.text.toString())
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithEmail:success")
+                    val intent = Intent(this, Home::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+                    Toast.makeText(
+                        baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-        }
+            }
 
 
     }

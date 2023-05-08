@@ -21,7 +21,6 @@
         <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/login_register_box"
             app:alignItems="center"
             app:flexDirection="column">
 
