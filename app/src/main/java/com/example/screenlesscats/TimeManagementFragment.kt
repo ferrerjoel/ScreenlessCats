@@ -15,12 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.screenlesscats.adapters.AppListAdapter
 import com.example.screenlesscats.data.AppData
+import com.example.screenlesscats.data.FilterState
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 
 class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
@@ -41,6 +44,9 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     private val apps = ArrayList<AppData>()
     private lateinit var recyclerView : RecyclerView
 
+    private var filterState: FilterState = FilterState.ALL
+    private lateinit var toggleButtonGroup : MaterialButtonToggleGroup
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -49,6 +55,19 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
         limitHours = sharedPreferences.getInt("limitHours", 0)
         limitMinutes = sharedPreferences.getInt("limitMinutes", 0)
+
+        toggleButtonGroup = view.findViewById<MaterialButtonToggleGroup>(R.id.toggleButton)
+
+        toggleButtonGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.button1 -> filterState = FilterState.ALL
+                    R.id.button2 -> filterState = FilterState.CHECKED
+                    R.id.button3 -> filterState = FilterState.UNCHECKED
+                }
+                createAppList(view)
+            }
+        }
 
         limitTimeTv = view.findViewById(R.id.timeLimitTv)
         setTextViewTime()
@@ -83,19 +102,42 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
             phoneApps = packetManager.getInstalledApplications(PackageManager.GET_META_DATA)
 
             for (app in phoneApps) {
-                // Exclude system apps
                 if (app.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
                     val appName = packetManager.getApplicationLabel(app).toString()
-                    val isChecked = sharedPreferencesApps.getBoolean(appName, false)
-                    if (isChecked) Log.d("DEBUG", appName)
-                    apps.add(
-                        AppData(
-                            appName,
-                            "yes",
-                            packetManager.getApplicationIcon(app),
-                            isChecked
-                        )
-                    )
+                    val packageName = app.packageName
+                    val isChecked = sharedPreferencesApps.getBoolean(packageName, false)
+                    if (isChecked) Log.d("DEBUG", packageName)
+                    when (filterState) {
+                        FilterState.ALL ->
+                            apps.add(
+                                AppData(
+                                    appName,
+                                    packageName,
+                                    packetManager.getApplicationIcon(app),
+                                    isChecked
+                                )
+                            )
+                        FilterState.CHECKED -> {
+                            if (isChecked) {
+                                AppData(
+                                    appName,
+                                    packageName,
+                                    packetManager.getApplicationIcon(app),
+                                    true
+                                )
+                            }
+                        }
+                        FilterState.UNCHECKED -> {
+                            if (!isChecked) {
+                                AppData(
+                                    appName,
+                                    packageName,
+                                    packetManager.getApplicationIcon(app),
+                                    false
+                                )
+                            }
+                        }
+                    }
                 }
             }
 
@@ -126,12 +168,20 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
     private fun createAppList(view : View) {
         recyclerView = view.findViewById<RecyclerView>(R.id.app_list)
+        val filteredApps = when (filterState) {
+            FilterState.ALL -> apps
+            FilterState.CHECKED -> apps.filter { it.checked }
+            FilterState.UNCHECKED -> apps.filter { !it.checked }
+        }
         // Material divider
         val dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        recyclerView.addItemDecoration(dividerItemDecoration)
+        // If we don't do this the divider is going to keep increasing, adding a new one each time we create the list
+        if (recyclerView.itemDecorationCount < 1) {
+            recyclerView.addItemDecoration(dividerItemDecoration)
+        }
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = AppListAdapter(apps)
+        recyclerView.adapter = AppListAdapter(filteredApps)
     }
     
 }
