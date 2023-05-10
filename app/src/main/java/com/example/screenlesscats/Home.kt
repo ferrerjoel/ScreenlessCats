@@ -1,14 +1,21 @@
 package com.example.screenlesscats
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 class Home : AppCompatActivity() {
+
     private lateinit var bottomNavigationBar: BottomNavigationView
     private lateinit var topAppBar: MaterialToolbar
+
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -52,7 +59,7 @@ class Home : AppCompatActivity() {
                     true
                 }
                 R.id.sign_out_option -> {
-                    // Handle favorite icon press
+                    signOut()
                     true
                 }
                 else -> false
@@ -65,4 +72,14 @@ class Home : AppCompatActivity() {
             replace(R.id.flFragment,fragment)
             commit()
         }
+    /**
+     * Signs out the user
+     */
+    private fun signOut() {
+        auth.signOut()
+        // Starts main screen
+        val intent= Intent(this, Login::class.java)
+        startActivity(intent)
+        finish()
+    }
 }
