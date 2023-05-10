@@ -130,36 +130,40 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                 if (app.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
                     val appName = packetManager.getApplicationLabel(app).toString()
                     val packageName = app.packageName
-                    val isChecked = sharedPreferencesApps.getBoolean(packageName, false)
-                    if (isChecked) Log.d("DEBUG", packageName)
-                    when (filterState) {
-                        FilterState.ALL ->
-                            apps.add(
-                                AppData(
-                                    appName,
-                                    packageName,
-                                    packetManager.getApplicationIcon(app),
-                                    isChecked
+                    if (packageName != "com.example.screenlesscats") {
+                        val isChecked = sharedPreferencesApps.getBoolean(packageName, false)
+                        if (isChecked) Log.d("DEBUG", packageName)
+                        when (filterState) {
+                            FilterState.ALL ->
+                                apps.add(
+                                    AppData(
+                                        appName,
+                                        packageName,
+                                        packetManager.getApplicationIcon(app),
+                                        isChecked
+                                    )
                                 )
-                            )
-                        FilterState.CHECKED -> {
-                            if (isChecked) {
-                                AppData(
-                                    appName,
-                                    packageName,
-                                    packetManager.getApplicationIcon(app),
-                                    true
-                                )
+
+                            FilterState.CHECKED -> {
+                                if (isChecked) {
+                                    AppData(
+                                        appName,
+                                        packageName,
+                                        packetManager.getApplicationIcon(app),
+                                        true
+                                    )
+                                }
                             }
-                        }
-                        FilterState.UNCHECKED -> {
-                            if (!isChecked) {
-                                AppData(
-                                    appName,
-                                    packageName,
-                                    packetManager.getApplicationIcon(app),
-                                    false
-                                )
+
+                            FilterState.UNCHECKED -> {
+                                if (!isChecked) {
+                                    AppData(
+                                        appName,
+                                        packageName,
+                                        packetManager.getApplicationIcon(app),
+                                        false
+                                    )
+                                }
                             }
                         }
                     }
