@@ -28,7 +28,7 @@ class AppListAdapter(private val appList: List<AppData>): RecyclerView.Adapter<A
             checkBox.isChecked = app.checked // set checkbox state based on checked property
             checkBox.setOnCheckedChangeListener { _, isChecked ->
                 app.checked = isChecked // update checked property of AppData object
-                updateAppCheckedState(app.appName, isChecked) // update shared preferences
+                updateAppCheckedState(app.packageName, isChecked) // update shared preferences
             }
         }
     }
@@ -52,9 +52,9 @@ class AppListAdapter(private val appList: List<AppData>): RecyclerView.Adapter<A
         return appList.filter { it.checked }
     }
 
-    private fun updateAppCheckedState(appName: String, isChecked: Boolean) {
+    private fun updateAppCheckedState(appPackage: String, isChecked: Boolean) {
         val editor = sharedPreferences.edit()
-        editor.putBoolean(appName, isChecked)
+        editor.putBoolean(appPackage, isChecked)
         editor.apply()
     }
 
