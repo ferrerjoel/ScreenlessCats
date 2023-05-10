@@ -130,42 +130,18 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                 if (app.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
                     val appName = packetManager.getApplicationLabel(app).toString()
                     val packageName = app.packageName
+                    // We are going to exclude this app
                     if (packageName != "com.example.screenlesscats") {
                         val isChecked = sharedPreferencesApps.getBoolean(packageName, false)
                         if (isChecked) Log.d("DEBUG", packageName)
-                        when (filterState) {
-                            FilterState.ALL ->
-                                apps.add(
-                                    AppData(
-                                        appName,
-                                        packageName,
-                                        packetManager.getApplicationIcon(app),
-                                        isChecked
-                                    )
-                                )
-
-                            FilterState.CHECKED -> {
-                                if (isChecked) {
-                                    AppData(
-                                        appName,
-                                        packageName,
-                                        packetManager.getApplicationIcon(app),
-                                        true
-                                    )
-                                }
-                            }
-
-                            FilterState.UNCHECKED -> {
-                                if (!isChecked) {
-                                    AppData(
-                                        appName,
-                                        packageName,
-                                        packetManager.getApplicationIcon(app),
-                                        false
-                                    )
-                                }
-                            }
-                        }
+                        apps.add(
+                            AppData(
+                                appName,
+                                packageName,
+                                packetManager.getApplicationIcon(app),
+                                isChecked
+                            )
+                        )
                     }
                 }
             }
@@ -176,7 +152,9 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         }
     }
 
-
+    /**
+     * Saves the chosen time using SharedPreferences
+     */
     private fun setLimitTime() {
         limitHours = timePicker.hour
         limitMinutes = timePicker.minute
@@ -187,6 +165,9 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         setTextViewTime()
     }
 
+    /**
+     * Changes the text of the text view that shows the time set
+     */
     private fun setTextViewTime() {
         if (limitHours and limitHours != 0) {
             limitTimeTv.text = getString(R.string.TimeTemplate, limitHours, limitMinutes)
@@ -195,6 +176,9 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         }
     }
 
+    /**
+     * Creates an app list, filtering using FilterState flags and calling the adapter
+     */
     private fun createAppList(view: View) {
         recyclerView = view.findViewById(R.id.app_list)
 
@@ -213,6 +197,9 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         recyclerView.adapter = AppListAdapter(filteredApps)
     }
 
+    /**
+     * Filters the app list, receives the app list to filter and a query from the search bar
+     */
     private fun filterApps(appList: List<AppData>, query: String): List<AppData> {
         return if (query.isBlank()) {
             appList
