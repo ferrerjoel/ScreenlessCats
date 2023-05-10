@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -17,6 +19,7 @@ import com.example.screenlesscats.adapters.AppListAdapter
 import com.example.screenlesscats.data.AppData
 import com.example.screenlesscats.data.FilterState
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.CoroutineScope
@@ -46,6 +49,10 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
     private var filterState: FilterState = FilterState.ALL
     private lateinit var toggleButtonGroup : MaterialButtonToggleGroup
+
+    private lateinit var searchBar: TextInputEditText
+    private var searchQuery: String = ""
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -90,6 +97,24 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         setTimeButton.setOnClickListener {
             timePicker.show(parentFragmentManager, "tag")
         }
+
+        searchBar = view.findViewById(R.id.search_bar)
+        searchBar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not used
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Update the search query
+                searchQuery = s.toString().trim()
+                // Refresh the app list with the new search query
+                createAppList(view)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Not used
+            }
+        })
 
         // Load apps in the background thread
         loadAppsInBackground()
@@ -166,16 +191,16 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         }
     }
 
-    private fun createAppList(view : View) {
-        recyclerView = view.findViewById<RecyclerView>(R.id.app_list)
+    private fun createAppList(view: View) {
+        recyclerView = view.findViewById(R.id.app_list)
+
         val filteredApps = when (filterState) {
-            FilterState.ALL -> apps
-            FilterState.CHECKED -> apps.filter { it.checked }
-            FilterState.UNCHECKED -> apps.filter { !it.checked }
+            FilterState.ALL -> filterApps(apps, searchQuery)
+            FilterState.CHECKED -> filterApps(apps.filter { it.checked }, searchQuery)
+            FilterState.UNCHECKED -> filterApps(apps.filter { !it.checked }, searchQuery)
         }
-        // Material divider
+
         val dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        // If we don't do this the divider is going to keep increasing, adding a new one each time we create the list
         if (recyclerView.itemDecorationCount < 1) {
             recyclerView.addItemDecoration(dividerItemDecoration)
         }
@@ -183,5 +208,16 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = AppListAdapter(filteredApps)
     }
-    
+
+    private fun filterApps(appList: List<AppData>, query: String): List<AppData> {
+        return if (query.isBlank()) {
+            appList
+        } else {
+            appList.filter { app ->
+                app.appName.contains(query, ignoreCase = true)
+            }
+        }
+    }
+
+
 }
