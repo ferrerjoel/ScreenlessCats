@@ -14,8 +14,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.PropertyName
 import com.google.firebase.ktx.Firebase
 import java.util.Calendar
+
 
 class Register : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -35,8 +37,11 @@ class Register : AppCompatActivity() {
         auth = Firebase.auth
 
         username = findViewById<TextInputEditText>(R.id.username)
+        @get:PropertyName("userName")
         email = findViewById<TextInputEditText>(R.id.email)
+        @get:PropertyName("userEmail")
         password = findViewById<TextInputEditText>(R.id.password)
+        @get:PropertyName("userpwd")
 
         toLoginBtn = findViewById<Button>(R.id.toLoginBtn)
         signupBtn = findViewById<Button>(R.id.signupBtn)
@@ -94,12 +99,12 @@ class Register : AppCompatActivity() {
             data["user_data"] = userData
 
             userData["defined_screen_time"] = -1
-            userData["days_streaks"] = limits
+            userData["days_streaks"] = -1
             userData["dedication_value"] = 0
             userData["limits"] = limits
 
             // We create a cursor and we give it a name
-            val database: FirebaseDatabase = FirebaseDatabase.getInstance("https://verbumly-default-rtdb.firebaseio.com/")
+            val database: FirebaseDatabase = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app")
             val reference: DatabaseReference = database.getReference("")
 
             if(reference != null) {
