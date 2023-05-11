@@ -32,6 +32,7 @@ import kotlinx.coroutines.withContext
 class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
     private lateinit var setTimeButton: Button
+    private lateinit var activateLimitButton: Button
     private lateinit var limitTimeTv: TextView
 
     private lateinit var timePicker: MaterialTimePicker
@@ -57,7 +58,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sharedPreferences = context?.getSharedPreferences("LimitTimeVariablesLocal", Context.MODE_PRIVATE)!!
+        sharedPreferences = context?.getSharedPreferences("Options", Context.MODE_PRIVATE)!!
         sharedPreferencesApps = context?.getSharedPreferences("LimitedApps", Context.MODE_PRIVATE)!!
 
         limitHours = sharedPreferences.getInt("limitHours", 0)
@@ -96,6 +97,20 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
         setTimeButton.setOnClickListener {
             timePicker.show(parentFragmentManager, "tag")
+        }
+
+        activateLimitButton = view.findViewById(R.id.activateLimitButton)
+
+        activateLimitButton.setOnClickListener{
+            val editor = sharedPreferences.edit()
+            if (!sharedPreferences.getBoolean("isLimitActivated", false)){
+                editor?.putBoolean("isLimitActivated", true)
+                activateLimitButton.setText(R.string.activate_limit_button_off)
+            } else {
+                editor?.putBoolean("isLimitActivated", false)
+                activateLimitButton.setText(R.string.activate_limit_button_off)
+            }
+            editor?.apply()
         }
 
         searchBar = view.findViewById(R.id.search_bar)

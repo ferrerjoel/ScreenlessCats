@@ -10,4 +10,10 @@
     <string name="set_time_button">Set time</string>
     <string name="TimeTemplate">%1$d hours and %2$d minutes</string>
     <string name="zero_time_limit_msg">No time!</string>
+    <string name="activate_limit_button_on">Start limit!</string>
+    <string name="activate_limit_button_off">End limit</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login_button">LOGIN</string>
 </resources>

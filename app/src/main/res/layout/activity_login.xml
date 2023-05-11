@@ -34,7 +34,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="example@gmail.com"
+                    android:hint="@string/email"
                     app:endIconMode="clear_text"
                     app:startIconContentDescription="Mail"
                     app:startIconDrawable="@drawable/ic_mail_24dp">
@@ -48,6 +48,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="@string/password"
                     app:endIconMode="password_toggle"
                     app:startIconContentDescription="Password"
                     app:startIconDrawable="@drawable/ic_lock_24dp">
@@ -64,7 +65,7 @@
                     style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Don't have an account?"/>
+                    android:text="@string/don_t_have_an_account"/>
 
 
             </com.google.android.flexbox.FlexboxLayout>
@@ -74,7 +75,7 @@
                 style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="LOGIN" />
+                android:text="@string/login_button" />
         </com.google.android.flexbox.FlexboxLayout>
 
     </com.google.android.flexbox.FlexboxLayout>

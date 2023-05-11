@@ -23,6 +23,8 @@ class Home : AppCompatActivity() {
         bottomNavigationBar = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         topAppBar = findViewById(R.id.top_app_bar)
 
+        auth = FirebaseAuth.getInstance()
+
         val homeFragment = HomeFragment()
         val timeFragment = TimeManagementFragment()
         val catsFragment = CatsFragment()
