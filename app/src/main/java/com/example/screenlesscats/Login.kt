@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.util.Patterns
 import android.widget.Button
@@ -24,6 +25,8 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        requestAppAccessibilitySettings()
 
         auth = Firebase.auth
 
@@ -73,7 +76,11 @@ class Login : AppCompatActivity() {
                     ).show()
                 }
             }
-
-
     }
+
+    private fun requestAppAccessibilitySettings() {
+        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+        startActivity(intent)
+    }
+
 }

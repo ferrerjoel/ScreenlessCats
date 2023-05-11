@@ -23,4 +23,5 @@
     <string name="warning_end_limit">Ending your limit will allow you to set new apps and set a new time! However, remember that you will lose the progress to get the next cat :(</string>
     <string name="cancel">Take me back!</string>
     <string name="accept">Accept</string>
+    <string name="accessibility_service_description">This accessibility service is used by ScrenlessCats to block apps that had been selected by the user and meet the user requeriments to be blocked until there is more time allowed.</string>
 </resources>
