@@ -2,19 +2,18 @@ package com.example.screenlesscats
 
 import android.content.ContentValues.TAG
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.util.Patterns
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.PropertyName
 import com.google.firebase.ktx.Firebase
 import java.util.Calendar
 
@@ -36,15 +35,12 @@ class Register : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        username = findViewById<TextInputEditText>(R.id.username)
-        @get:PropertyName("userName")
-        email = findViewById<TextInputEditText>(R.id.email)
-        @get:PropertyName("userEmail")
-        password = findViewById<TextInputEditText>(R.id.password)
-        @get:PropertyName("userpwd")
+        username = findViewById(R.id.username)
+        email = findViewById(R.id.email)
+        password = findViewById(R.id.password)
 
-        toLoginBtn = findViewById<Button>(R.id.toLoginBtn)
-        signupBtn = findViewById<Button>(R.id.signupBtn)
+        toLoginBtn = findViewById(R.id.toLoginBtn)
+        signupBtn = findViewById(R.id.signupBtn)
 
         toLoginBtn.setOnClickListener{
             val intent = Intent(this, Login::class.java)
@@ -75,7 +71,6 @@ class Register : AppCompatActivity() {
                         "Authentication failed.",
                         Toast.LENGTH_SHORT,
                     ).show()
-                    Log.d("Message tag", email.text.toString() + " pass: " + password.text.toString() + " task: " + task.exception)
                 }
 
             }
@@ -84,16 +79,21 @@ class Register : AppCompatActivity() {
     private fun updateUI(user: FirebaseUser?){
         if(user != null){
             val date = Calendar.getInstance().time
-            val userID = user.uid.toString()
+            val userID = user.uid
 
-            val data: HashMap<String, Any> = HashMap<String, Any>()
-            val cats: HashMap<String, Any> = HashMap<String, Any>()
-            val userData: HashMap<String, Any> = HashMap<String, Any>()
-            val limits: HashMap<String, Any> = HashMap<String, Any>()
+            val data: HashMap<String, Any> = HashMap()
+            val cats: HashMap<String, Any> = HashMap()
+            val cat: HashMap<String, Any> = HashMap()
+            val userData: HashMap<String, Any> = HashMap()
+            val limits: HashMap<String, Any> = HashMap()
+            cats["common_0"] = cat
+            cat["id"] = 0
+            cats["name"] = "Lluis"
+            cats["rarity"] = "common"
 
             data["id"] = userID
             data["creation_date"] = date
-            data["username"] = username
+            data["username"] = username.text.toString()
             data["friend_code"] = 0
             data["cats"] = cats
             data["user_data"] = userData
@@ -107,13 +107,9 @@ class Register : AppCompatActivity() {
             val database: FirebaseDatabase = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app")
             val reference: DatabaseReference = database.getReference("")
 
-            if(reference != null) {
-                // Create a child with the values of playerData
-                reference.child(userID).setValue(data)
-                Toast.makeText(this, "User registered successfully", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Data base error", Toast.LENGTH_SHORT).show()
-            }
+            // Create a child with the values of playerData
+            reference.child(userID).setValue(data)
+            Toast.makeText(this, "User registered successfully", Toast.LENGTH_SHORT).show()
             finish()
         }
 
