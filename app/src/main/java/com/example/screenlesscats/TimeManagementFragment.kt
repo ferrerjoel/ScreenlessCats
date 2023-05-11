@@ -19,6 +19,7 @@ import com.example.screenlesscats.adapters.AppListAdapter
 import com.example.screenlesscats.data.AppData
 import com.example.screenlesscats.data.FilterState
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -96,21 +97,29 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         setTimeButton = view.findViewById(R.id.setTimeButton)
 
         setTimeButton.setOnClickListener {
-            timePicker.show(parentFragmentManager, "tag")
+            if (sharedPreferences.getBoolean("isLimitEnabled", false)) {
+                showWarningChangeTime()
+            } else {
+                timePicker.show(parentFragmentManager, "tag")
+            }
         }
 
         activateLimitButton = view.findViewById(R.id.activateLimitButton)
 
+        if (sharedPreferences.getBoolean("isLimitEnabled", false))
+            activateLimitButton.setText(R.string.activate_limit_button_off)
+
         activateLimitButton.setOnClickListener{
             val editor = sharedPreferences.edit()
-            if (!sharedPreferences.getBoolean("isLimitActivated", false)){
-                editor?.putBoolean("isLimitActivated", true)
-                activateLimitButton.setText(R.string.activate_limit_button_off)
+            if (sharedPreferences.getBoolean("isLimitEnabled", false)){
+                showWarningEndLimit(editor, view)
             } else {
-                editor?.putBoolean("isLimitActivated", false)
+                editor?.putBoolean("isLimitEnabled", true)
                 activateLimitButton.setText(R.string.activate_limit_button_off)
+                editor?.apply()
+                createAppList(view)
             }
-            editor?.apply()
+
         }
 
         searchBar = view.findViewById(R.id.search_bar)
@@ -222,6 +231,42 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
             appList.filter { app ->
                 app.appName.contains(query, ignoreCase = true)
             }
+        }
+    }
+
+    /**
+     * Warning shown when trying to change the time when you have the limit set
+     */
+    private fun showWarningChangeTime() {
+        context?.let {
+            MaterialAlertDialogBuilder(it)
+                .setTitle(resources.getString(R.string.warning_title_end_limit_time))
+                .setMessage(resources.getString(R.string.warning_end_limit_time))
+                .setNeutralButton(resources.getString(R.string.i_understand)) { dialog, which ->
+                    // Respond to neutral button press
+                }
+                .show()
+        }
+    }
+
+    /**
+     * Warning shown when trying to end the limit
+     */
+    private fun showWarningEndLimit(editor : SharedPreferences.Editor, view: View) {
+        context?.let {
+            MaterialAlertDialogBuilder(it)
+                .setTitle(resources.getString(R.string.warning_title_end_limit))
+                .setMessage(resources.getString(R.string.warning_end_limit))
+                .setNeutralButton(resources.getString(R.string.cancel)) { dialog, which ->
+                    // Respond to neutral button press
+                }
+                .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
+                    editor.putBoolean("isLimitEnabled", false)
+                    editor.apply()
+                    activateLimitButton.setText(R.string.activate_limit_button_on)
+                    createAppList(view)
+                }
+                .show()
         }
     }
 

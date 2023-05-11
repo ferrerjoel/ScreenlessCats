@@ -16,4 +16,11 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login_button">LOGIN</string>
+    <string name="warning_end_limit_time">Wait! First you have to end the limit! This implies losing all your progress to get the next cat!</string>
+    <string name="i_understand">I understand</string>
+    <string name="warning_title_end_limit_time">Wait a moment!</string>
+    <string name="warning_title_end_limit">Are you sure?</string>
+    <string name="warning_end_limit">Ending your limit will allow you to set new apps and set a new time! However, remember that you will lose the progress to get the next cat :(</string>
+    <string name="cancel">Take me back!</string>
+    <string name="accept">Accept</string>
 </resources>

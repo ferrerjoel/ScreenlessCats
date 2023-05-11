@@ -16,6 +16,7 @@ import com.example.screenlesscats.data.AppData
 class AppListAdapter(private val appList: List<AppData>): RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
 
     private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var sharedPreferencesOptions : SharedPreferences
 
     inner class AppListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val appNameTextView: TextView = itemView.findViewById(R.id.app_name)
@@ -30,12 +31,14 @@ class AppListAdapter(private val appList: List<AppData>): RecyclerView.Adapter<A
                 app.checked = isChecked // update checked property of AppData object
                 updateAppCheckedState(app.packageName, isChecked) // update shared preferences
             }
+            if (sharedPreferencesOptions.getBoolean("isLimitEnabled", false)) checkBox.isEnabled = false
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppListViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.app_list_element, parent, false)
         sharedPreferences = parent.context.getSharedPreferences("LimitedApps", Context.MODE_PRIVATE)
+        sharedPreferencesOptions = parent.context.getSharedPreferences("Options", Context.MODE_PRIVATE)
         return AppListViewHolder(view)
     }
 
