@@ -269,7 +269,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                     editor.apply()
                     activateLimitButton.setText(R.string.activate_limit_button_on)
                     createAppList(view)
-                    (requireActivity() as Home).endService(requireContext())
+                    //(requireActivity() as Home).endService(requireContext())
                 }
                 .show()
         }

@@ -119,15 +119,15 @@ class Home : AppCompatActivity() {
 
         return false
     }
-
-    fun endService(context: Context) {
-        val serviceComponent = ComponentName(context, AppBlockerService::class.java)
-        context.packageManager.setComponentEnabledSetting(
-            serviceComponent,
-            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-            PackageManager.DONT_KILL_APP
-        )
-    }
+//
+//    fun endService(context: Context) {
+//        val serviceComponent = ComponentName(context, AppBlockerService::class.java)
+//        context.packageManager.setComponentEnabledSetting(
+//            serviceComponent,
+//            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+//            PackageManager.DONT_KILL_APP
+//        )
+//    }
 
 
 
