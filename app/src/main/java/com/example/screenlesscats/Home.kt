@@ -1,8 +1,10 @@
 package com.example.screenlesscats
 
 import android.app.ActivityManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -72,13 +74,7 @@ class Home : AppCompatActivity() {
             }
         }
 
-        val serviceClass = AppBlockerService::class.java
-
-        if (!isServiceRunning(serviceClass)) {
-            val intent = Intent(applicationContext, serviceClass)
-            startService(intent)
-            Log.d("BLOCK SERVICE", "SERVICE STARTED")
-        }
+        // startBlockService()
 
     }
 
@@ -98,17 +94,39 @@ class Home : AppCompatActivity() {
         finish()
     }
 
+    fun startBlockService() {
+        val serviceClass = AppBlockerService::class.java
+
+        if (!isServiceRunning(serviceClass)) {
+            Log.d("BLOCK SERVICE", "TRYING TO START SERVICE")
+            val intent = Intent(applicationContext, serviceClass)
+            startService(intent)
+        } else {
+            Log.d("BLOCK SERVICE", "SERVICE IS ALREADY RUNNING")
+        }
+    }
+
     private fun isServiceRunning(serviceClass: Class<*>): Boolean {
         val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
         val runningServices = activityManager?.getRunningServices(Integer.MAX_VALUE)
 
         for (service in runningServices ?: emptyList()) {
             if (serviceClass.name == service.service.className) {
+                Log.d("BLOCK SERVICE", "SERVICE ALREADY RUNNING")
                 return true
             }
         }
 
         return false
+    }
+
+    fun endService(context: Context) {
+        val serviceComponent = ComponentName(context, AppBlockerService::class.java)
+        context.packageManager.setComponentEnabledSetting(
+            serviceComponent,
+            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+            PackageManager.DONT_KILL_APP
+        )
     }
 
 

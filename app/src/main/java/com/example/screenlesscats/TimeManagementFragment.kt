@@ -1,6 +1,7 @@
 package com.example.screenlesscats
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.screenlesscats.adapters.AppListAdapter
+import com.example.screenlesscats.block.AppBlockerService
 import com.example.screenlesscats.data.AppData
 import com.example.screenlesscats.data.FilterState
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -118,6 +120,8 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                 activateLimitButton.setText(R.string.activate_limit_button_off)
                 editor?.apply()
                 createAppList(view)
+
+                (requireActivity() as Home).startBlockService()
             }
 
         }
@@ -265,6 +269,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                     editor.apply()
                     activateLimitButton.setText(R.string.activate_limit_button_on)
                     createAppList(view)
+                    (requireActivity() as Home).endService(requireContext())
                 }
                 .show()
         }
