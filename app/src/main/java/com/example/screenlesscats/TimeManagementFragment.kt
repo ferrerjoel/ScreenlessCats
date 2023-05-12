@@ -186,9 +186,12 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     private fun setLimitTime() {
         limitHours = timePicker.hour
         limitMinutes = timePicker.minute
+        val totalMilliseconds = ((limitHours * 60 + limitMinutes) * 60 * 1000).toLong()
         val editor = sharedPreferences.edit()
         editor?.putInt("limitHours", limitHours)
         editor?.putInt("limitMinutes", limitMinutes)
+        editor?.putLong("limitTime", totalMilliseconds)
+        editor?.putLong("remainingTimeToday", totalMilliseconds)
         editor?.apply()
         setTextViewTime()
     }

@@ -101,8 +101,6 @@ class Home : AppCompatActivity() {
             Log.d("BLOCK SERVICE", "TRYING TO START SERVICE")
             val intent = Intent(applicationContext, serviceClass)
             startService(intent)
-        } else {
-            Log.d("BLOCK SERVICE", "SERVICE IS ALREADY RUNNING")
         }
     }
 
