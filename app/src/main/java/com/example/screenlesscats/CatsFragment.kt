@@ -1,6 +1,5 @@
 package com.example.screenlesscats
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,6 +13,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -32,36 +32,36 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
         loadCats(view)
     }
 
-    private fun loadCats(view : View){
-        database = Firebase.database.reference
+    private fun loadCats(view : View) {
         auth = Firebase.auth
         val uid = auth.uid.toString()
-        cats.add(Cat(23,"Janzo", "common"))
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                Log.d("BON DIA", "Entrada a onDataChange")
-                //Get cats child
-                val aviableCats = snapshot.child(uid).child("cats")
-                //Get all childs of cats
-                val children = aviableCats.children
-                children.forEach{
-                    Log.d("BON DIA", it.child("id").value.toString())
-                    Log.d("BON DIA", it.child("name").value.toString())
-                    Log.d("BON DIA", it.child("rarity").value.toString())
-                    //Add cat info into a cat ArrayList
-                    cats.add( Cat(
-                        Integer.parseInt(it.child("id").value.toString()),
-                        it.child("name").value.toString(),
-                        it.child("rarity").value.toString()))
-                }
-                createCatList(view)
-            }
 
+        database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid)
+        Log.d("DATABASE_REF", database.toString())
+
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                Log.d("BON DIA", "On Success")
+                for(cat in dataSnapshot.child(uid).child("cats").children){
+                    Log.d("BON DIA", cat.child("id").value.toString())
+                    Log.d("BON DIA", cat.child("name").value.toString())
+                    Log.d("BON DIA", cat.child("rarity").value.toString())
+
+                    cats.add(Cat(
+                        Integer.parseInt(cat.child("id").value.toString()),
+                        cat.child("catName").value.toString(),
+                        cat.child("catRarity").value.toString()
+                    ))
+                }
+            }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.d("BON DIA", "MAMAMIA" + error.toString())
+                Log.d("BON DIA", "On Cancelled")
             }
         })
+
+        cats.add(Cat(23, "Janzo", "common"))
+        createCatList(view)
     }
     private fun createCatList(view: View){
         val catList = view.findViewById<RecyclerView>(R.id.cat_list)

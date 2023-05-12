@@ -12,8 +12,11 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import java.util.Calendar
 
@@ -88,8 +91,8 @@ class Register : AppCompatActivity() {
             val limits: HashMap<String, Any> = HashMap()
             cats["common_0"] = cat
             cat["id"] = 0
-            cats["name"] = "Lluis"
-            cats["rarity"] = "common"
+            cat["name"] = "Lluis"
+            cat["rarity"] = "common"
 
             data["id"] = userID
             data["creation_date"] = date
@@ -105,7 +108,7 @@ class Register : AppCompatActivity() {
 
             // We create a cursor and we give it a name
             val database: FirebaseDatabase = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app")
-            val reference: DatabaseReference = database.getReference("")
+            val reference: DatabaseReference = database.getReference(userID)
 
             // Create a child with the values of playerData
             reference.child(userID).setValue(data)
