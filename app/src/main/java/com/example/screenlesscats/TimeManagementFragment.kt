@@ -14,6 +14,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,8 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-
-
+import com.google.android.material.progressindicator.CircularProgressIndicator
 
 
 class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
@@ -60,9 +60,13 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     private lateinit var searchBar: TextInputEditText
     private var searchQuery: String = ""
 
+    private lateinit var spinner : CircularProgressIndicator
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        spinner = view.findViewById(R.id.spinner)
 
         sharedPreferences = context?.getSharedPreferences("Options", Context.MODE_PRIVATE)!!
         sharedPreferencesApps = context?.getSharedPreferences("LimitedApps", Context.MODE_PRIVATE)!!
@@ -149,6 +153,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
         // Load apps in the background thread
         loadAppsInBackground()
+
     }
 
     private fun loadAppsInBackground() {
@@ -232,6 +237,8 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = AppListAdapter(filteredApps)
+        spinner.visibility = View.GONE
+
     }
 
     /**
