@@ -1,5 +1,6 @@
 package com.example.screenlesscats
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.screenlesscats.adapters.CatAdapter
 import com.example.screenlesscats.data.Cat
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -25,9 +27,12 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
 
     private lateinit var database: DatabaseReference
     private lateinit var auth : FirebaseAuth
+    private lateinit var spinner : CircularProgressIndicator
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        spinner = view.findViewById(R.id.spinner)
+
         cats = ArrayList<Cat>()
         loadCats(view)
     }
@@ -53,6 +58,8 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
                     ))
                 }
                 createCatList(view)
+                spinner.visibility = View.GONE
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -65,6 +72,8 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
         val catList = view.findViewById<RecyclerView>(R.id.cat_list)
         catList.layoutManager = GridLayoutManager(view.context, 3)
         catList.adapter = CatAdapter(cats)
+
+
 
 
     }
