@@ -8,11 +8,13 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.screenlesscats.block.AppBlockerService
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -26,6 +28,14 @@ class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        if(!isAccessServiceEnabled(this)){
+         Snackbar.make(findViewById<View>(android.R.id.content), "Accessibility perms needed. Some functionalities will now work otherwise", Snackbar.LENGTH_LONG)
+             .setAction("Settings"){
+                 requestAppAccessibilitySettings()
+             }
+             .show()
+        }
 
         bottomNavigationBar = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         topAppBar = findViewById(R.id.top_app_bar)
@@ -125,5 +135,9 @@ class Home : AppCompatActivity() {
         val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
         startActivity(intent)
     }
-
+    private fun isAccessServiceEnabled(context: Context): Boolean {
+        val prefString =
+            Settings.Secure.getString(context.contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
+        return prefString.contains("${context.packageName}/${context.packageName}.block.AppBlockerService")
+    }
 }

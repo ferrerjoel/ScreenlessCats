@@ -85,7 +85,7 @@ class Login : AppCompatActivity() {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.exception)
-                        Snackbar.make(findViewById<View>(android.R.id.content), "Authentification Failed", Snackbar.LENGTH_LONG)
+                        Snackbar.make(findViewById<View>(android.R.id.content), "Authentication Failed", Snackbar.LENGTH_LONG)
                             .show()
                     }
                 }
