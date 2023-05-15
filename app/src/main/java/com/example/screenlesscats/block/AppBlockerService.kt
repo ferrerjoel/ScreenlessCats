@@ -71,7 +71,7 @@ class AppBlockerService : AccessibilityService() {
     }
 
     override fun onInterrupt() {
-        // Handle accessibility service interruption
+        Log.d("TIMER BLOCK", "INTERRUPTED")
     }
 
     private fun showToast(message: String) {
