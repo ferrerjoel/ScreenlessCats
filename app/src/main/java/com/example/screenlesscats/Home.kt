@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -70,6 +71,10 @@ class Home : AppCompatActivity() {
                     signOut()
                     true
                 }
+                R.id.give_accessibility_permissions -> {
+                    requestAppAccessibilitySettings()
+                    true
+                }
                 else -> false
             }
         }
@@ -116,6 +121,9 @@ class Home : AppCompatActivity() {
         return false
     }
 
-
+    private fun requestAppAccessibilitySettings() {
+        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+        startActivity(intent)
+    }
 
 }
