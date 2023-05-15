@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.screenlesscats.data.Cat
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -26,6 +27,9 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
     private lateinit var dailyProgressBar : LinearProgressIndicator
     private lateinit var weeklyProgressBar : LinearProgressIndicator
 
+    private lateinit var dailyTimeLeft : TextView
+    private lateinit var weeklyTimeLeft : TextView
+
     private var limitTime: Long = 0
     private var remainingTimeToday: Long = 0
 
@@ -36,6 +40,9 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
 
         dailyProgressBar = view.findViewById(R.id.daily_progress)
         weeklyProgressBar = view.findViewById(R.id.weekly_progress)
+
+        dailyTimeLeft = view.findViewById(R.id.daily_time_left_text)
+        weeklyTimeLeft = view.findViewById(R.id.weekly_time_left_text)
 
         catImage = view.findViewById(R.id.cat_home)
         loadCat()
@@ -89,5 +96,17 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
 
         dailyProgressBar.progress = dailyProgress
 
+        val dailyHoursAndMinutes = convertLongToHoursAndMinutes(limitTime)
+
+        dailyTimeLeft.text = getString(R.string.daily_time_left, dailyHoursAndMinutes.first, dailyHoursAndMinutes.second)
     }
+
+    private fun convertLongToHoursAndMinutes(millis: Long): Pair<Int, Int> {
+        val totalSeconds = millis / 1000
+        val hours = (totalSeconds / 3600).toInt()
+        val minutes = ((totalSeconds % 3600) / 60).toInt()
+
+        return Pair(hours, minutes)
+    }
+
 }
