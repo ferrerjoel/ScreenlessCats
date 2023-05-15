@@ -37,7 +37,8 @@
                     android:hint="@string/email"
                     app:endIconMode="clear_text"
                     app:startIconContentDescription="Mail"
-                    app:startIconDrawable="@drawable/ic_mail_24dp">
+                    app:startIconDrawable="@drawable/ic_mail_24dp"
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email"
@@ -52,7 +53,8 @@
                     android:hint="@string/password"
                     app:endIconMode="password_toggle"
                     app:startIconContentDescription="Password"
-                    app:startIconDrawable="@drawable/ic_lock_24dp">
+                    app:startIconDrawable="@drawable/ic_lock_24dp"
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/password"
