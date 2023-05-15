@@ -41,7 +41,6 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
 
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                Log.d("BON DIA", "On Success")
                 for(cat in dataSnapshot.child(uid).child("cats").children){
                     Log.d("BON DIA", cat.child("id").value.toString())
                     Log.d("BON DIA", cat.child("name").value.toString())
@@ -49,10 +48,11 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
 
                     cats.add(Cat(
                         Integer.parseInt(cat.child("id").value.toString()),
-                        cat.child("catName").value.toString(),
-                        cat.child("catRarity").value.toString()
+                        cat.child("name").value.toString(),
+                        cat.child("rarity").value.toString()
                     ))
                 }
+                createCatList(view)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -60,8 +60,6 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
             }
         })
 
-        cats.add(Cat(23, "Janzo", "common"))
-        createCatList(view)
     }
     private fun createCatList(view: View){
         val catList = view.findViewById<RecyclerView>(R.id.cat_list)

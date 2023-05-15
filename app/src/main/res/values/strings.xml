@@ -25,4 +25,7 @@
     <string name="accept">Accept</string>
     <string name="accessibility_service_description">This accessibility service is used by ScrenlessCats to block apps that had been selected by the user and meet the user requeriments to be blocked until there is more time allowed.</string>
     <string name="toast_blocked_app">This app is blocked by Screenless cats. You don\'t have more time today</string>
+    <string name="invalid_mail">Invalid Mail</string>
+    <string name="invalid_pwd">Password must have 6 or more characters</string>
+
 </resources>

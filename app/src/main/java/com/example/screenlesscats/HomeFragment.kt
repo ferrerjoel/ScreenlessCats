@@ -1,10 +1,17 @@
 package com.example.screenlesscats
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.example.screenlesscats.data.Cat
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 
@@ -18,10 +25,42 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         loadCat()
     }
 
-    fun loadCat(){
-        val cat = Cat(23,"Janzo", "common")
-        val imageID = requireContext().resources.getIdentifier("drawable/${cat.catRarity}_${cat.catId}", null, requireContext().packageName)
-        catImage.setImageResource(imageID)
+    private fun loadCat() {
+        val auth = Firebase.auth
+        val uid = auth.uid.toString()
+
+        val database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid)
+
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                //Get all cats
+                val cats = dataSnapshot.child(uid).child("cats").children
+
+                // Convert `cats` into a list
+                val catList = ArrayList<Cat>()
+                cats.forEach { s ->
+                    val cat = Cat(
+                        Integer.parseInt(s.child("id").value.toString()),
+                            s.child("rarity").value.toString(),
+                        s.child("rarity").value.toString()
+                        )
+                    catList.add(cat)
+                }
+
+                // Generate a random index within the list size
+                val randomIndex = (0 until catList.size).random()
+
+                // Access the random cat
+                val randomCat = catList[randomIndex]
+                Log.d("BON", randomCat.catName)
+                val imageID = requireContext().resources.getIdentifier("drawable/${randomCat.catRarity}_${randomCat.catId}", null, requireContext().packageName)
+                catImage.setImageResource(imageID)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("BON DIA", "On Cancelled")
+            }
+        })
 
     }
 }
