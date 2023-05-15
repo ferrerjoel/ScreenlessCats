@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +30,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+
 
 
 
@@ -194,13 +197,16 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         editor?.putLong("remainingTimeToday", totalMilliseconds)
         editor?.apply()
         setTextViewTime()
+        // We update the time values of the blocker service
+        val intent = Intent("TIME_UPDATE")
+        LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
     }
 
     /**
      * Changes the text of the text view that shows the time set
      */
     private fun setTextViewTime() {
-        if (limitHours and limitHours != 0) {
+        if (limitHours or limitMinutes != 0) {
             limitTimeTv.text = getString(R.string.TimeTemplate, limitHours, limitMinutes)
         } else {
             limitTimeTv.text = getString(R.string.zero_time_limit_msg)
