@@ -1,18 +1,23 @@
 package com.example.screenlesscats
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.provider.Settings.SettingNotFoundException
+import android.text.TextUtils.SimpleStringSplitter
 import android.util.Log
 import android.util.Patterns
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.screenlesscats.block.AppBlockerService
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+
 
 class Login : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -26,7 +31,10 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        requestAppAccessibilitySettings()
+        if(!isAccessServiceEnabled(this)){
+            requestAppAccessibilitySettings()
+        }
+
 
         auth = Firebase.auth
 
@@ -86,8 +94,14 @@ class Login : AppCompatActivity() {
     }
 
     private fun requestAppAccessibilitySettings() {
+
         val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
         startActivity(intent)
-    }
 
+    }
+    private fun isAccessServiceEnabled(context: Context): Boolean {
+        val prefString =
+            Settings.Secure.getString(context.contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
+        return prefString.contains("${context.packageName}/${context.packageName}.block.AppBlockerService")
+    }
 }
