@@ -26,8 +26,9 @@ import java.util.Calendar
 
 class Register : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
-
+    companion object{
     private lateinit var username: TextInputEditText
+    }
     private lateinit var email: TextInputEditText
     private lateinit var password: TextInputEditText
     private lateinit var toLoginBtn: Button
@@ -114,7 +115,7 @@ class Register : AppCompatActivity() {
 
             // We create a cursor and we give it a name
             val database: FirebaseDatabase = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app")
-            val reference: DatabaseReference = database.getReference(userID)
+            val reference: DatabaseReference = database.getReference("")
 
             // Create a child with the values of playerData
             reference.child(userID).setValue(data)

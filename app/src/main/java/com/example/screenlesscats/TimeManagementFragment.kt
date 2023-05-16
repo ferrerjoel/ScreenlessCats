@@ -32,7 +32,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.example.screenlesscats.data.Cat
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.Calendar
 
 
 class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
@@ -202,9 +212,28 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         editor?.putLong("remainingTimeToday", totalMilliseconds)
         editor?.apply()
         setTextViewTime()
+        uploadLimit(totalMilliseconds)
         // We update the time values of the blocker service
         val intent = Intent("TIME_UPDATE")
         LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
+    }
+
+    private fun uploadLimit(totalMiliseconds : Long){
+        val auth = Firebase.auth
+        val uid = auth.uid.toString()
+
+        val database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid)
+        val limit: HashMap<String, Any> = HashMap()
+
+        val calendar = Calendar.getInstance()
+
+        limit["Date_limit_defined"] = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH)
+        limit["Defined_screen_time"] = totalMiliseconds
+        limit["Date_limit_ended"] = ""
+
+        database.child("user_data").child("limits").child("1").setValue(limit)
+        database.child("user_data").child("Defined_screen_time").setValue(totalMiliseconds)
+
     }
 
     /**
@@ -288,8 +317,20 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                     //(requireActivity() as Home).endService(requireContext())
                 }
                 .show()
+            endLimit()
         }
     }
 
+    private fun endLimit(){
+        val auth = Firebase.auth
+        val uid = auth.uid.toString()
+
+        val database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid)
+        val calendar = Calendar.getInstance()
+        val limit = database.child("user_data").child("limits").limitToLast(1)
+        val toUpdate: HashMap<String, Any> = HashMap()
+        toUpdate["Date_limit_ended"] = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH)
+        database.child("user_data").child("limits").updateChildren(toUpdate)
+    }
 
 }

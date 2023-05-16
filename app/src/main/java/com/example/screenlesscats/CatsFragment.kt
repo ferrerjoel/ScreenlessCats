@@ -42,15 +42,10 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
         val uid = auth.uid.toString()
 
         database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid)
-        Log.d("DATABASE_REF", database.toString())
 
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for(cat in dataSnapshot.child(uid).child("cats").children){
-                    Log.d("BON DIA", cat.child("id").value.toString())
-                    Log.d("BON DIA", cat.child("name").value.toString())
-                    Log.d("BON DIA", cat.child("rarity").value.toString())
-
                     cats.add(Cat(
                         Integer.parseInt(cat.child("id").value.toString()),
                         cat.child("name").value.toString(),
@@ -70,11 +65,7 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
     }
     private fun createCatList(view: View){
         val catList = view.findViewById<RecyclerView>(R.id.cat_list)
-        catList.layoutManager = GridLayoutManager(view.context, 3)
+        catList.layoutManager = GridLayoutManager(view.context, 3).apply {  }
         catList.adapter = CatAdapter(cats)
-
-
-
-
     }
 }
