@@ -25,6 +25,8 @@ class AppBlockerService : AccessibilityService() {
     private var remainingTimeToday: Long = 0
     private var startDate: String = ""
 
+    private var isTimerRunning: Boolean = false
+
     override fun onCreate() {
         super.onCreate()
         sharedPreferences = applicationContext.getSharedPreferences("Options", Context.MODE_PRIVATE)
@@ -57,14 +59,13 @@ class AppBlockerService : AccessibilityService() {
                     //Log.d("BLOCK SERVICE EV", isCheckedPackage(event.packageName?.toString()).toString() + " " + sharedPreferences.getBoolean("isLimitEnabled", false))
                     // Check if the blocked app's window is focused
                     val source: AccessibilityNodeInfo? = event.source
-
+                    Log.d("EVENT TYPE", event.eventType.toString() + " " + event.action + " " + event.contentChangeTypes + isCheckedPackage(packageName) + " " +packageName)
                     if (isCheckedPackage(packageName) && source != null) {
                         // Show a dialog indicating the app is blocked when the user tries to interact with it
                         checkTimeAndBlock()
-                    } else {
+                    } else if (event.packageName != "com.oplus.games"){
                         stopTimer()
                     }
-
                 }
             }
         }
@@ -82,7 +83,7 @@ class AppBlockerService : AccessibilityService() {
         return sharedPreferencesApps.getBoolean(packageName, false)
     }
 
-    private fun checkTimeAndBlock () {
+    private fun checkTimeAndBlock() {
         if (remainingTimeToday > 0L) {
             startTimer()
         } else {
@@ -104,7 +105,7 @@ class AppBlockerService : AccessibilityService() {
             // Reset the timer to the original value at the start of a new day
             remainingTimeToday = limitTime
             startDate = currentDate
-            saveTimerData()
+            saveTimerData(true)
         } else {
             Log.d("TIMER BLOCK", "ELSE")
             // Restore the remaining time from SharedPreferences
@@ -116,33 +117,40 @@ class AppBlockerService : AccessibilityService() {
     }
 
     private fun startTimer() {
-        timer = object : CountDownTimer(remainingTimeToday, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                remainingTimeToday = millisUntilFinished
-                Log.d("TIMER BLOCK", remainingTimeToday.toString())
-                // Update the remaining time in SharedPreferences
-                saveTimerData()
-            }
+        if (!isTimerRunning){
+            Log.d("TIMER BLOCK", "TIMER STARTED")
+            isTimerRunning = true
+            timer = object : CountDownTimer(remainingTimeToday, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    remainingTimeToday = millisUntilFinished
+                    Log.d("TIMER BLOCK", remainingTimeToday.toString())
+                    // Update the remaining time in SharedPreferences
+                    saveTimerData(false)
+                }
 
-            override fun onFinish() {
-                // Timer finished, handle the desired action
-                checkTimeAndBlock()
-            }
-        }.start()
-    }
-
-    private fun stopTimer() {
-        if (::timer.isInitialized) {
-            timer.cancel()
-            saveTimerData()
-            Log.d("TIMER BLOCK", "TIMER CANCELED")
+                override fun onFinish() {
+                    // Timer finished, handle the desired action
+                    Log.d("TIMER BLOCK", "TIMER ON FINISH CALLED")
+                    remainingTimeToday = 0L
+                    checkTimeAndBlock()
+                }
+            }.start()
         }
     }
 
-    private fun saveTimerData() {
+    private fun stopTimer() {
+        if (::timer.isInitialized && isTimerRunning) {
+            timer.cancel()
+            saveTimerData(false)
+            Log.d("TIMER BLOCK", "TIMER CANCELED")
+            isTimerRunning = false
+        }
+    }
+
+    private fun saveTimerData(withDate : Boolean) {
         val editor = sharedPreferences.edit()
         editor.putLong("remainingTimeToday", remainingTimeToday)
-        editor.putString("startDate", startDate)
+        if (withDate) editor.putString("startDate", startDate)
         editor.apply()
     }
 
