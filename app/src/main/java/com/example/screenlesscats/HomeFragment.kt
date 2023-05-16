@@ -96,7 +96,7 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
 
         dailyProgressBar.progress = dailyProgress
 
-        val dailyHoursAndMinutes = convertLongToHoursAndMinutes(limitTime)
+        val dailyHoursAndMinutes = convertLongToHoursAndMinutes(remainingTimeToday)
 
         dailyTimeLeft.text = getString(R.string.daily_time_left, dailyHoursAndMinutes.first, dailyHoursAndMinutes.second)
     }
