@@ -52,7 +52,7 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         catImage.setOnClickListener() {
             catImage.startAnimation(animation)
         }
-        
+
         loadCat()
         loadProgressBars()
     }
