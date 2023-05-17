@@ -27,6 +27,21 @@ class AppBlockerService : AccessibilityService() {
 
     private var isTimerRunning: Boolean = false
 
+    val gamePackageApps = hashSetOf(
+        "com.oplus.games",
+        "com.sec.android.app.samsungapps",
+        "com.xiaomi.gamecenter",
+        "com.huawei.gameassistant",
+        "com.oppo.games",
+        "com.vivo.gamecenter",
+        "com.sony.playstation.playstationapp",
+        "com.lge.games",
+        "com.google.android.play.games",
+        "com.asus.gamecenter",
+        "com.motorola.gametime",
+        "com.htc.vr.games"
+    )
+
     override fun onCreate() {
         super.onCreate()
         sharedPreferences = applicationContext.getSharedPreferences("Options", Context.MODE_PRIVATE)
@@ -45,7 +60,7 @@ class AppBlockerService : AccessibilityService() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d("BLOCK SERVICE", "SERVICE ENDED")
-        timer.cancel()
+        if (::timer.isInitialized) timer.cancel()
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
@@ -63,7 +78,7 @@ class AppBlockerService : AccessibilityService() {
                     if (isCheckedPackage(packageName) && source != null) {
                         // Show a dialog indicating the app is blocked when the user tries to interact with it
                         checkTimeAndBlock()
-                    } else if (event.packageName != "com.oplus.games"){
+                    } else if (!gamePackageApps.contains(event.packageName)){
                         stopTimer()
                     }
                 }

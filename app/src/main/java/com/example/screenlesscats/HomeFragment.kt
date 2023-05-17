@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -79,12 +81,17 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
                 Log.d("BON", randomCat.catName)
                 val imageID = requireContext().resources.getIdentifier("drawable/${randomCat.catRarity}_${randomCat.catId}", null, requireContext().packageName)
                 catImage.setImageResource(imageID)
+                val animation = AnimationUtils.loadAnimation(context, R.anim.cat_animation)
+                animation.repeatCount = Animation.INFINITE
+                catImage.startAnimation(animation)
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.d("BON DIA", "On Cancelled")
             }
         })
+
+
 
     }
 
