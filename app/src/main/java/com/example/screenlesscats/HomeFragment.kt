@@ -47,6 +47,12 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         weeklyTimeLeft = view.findViewById(R.id.weekly_time_left_text)
 
         catImage = view.findViewById(R.id.cat_home)
+
+        val animation = AnimationUtils.loadAnimation(context, R.anim.cat_animation)
+        catImage.setOnClickListener() {
+            catImage.startAnimation(animation)
+        }
+        
         loadCat()
         loadProgressBars()
     }
@@ -81,9 +87,6 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
                 Log.d("BON", randomCat.catName)
                 val imageID = requireContext().resources.getIdentifier("drawable/${randomCat.catRarity}_${randomCat.catId}", null, requireContext().packageName)
                 catImage.setImageResource(imageID)
-                val animation = AnimationUtils.loadAnimation(context, R.anim.cat_animation)
-                animation.repeatCount = Animation.INFINITE
-                catImage.startAnimation(animation)
             }
 
             override fun onCancelled(error: DatabaseError) {
