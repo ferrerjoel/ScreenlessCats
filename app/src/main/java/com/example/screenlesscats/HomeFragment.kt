@@ -61,12 +61,12 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         val auth = Firebase.auth
         val uid = auth.uid.toString()
 
-        val database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid)
+        val database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid).child("cats")
 
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 //Get all cats
-                val cats = dataSnapshot.child(uid).child("cats").children
+                val cats = dataSnapshot.children
 
                 // Convert `cats` into a list
                 val catList = ArrayList<Cat>()
@@ -84,7 +84,6 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
 
                 // Access the random cat
                 val randomCat = catList[randomIndex]
-                Log.d("BON", randomCat.catName)
                 val imageID = requireContext().resources.getIdentifier("drawable/${randomCat.catRarity}_${randomCat.catId}", null, requireContext().packageName)
                 catImage.setImageResource(imageID)
             }

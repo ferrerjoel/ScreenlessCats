@@ -17,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import java.util.Calendar
 
 class Home : AppCompatActivity() {
 
@@ -139,5 +140,10 @@ class Home : AppCompatActivity() {
         val prefString =
             Settings.Secure.getString(context.contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
         return prefString.contains("${context.packageName}/${context.packageName}.block.AppBlockerService")
+    }
+
+    private fun checkNewCat(){
+        val calendar = Calendar.getInstance()
+        
     }
 }

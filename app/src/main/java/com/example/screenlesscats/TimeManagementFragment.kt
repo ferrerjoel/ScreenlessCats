@@ -12,36 +12,27 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.findViewTreeViewModelStoreOwner
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.screenlesscats.adapters.AppListAdapter
-import com.example.screenlesscats.block.AppBlockerService
 import com.example.screenlesscats.data.AppData
 import com.example.screenlesscats.data.FilterState
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.example.screenlesscats.data.Cat
-import com.google.android.material.progressindicator.CircularProgressIndicator
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.ktx.Firebase
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.Calendar
 
 
@@ -54,6 +45,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     private lateinit var timePicker: MaterialTimePicker
     private var limitHours: Int = 0
     private var limitMinutes: Int = 0
+    private var totalMilliseconds: Long = 0
 
     private lateinit var sharedPreferences : SharedPreferences
     private lateinit var sharedPreferencesApps : SharedPreferences
@@ -83,6 +75,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
         limitHours = sharedPreferences.getInt("limitHours", 0)
         limitMinutes = sharedPreferences.getInt("limitMinutes", 0)
+        totalMilliseconds = sharedPreferences.getLong("limitTime", 0)
 
         toggleButtonGroup = view.findViewById<MaterialButtonToggleGroup>(R.id.toggleButton)
 
@@ -139,6 +132,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                 createAppList(view)
 
                 (requireActivity() as Home).startBlockService()
+                uploadLimit(totalMilliseconds)
             }
 
         }
@@ -204,7 +198,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     private fun setLimitTime() {
         limitHours = timePicker.hour
         limitMinutes = timePicker.minute
-        val totalMilliseconds = ((limitHours * 60 + limitMinutes) * 60 * 1000).toLong()
+        totalMilliseconds = ((limitHours * 60 + limitMinutes) * 60 * 1000).toLong()
         val editor = sharedPreferences.edit()
         editor?.putInt("limitHours", limitHours)
         editor?.putInt("limitMinutes", limitMinutes)
@@ -212,27 +206,34 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         editor?.putLong("remainingTimeToday", totalMilliseconds)
         editor?.apply()
         setTextViewTime()
-        uploadLimit(totalMilliseconds)
         // We update the time values of the blocker service
         val intent = Intent("TIME_UPDATE")
         LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
     }
 
-    private fun uploadLimit(totalMiliseconds : Long){
+    private fun uploadLimit(totalMilliseconds : Long){
         val auth = Firebase.auth
         val uid = auth.uid.toString()
 
-        val database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid)
+        val ref = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid).child("user_data")
+
         val limit: HashMap<String, Any> = HashMap()
 
         val calendar = Calendar.getInstance()
 
-        limit["Date_limit_defined"] = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH)
-        limit["Defined_screen_time"] = totalMiliseconds
+        limit["Date_limit_defined"] = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
+        limit["Defined_screen_time"] = totalMilliseconds
         limit["Date_limit_ended"] = ""
 
-        database.child("user_data").child("limits").child("1").setValue(limit)
-        database.child("user_data").child("Defined_screen_time").setValue(totalMiliseconds)
+        var maxId : Long = 0
+        ref.child("limits").get().addOnSuccessListener {
+            maxId = it.childrenCount
+            Log.d("BON", maxId.toString())
+            ref.child("limits").child((maxId+1).toString()).setValue(limit)
+            ref.child("Defined_screen_time").setValue(totalMilliseconds)
+        }.addOnCanceledListener {
+            Log.d("BON DIA", "On Cancelled")
+        }
 
     }
 
@@ -314,10 +315,11 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                     editor.apply()
                     activateLimitButton.setText(R.string.activate_limit_button_on)
                     createAppList(view)
+                    endLimit()
                     //(requireActivity() as Home).endService(requireContext())
                 }
                 .show()
-            endLimit()
+
         }
     }
 
@@ -325,12 +327,24 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         val auth = Firebase.auth
         val uid = auth.uid.toString()
 
-        val database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid)
+        val ref = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid).child("user_data").child("limits")
+
         val calendar = Calendar.getInstance()
-        val limit = database.child("user_data").child("limits").limitToLast(1)
         val toUpdate: HashMap<String, Any> = HashMap()
         toUpdate["Date_limit_ended"] = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH)
-        database.child("user_data").child("limits").updateChildren(toUpdate)
+
+        var maxId : Long = 1
+        ref.get().addOnSuccessListener {
+            maxId = it.childrenCount
+            ref.child(maxId.toString()).updateChildren(toUpdate)
+            Log.d("BON", maxId.toString())
+        }.addOnCanceledListener {
+            Log.d("BON DIA", "On Cancelled")
+        }
+
+
+
+
     }
 
 }
