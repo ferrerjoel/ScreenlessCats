@@ -41,11 +41,11 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
         auth = Firebase.auth
         val uid = auth.uid.toString()
 
-        database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid)
+        database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid).child("cats")
 
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for(cat in dataSnapshot.child(uid).child("cats").children){
+                for(cat in dataSnapshot.children){
                     cats.add(Cat(
                         Integer.parseInt(cat.child("id").value.toString()),
                         cat.child("name").value.toString(),
