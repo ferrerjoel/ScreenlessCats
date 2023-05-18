@@ -29,5 +29,6 @@
     <string name="invalid_pwd">Password must have 6 or more characters</string>
     <string name="daily_time_left">Daily time left: %1$d hours and %2$d minutes</string>
     <string name="weekly_time_left">Weekly time left: %1$d hours and %2$d minutes</string>
+    <string name="cat_hello">Hello!</string>
 
 </resources>

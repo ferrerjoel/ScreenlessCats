@@ -78,14 +78,15 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
                         )
                     catList.add(cat)
                 }
+                if (catList.size > 0) {
+                    // Generate a random index within the list size
+                    val randomIndex = (0 until catList.size).random()
 
-                // Generate a random index within the list size
-                val randomIndex = (0 until catList.size).random()
-
-                // Access the random cat
-                val randomCat = catList[randomIndex]
-                val imageID = requireContext().resources.getIdentifier("drawable/${randomCat.catRarity}_${randomCat.catId}", null, requireContext().packageName)
-                catImage.setImageResource(imageID)
+                    // Access the random cat
+                    val randomCat = catList[randomIndex]
+                    val imageID = requireContext().resources.getIdentifier("drawable/${randomCat.catRarity}_${randomCat.catId}", null, requireContext().packageName)
+                    catImage.setImageResource(imageID)
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -104,6 +105,7 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         val dailyProgress = ((remainingTimeToday.toDouble() / limitTime.toDouble()) * 100).toInt()
 
         dailyProgressBar.progress = dailyProgress
+
 
         val dailyHoursAndMinutes = convertLongToHoursAndMinutes(remainingTimeToday)
 
