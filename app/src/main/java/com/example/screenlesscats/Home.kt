@@ -150,7 +150,6 @@ class Home : AppCompatActivity() {
     }
 
     private fun checkNewCat(){
-        Log.d("CREISI", "Enter checkNewCat")
         val calendar = Calendar.getInstance()
 
         val currentDate = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
@@ -162,21 +161,24 @@ class Home : AppCompatActivity() {
 
         var maxId : Long = 1
         ref.get().addOnSuccessListener {
+            val ds = Integer.parseInt(it.child("user_data").child("days_streaks").value.toString())
+
             maxId = it.child("user_data").child("limits").childrenCount
-            Log.d("CREISI", "Last limit: $maxId")
             val limit = it.child("user_data").child("limits").child(maxId.toString())
 
             if(limit.child("Date_limit_ended").value.toString() == ""){
                 Log.d("CREISI", "Last limit not ended yet")
                 Log.d("CREISI", "Date of today: $currentDate")
                 Log.d("CREISI", "Date of limit: "+it.child("user_data").child("Date_limit_defined").value.toString())
+
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()) // Format of the dates
                 val date1 = dateFormat.parse(currentDate)
                 val date2 = dateFormat.parse(limit.child("Date_limit_defined").value.toString())
 
                 val dif = date1.time - date2.time
                 val seconds = dif / 1000
-                if (seconds > 60){
+                if (seconds > 60 * ds+1){
+                    ref.child("user_data").child("days_streaks").setValue(ds+1)
                     val newCat = getRewardCatInfo()
                     ref.child("cats").child(newCat["name"].toString()).setValue(newCat)
 
@@ -193,8 +195,8 @@ class Home : AppCompatActivity() {
     }
 
     private fun getRewardCatInfo(): HashMap<String, Any>{
-        val rarities = arrayOf("common", "rare", "very_rare", "epic", "legendary", "mythic")
-        lateinit var r : String
+        val rarities = arrayOf("mythic", "legendary", "epic", "very_rare", "rare", "common")
+        var r : String = ""
         val prob = arrayOf(0.005, 0.01, 0.05, 0.115, 0.22, 0.6)
         val randomNumber = Random.nextDouble()
         for ( i in prob.indices){

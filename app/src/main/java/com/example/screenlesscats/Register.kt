@@ -109,7 +109,7 @@ class Register : AppCompatActivity() {
             data["user_data"] = userData
 
             userData["defined_screen_time"] = -1
-            userData["days_streaks"] = -1
+            userData["days_streaks"] = 0
             userData["dedication_value"] = 0
             userData["limits"] = limits
 
