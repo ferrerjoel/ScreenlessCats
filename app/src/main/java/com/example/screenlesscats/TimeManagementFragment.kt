@@ -348,6 +348,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
             val newDefinedTime : HashMap<String, Any> = HashMap()
             newDefinedTime["Defined_screen_time"] = 0
             ref.updateChildren(newDefinedTime)
+            ref.child("days_streaks").setValue(0)
             Log.d("BON", maxId.toString())
         }.addOnCanceledListener {
             Log.d("BON DIA", "On Cancelled")
