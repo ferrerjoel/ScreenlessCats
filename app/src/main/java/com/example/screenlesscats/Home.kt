@@ -169,7 +169,7 @@ class Home : AppCompatActivity() {
             if(limit.child("Date_limit_ended").value.toString() == ""){
                 Log.d("CREISI", "Last limit not ended yet")
                 Log.d("CREISI", "Date of today: $currentDate")
-                Log.d("CREISI", "Date of limit: "+it.child("user_data").child("Date_limit_ended").value.toString())
+                Log.d("CREISI", "Date of limit: "+it.child("user_data").child("Date_limit_defined").value.toString())
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()) // Format of the dates
                 val date1 = dateFormat.parse(currentDate)
                 val date2 = dateFormat.parse(limit.child("Date_limit_defined").value.toString())
