@@ -327,7 +327,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         val auth = Firebase.auth
         val uid = auth.uid.toString()
 
-        val ref = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid).child("user_data").child("limits")
+        val ref = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid).child("user_data")
 
         val calendar = Calendar.getInstance()
         val toUpdate: HashMap<String, Any> = HashMap()
@@ -335,8 +335,12 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
         var maxId : Long = 1
         ref.get().addOnSuccessListener {
-            maxId = it.childrenCount
-            ref.child(maxId.toString()).updateChildren(toUpdate)
+            maxId = it.child("limits").childrenCount
+            ref.child("limits").child(maxId.toString()).updateChildren(toUpdate)
+
+            val newDefinedTime : HashMap<String, Any> = HashMap()
+            newDefinedTime["Defined_screen_time"] = 0
+            ref.updateChildren(newDefinedTime)
             Log.d("BON", maxId.toString())
         }.addOnCanceledListener {
             Log.d("BON DIA", "On Cancelled")
