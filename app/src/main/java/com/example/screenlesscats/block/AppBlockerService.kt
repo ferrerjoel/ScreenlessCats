@@ -14,8 +14,18 @@ import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.screenlesscats.R
 import java.util.Calendar
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
+import androidx.core.app.NotificationCompat
+
+private const val CHANNEL_ID = "TimerNotificationChannel"
 
 class AppBlockerService : AccessibilityService() {
+
+    private var oneMinuteNotificationSend: Boolean = false
+    private var fiveMinuteNotificationSend: Boolean = false
+    private var tenMinuteNotificationSend: Boolean = false
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var sharedPreferencesApps: SharedPreferences
@@ -27,7 +37,7 @@ class AppBlockerService : AccessibilityService() {
 
     private var isTimerRunning: Boolean = false
 
-    val gamePackageApps = hashSetOf(
+    private val gamePackageApps = hashSetOf(
         "com.oplus.games",
         "com.sec.android.app.samsungapps",
         "com.xiaomi.gamecenter",
@@ -53,8 +63,18 @@ class AppBlockerService : AccessibilityService() {
         // Load original timer value and start date
         limitTime = sharedPreferences.getLong("limitTime", 0)
         startDate = sharedPreferences.getString("startDate", "") ?: ""
+        // We don't need to send a notification if the set time is not more than the notification time
+        if (limitTime > 600000) {
+            tenMinuteNotificationSend = true
+        } else if (limitTime > 300000) {
+            fiveMinuteNotificationSend = true
+        } else if (limitTime > 60000) {
+            oneMinuteNotificationSend = true
+        }
 
         setupTimer()
+
+        createNotificationChannel()
     }
 
     override fun onDestroy() {
@@ -119,6 +139,7 @@ class AppBlockerService : AccessibilityService() {
             Log.d("TIMER BLOCK", "NEW DAY")
             // Reset the timer to the original value at the start of a new day
             remainingTimeToday = limitTime
+            resetNotificationFlags()
             startDate = currentDate
             saveTimerData(true)
         } else {
@@ -138,6 +159,7 @@ class AppBlockerService : AccessibilityService() {
             timer = object : CountDownTimer(remainingTimeToday, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     remainingTimeToday = millisUntilFinished
+                    sendTimeNotification()
                     Log.d("TIMER BLOCK", remainingTimeToday.toString())
                     // Update the remaining time in SharedPreferences
                     saveTimerData(false)
@@ -198,5 +220,50 @@ class AppBlockerService : AccessibilityService() {
             }
         }
     }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Timer Channel"
+            val descriptionText = "Notification Channel for Timer"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun sendNotification(message: String) {
+        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle(message)
+            .setContentText("All your selected apps are going to be blocked!")
+            .setSmallIcon(R.drawable.cat)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(0, notificationBuilder.build())
+    }
+
+    private fun resetNotificationFlags() {
+        oneMinuteNotificationSend = false
+        fiveMinuteNotificationSend = false
+        tenMinuteNotificationSend = false
+    }
+
+    private fun sendTimeNotification() {
+        if (!tenMinuteNotificationSend && remainingTimeToday <= 600000) {
+            sendNotification("10 minutes left")
+        } else if (!fiveMinuteNotificationSend && remainingTimeToday <= 300000) {
+            sendNotification("5 minutes left")
+        } else if (!oneMinuteNotificationSend && remainingTimeToday <= 60000) {
+            sendNotification("1 minute left")
+        }
+    }
+
+
 
 }

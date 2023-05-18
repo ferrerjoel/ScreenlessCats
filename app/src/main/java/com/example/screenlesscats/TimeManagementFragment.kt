@@ -46,6 +46,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     private var limitHours: Int = 0
     private var limitMinutes: Int = 0
     private var totalMilliseconds: Long = 0
+    private var totalMillisecondsWeekly: Long = 0
 
     private lateinit var sharedPreferences : SharedPreferences
     private lateinit var sharedPreferencesApps : SharedPreferences
@@ -199,12 +200,18 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         limitHours = timePicker.hour
         limitMinutes = timePicker.minute
         totalMilliseconds = ((limitHours * 60 + limitMinutes) * 60 * 1000).toLong()
+        totalMillisecondsWeekly = (600000 + (totalMilliseconds * 0.2) * 7).toLong()
+
         val editor = sharedPreferences.edit()
         editor?.putInt("limitHours", limitHours)
         editor?.putInt("limitMinutes", limitMinutes)
+
         editor?.putLong("limitTime", totalMilliseconds)
         editor?.putLong("remainingTimeToday", totalMilliseconds)
+        editor?.putLong("limitWeeklyTime", totalMillisecondsWeekly)
+        editor?.putLong("remainingTimeWeekly", totalMillisecondsWeekly)
         editor?.apply()
+
         setTextViewTime()
         // We update the time values of the blocker service
         val intent = Intent("TIME_UPDATE")
@@ -315,7 +322,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                     editor.apply()
                     activateLimitButton.setText(R.string.activate_limit_button_on)
                     createAppList(view)
-                    endLimit()
+                    endLimitFirebase()
                     //(requireActivity() as Home).endService(requireContext())
                 }
                 .show()
@@ -323,7 +330,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         }
     }
 
-    private fun endLimit(){
+    private fun endLimitFirebase(){
         val auth = Firebase.auth
         val uid = auth.uid.toString()
 
@@ -345,9 +352,6 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         }.addOnCanceledListener {
             Log.d("BON DIA", "On Cancelled")
         }
-
-
-
 
     }
 

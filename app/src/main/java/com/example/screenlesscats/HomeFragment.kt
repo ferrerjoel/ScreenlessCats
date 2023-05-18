@@ -34,6 +34,7 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
 
     private var limitTime: Long = 0
     private var remainingTimeToday: Long = 0
+    private var remainingTimeWeekly: Long = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -101,15 +102,19 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
     private fun loadProgressBars() {
         limitTime = sharedPreferences.getLong("limitTime", 0)
         remainingTimeToday = sharedPreferences.getLong("remainingTimeToday", limitTime)
+        remainingTimeWeekly = sharedPreferences.getLong("remainingTimeWeekly", limitTime)
 
         val dailyProgress = ((remainingTimeToday.toDouble() / limitTime.toDouble()) * 100).toInt()
+        val weeklyProgress = ((remainingTimeWeekly.toDouble() / limitTime.toDouble()) * 100).toInt()
 
         dailyProgressBar.progress = dailyProgress
-
+        weeklyProgressBar.progress = weeklyProgress
 
         val dailyHoursAndMinutes = convertLongToHoursAndMinutes(remainingTimeToday)
+        val weeklyHoursAndMinutes = convertLongToHoursAndMinutes(remainingTimeWeekly)
 
         dailyTimeLeft.text = getString(R.string.daily_time_left, dailyHoursAndMinutes.first, dailyHoursAndMinutes.second)
+        weeklyTimeLeft.text = getString(R.string.weekly_time_left, weeklyHoursAndMinutes.first, weeklyHoursAndMinutes.second)
     }
 
     private fun convertLongToHoursAndMinutes(millis: Long): Pair<Int, Int> {

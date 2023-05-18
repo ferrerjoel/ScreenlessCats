@@ -12,6 +12,6 @@
     <item
         android:id="@+id/item_cats"
         android:enabled="true"
-        android:icon="@drawable/baseline_card_giftcard_24"
+        android:icon="@drawable/cat"
         android:title="@string/menu_cats"/>
 </menu>
