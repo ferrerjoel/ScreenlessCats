@@ -1,10 +1,8 @@
 package com.example.screenlesscats
 
 import android.app.ActivityManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -16,8 +14,15 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
+import kotlin.random.Random
+
 
 class Home : AppCompatActivity() {
 
@@ -29,6 +34,8 @@ class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        checkNewCat()
 
         if(!isAccessServiceEnabled(this)){
          Snackbar.make(findViewById<View>(android.R.id.content), "Accessibility perms needed. Some functionalities will now work otherwise", Snackbar.LENGTH_LONG)
@@ -143,7 +150,82 @@ class Home : AppCompatActivity() {
     }
 
     private fun checkNewCat(){
+        Log.d("CREISI", "Enter checkNewCat")
         val calendar = Calendar.getInstance()
-        
+
+        val currentDate = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
+
+        val auth = Firebase.auth
+        val uid = auth.uid.toString()
+
+        val ref = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid)
+
+        var maxId : Long = 1
+        ref.get().addOnSuccessListener {
+            maxId = it.child("user_data").child("limits").childrenCount
+            Log.d("CREISI", "Last limit: $maxId")
+            val limit = it.child("user_data").child("limits").child(maxId.toString())
+
+            if(limit.child("Date_limit_ended").value.toString() == ""){
+                Log.d("CREISI", "Last limit not ended yet")
+                Log.d("CREISI", "Date of today: $currentDate")
+                Log.d("CREISI", "Date of limit: "+it.child("user_data").child("Date_limit_ended").value.toString())
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()) // Format of the dates
+                val date1 = dateFormat.parse(currentDate)
+                val date2 = dateFormat.parse(limit.child("Date_limit_defined").value.toString())
+
+                val dif = date1.time - date2.time
+                val seconds = dif / 1000
+                if (seconds > 60){
+                    val newCat = getRewardCatInfo()
+                    ref.child("cats").child(newCat["name"].toString()).setValue(newCat)
+
+                }
+
+            }
+            val newDefinedTime : HashMap<String, Any> = HashMap()
+            newDefinedTime["Defined_screen_time"] = 0
+        }.addOnCanceledListener {
+            Log.d("BON DIA", "On Cancelled")
+        }
+
+
     }
+
+    private fun getRewardCatInfo(): HashMap<String, Any>{
+        val rarities = arrayOf("common", "rare", "very_rare", "epic", "legendary", "mythic")
+        lateinit var r : String
+        val prob = arrayOf(0.005, 0.01, 0.05, 0.115, 0.22, 0.6)
+        val randomNumber = Random.nextDouble()
+        for ( i in prob.indices){
+            if(randomNumber <= prob[i]){
+                r = rarities[i]
+            }
+        }
+        if(r == "") r = rarities.last()
+        val length = countResources(r+'_', "drawable")
+
+        val catID = Random.nextInt(0, length)
+
+        val cat = HashMap<String, Any>()
+
+        cat["id"] = catID
+        cat["name"] = r+'_'+catID
+        cat["rarity"] = r
+
+        return cat
+    }
+    private fun countResources(prefix: String, type: String): Int {
+        var id: Long = -1
+        var count = -1
+        while (id != 0L) {
+            count++
+            id = resources.getIdentifier(
+                prefix + (count + 1),
+                type, packageName
+            ).toLong()
+        }
+        return count
+    }
+
 }
