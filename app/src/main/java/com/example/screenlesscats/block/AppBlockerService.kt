@@ -257,10 +257,13 @@ class AppBlockerService : AccessibilityService() {
     private fun sendTimeNotification() {
         if (!tenMinuteNotificationSend && remainingTimeToday <= 600000) {
             sendNotification("10 minutes left")
+            tenMinuteNotificationSend = true
         } else if (!fiveMinuteNotificationSend && remainingTimeToday <= 300000) {
             sendNotification("5 minutes left")
+            fiveMinuteNotificationSend = true
         } else if (!oneMinuteNotificationSend && remainingTimeToday <= 60000) {
             sendNotification("1 minute left")
+            oneMinuteNotificationSend = true
         }
     }
 

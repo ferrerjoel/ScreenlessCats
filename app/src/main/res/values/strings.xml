@@ -30,5 +30,31 @@
     <string name="daily_time_left">Daily time left: %1$d hours and %2$d minutes</string>
     <string name="weekly_time_left">Weekly time left: %1$d hours and %2$d minutes</string>
     <string name="cat_hello">Hello!</string>
-
+    <string-array name="cat_phrases">
+        <item>Take a break and stretch your legs</item>
+        <item>Practice mindfulness to reduce stress</item>
+        <item>Set boundaries for device usage</item>
+        <item>Engage in physical activities regularly</item>
+        <item>Disconnect from screens before bedtime</item>
+        <item>Focus on one task at a time</item>
+        <item>Take deep breaths and relax</item>
+        <item>Engage in meaningful face-to-face conversations</item>
+        <item>Unplug and enjoy nature</item>
+        <item>Limit social media usage</item>
+        <item>Practice digital detox regularly</item>
+        <item>Get quality sleep for better well-being</item>
+        <item>Prioritize self-care and personal time</item>
+        <item>Set realistic goals and prioritize tasks</item>
+        <item>Practice gratitude and appreciation</item>
+        <item>Take regular breaks from screens</item>
+        <item>Engage in hobbies and creative pursuits</item>
+        <item>Establish a healthy work-life balance</item>
+        <item>Connect with loved ones offline</item>
+        <item>Practice digital mindfulness</item>
+        <item>Cultivate a positive online environment</item>
+        <item>Learn to manage and reduce screen time</item>
+        <item>Practice good posture while using devices</item>
+        <item>Take time to reflect and recharge</item>
+        <item>Embrace the joy of missing out (JOMO)</item>
+    </string-array>
 </resources>

@@ -31,6 +31,7 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
 
     private lateinit var dailyTimeLeft : TextView
     private lateinit var weeklyTimeLeft : TextView
+    private lateinit var catText : TextView
 
     private var limitTime: Long = 0
     private var remainingTimeToday: Long = 0
@@ -48,6 +49,7 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         weeklyTimeLeft = view.findViewById(R.id.weekly_time_left_text)
 
         catImage = view.findViewById(R.id.cat_home)
+        catText = view.findViewById(R.id.cat_text)
 
         val animation = AnimationUtils.loadAnimation(context, R.anim.cat_animation)
         catImage.setOnClickListener() {
@@ -88,6 +90,7 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
                     val imageID = requireContext().resources.getIdentifier("drawable/${randomCat.catRarity}_${randomCat.catId}", null, requireContext().packageName)
                     catImage.setImageResource(imageID)
                 }
+                catText.text = resources.getStringArray(R.array.cat_phrases).random()
             }
 
             override fun onCancelled(error: DatabaseError) {

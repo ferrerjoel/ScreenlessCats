@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/cat_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/cat_bubble"
@@ -87,12 +87,12 @@
                     android:id="@+id/cat_home"
                     android:layout_width="158dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="44dp"
+                    android:layout_marginTop="70dp"
                     android:translationZ="1dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView"
+                    app:layout_constraintTop_toTopOf="@+id/cat_text"
                     app:srcCompat="@drawable/common_0" />
 
                 <View
