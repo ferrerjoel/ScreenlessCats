@@ -58,4 +58,6 @@
         <item>Embrace the joy of missing out (JOMO)</item>
     </string-array>
     <string name="activate_weekly_time_button">Activate weekly time!</string>
+    <string name="cat_pop_title">Congrats</string>
+    <string name="cat_pop_msg">You have recieved %1$d cats</string>
 </resources>

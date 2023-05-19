@@ -12,12 +12,15 @@ import androidx.fragment.app.Fragment
 import com.example.screenlesscats.block.AppBlockerService
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -161,7 +164,7 @@ class Home : AppCompatActivity() {
 
         var maxId : Long = 1
         ref.get().addOnSuccessListener {
-            val ds = Integer.parseInt(it.child("user_data").child("days_streaks").value.toString())
+            var ds = Integer.parseInt(it.child("user_data").child("days_streaks").value.toString())
 
 
             maxId = it.child("user_data").child("limits").childrenCount
@@ -170,26 +173,29 @@ class Home : AppCompatActivity() {
             if (limit.exists()) {
 
                 var catsEarned = Integer.parseInt(limit.child("Cats_earned").value.toString())
+                val catsEarnedStart = catsEarned
 
                 if (limit.child("Date_limit_ended").value.toString() == "") {
-
                     val dateFormat =
                         SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()) // Format of the dates
                     val date1 = dateFormat.parse(currentDate)
                     val date2 = dateFormat.parse(limit.child("Date_limit_defined").value.toString())
-
                     val dif = date1.time - date2.time
                     val seconds = dif / 1000
-                    if (seconds > 60 * ds + 1) {
-                        ref.child("user_data").child("days_streaks").setValue(ds + 1)
 
-                        while (catsEarned < ds+1) {
+                    if (seconds > 60 * ds + 1) {
+                        while(ds.toLong() != (seconds/60)){
+                            ref.child("user_data").child("days_streaks").setValue(ds + 1)
+                            ds += 1
+                        }
+                        val catsToGet = if(ds==0) 1 else ds
+                        while (catsEarned <= catsToGet) {
                             val newCat = getRewardCatInfo()
                             ref.child("cats").child(newCat["name"].toString()).setValue(newCat)
                             catsEarned += 1
                         }
-
-                        ref.child("user_data").child(maxId.toString()).setValue(ds + 1)
+                        showCatsEarned(catsEarned - catsEarnedStart)
+                        ref.child("user_data").child("limits").child(maxId.toString()).child("Cats_earned").setValue(ds + 1)
                     }
 
                 }
@@ -203,25 +209,24 @@ class Home : AppCompatActivity() {
 
     }
 
-    private fun getRewardCatInfo(): HashMap<String, Any>{
+    private fun getRewardCatInfo(): HashMap<String, Any> {
         val rarities = arrayOf("mythic", "legendary", "epic", "very_rare", "rare", "common")
-        var r : String = ""
-        val prob = arrayOf(0.005, 0.01, 0.05, 0.115, 0.22, 0.6)
+        var r: String = ""
+        val prob = arrayOf(0.005, 0.01, 0.05, 0.115, 0.5, 0.5)
         val randomNumber = Random.nextDouble()
-        for ( i in prob.indices){
-            if(randomNumber <= prob[i]){
+        for (i in prob.indices) {
+            if (randomNumber <= prob[i]) {
                 r = rarities[i]
+                break
             }
         }
-        if(r == "") r = rarities.last()
-        val length = countResources(r+'_', "drawable")
+        if (r == "") r = rarities.last()
+        val length = countResources(r + '_', "drawable")
 
         val catID = Random.nextInt(0, length)
-
         val cat = HashMap<String, Any>()
-
         cat["id"] = catID
-        cat["name"] = r+'_'+catID
+        cat["name"] = getRandomWordFromRawFile(this, R.raw.cat_names) ?: "Sergi"
         cat["rarity"] = r
 
         return cat
@@ -237,6 +242,43 @@ class Home : AppCompatActivity() {
             ).toLong()
         }
         return count
+    }
+    fun getRandomWordFromRawFile(context: Context, fileId: Int): String? {
+        val wordList = mutableListOf<String>()
+
+        try {
+            val inputStream: InputStream = context.resources.openRawResource(fileId)
+            val reader = BufferedReader(InputStreamReader(inputStream))
+            var line: String?
+
+            while (reader.readLine().also { line = it } != null) {
+                wordList.add(line.orEmpty())
+            }
+
+            reader.close()
+            inputStream.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        if (wordList.isEmpty()) {
+            return null
+        }
+
+        val randomIndex = Random.nextInt(wordList.size)
+        return wordList[randomIndex]
+    }
+    private fun showCatsEarned(catsEarned: Int) {
+        this.let {
+            MaterialAlertDialogBuilder(it)
+                .setTitle(resources.getString(R.string.cat_pop_title))
+                .setMessage(resources.getString(R.string.cat_pop_msg, catsEarned))
+                .setNeutralButton(resources.getString(R.string.accept)) { dialog, which ->
+                    // Respond to neutral button press
+                }
+                .show()
+
+        }
     }
 
 }
