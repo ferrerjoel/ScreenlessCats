@@ -231,6 +231,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         limit["Date_limit_defined"] = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
         limit["Defined_screen_time"] = totalMilliseconds
         limit["Date_limit_ended"] = ""
+        limit["Cats_earned"] = 0
 
         var maxId : Long = 0
         ref.child("limits").get().addOnSuccessListener {

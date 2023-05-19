@@ -163,27 +163,36 @@ class Home : AppCompatActivity() {
         ref.get().addOnSuccessListener {
             val ds = Integer.parseInt(it.child("user_data").child("days_streaks").value.toString())
 
+
             maxId = it.child("user_data").child("limits").childrenCount
             val limit = it.child("user_data").child("limits").child(maxId.toString())
 
-            if(limit.child("Date_limit_ended").value.toString() == ""){
-                Log.d("CREISI", "Last limit not ended yet")
-                Log.d("CREISI", "Date of today: $currentDate")
-                Log.d("CREISI", "Date of limit: "+it.child("user_data").child("Date_limit_defined").value.toString())
+            if (limit.exists()) {
 
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()) // Format of the dates
-                val date1 = dateFormat.parse(currentDate)
-                val date2 = dateFormat.parse(limit.child("Date_limit_defined").value.toString())
+                var catsEarned = Integer.parseInt(limit.child("Cats_earned").value.toString())
 
-                val dif = date1.time - date2.time
-                val seconds = dif / 1000
-                if (seconds > 60 * ds+1){
-                    ref.child("user_data").child("days_streaks").setValue(ds+1)
-                    val newCat = getRewardCatInfo()
-                    ref.child("cats").child(newCat["name"].toString()).setValue(newCat)
+                if (limit.child("Date_limit_ended").value.toString() == "") {
+
+                    val dateFormat =
+                        SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()) // Format of the dates
+                    val date1 = dateFormat.parse(currentDate)
+                    val date2 = dateFormat.parse(limit.child("Date_limit_defined").value.toString())
+
+                    val dif = date1.time - date2.time
+                    val seconds = dif / 1000
+                    if (seconds > 60 * ds + 1) {
+                        ref.child("user_data").child("days_streaks").setValue(ds + 1)
+
+                        while (catsEarned < ds+1) {
+                            val newCat = getRewardCatInfo()
+                            ref.child("cats").child(newCat["name"].toString()).setValue(newCat)
+                            catsEarned += 1
+                        }
+
+                        ref.child("user_data").child(maxId.toString()).setValue(ds + 1)
+                    }
 
                 }
-
             }
             val newDefinedTime : HashMap<String, Any> = HashMap()
             newDefinedTime["Defined_screen_time"] = 0
