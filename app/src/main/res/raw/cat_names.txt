@@ -4,13 +4,10 @@ Abagael
 Abagail
 Abbe
 Abbey
-Abbey
 Abbi
-Abbie
 Abbie
 Abbot
 Abbott
-Abby
 Abby
 Abdel
 Abdul
@@ -35,7 +32,6 @@ Adaline
 Adam
 Adams
 Adara
-Addie
 Addie
 Addis
 Adel
@@ -71,13 +67,11 @@ Adrea
 Adria
 Adriaens
 Adrian
-Adrian
 Adriana
 Adriane
 Adrianna
 Adrianne
 Adrick
-Adrien
 Adrien
 Adriena
 Adrienne
@@ -130,7 +124,6 @@ Ainsley
 Ainslie
 Ajai
 Ajay
-Ajay
 Al
 Alaa
 Alain
@@ -178,7 +171,6 @@ Alessandro
 Aleta
 Alethea
 Alex
-Alex
 Alexa
 Alexander
 Alexandra
@@ -189,9 +181,7 @@ Alexia
 Alexina
 Alexine
 Alexis
-Alexis
 Alf
-Alfie
 Alfie
 Alfonse
 Alfonso
@@ -201,7 +191,6 @@ Alfred
 Alfreda
 Alfredo
 Algernon
-Ali
 Ali
 Alia
 Alic
@@ -221,7 +210,6 @@ Alissa
 Alister
 Alisun
 Alix
-Alix
 Aliza
 Alla
 Allah
@@ -234,7 +222,6 @@ Alley
 Alli
 Allianora
 Allie
-Allie
 Allin
 Allina
 Allis
@@ -243,7 +230,6 @@ Allissa
 Allsun
 Ally
 Allyce
-Allyn
 Allyn
 Allys
 Allyson
@@ -342,11 +328,9 @@ Andee
 Anders
 Andi
 Andie
-Andie
 Andonis
 Andra
 Andre
-Andrea
 Andrea
 Andreana
 Andreas
@@ -366,14 +350,12 @@ Andros
 Andrus
 Andrzej
 Andy
-Andy
 Anestassia
 Anet
 Anett
 Anetta
 Anette
 Ange
-Angel
 Angel
 Angela
 Angele
@@ -387,7 +369,6 @@ Angelique
 Angelita
 Angelle
 Angelo
-Angie
 Angie
 Angil
 Angus
@@ -517,7 +498,6 @@ Arianne
 Aridatha
 Arie
 Ariel
-Ariel
 Ariela
 Ariella
 Arielle
@@ -569,7 +549,6 @@ Ashlee
 Ashleigh
 Ashlen
 Ashley
-Ashley
 Ashli
 Ashlie
 Ashly
@@ -591,7 +570,6 @@ Aubine
 Aubree
 Aubrette
 Aubrey
-Aubrey
 Aubrie
 Aubry
 Audi
@@ -610,7 +588,6 @@ Auguste
 Augustin
 Augustina
 Augustine
-Augustine
 Augusto
 Augustus
 Aura
@@ -628,14 +605,12 @@ Aurora
 Aurore
 Austen
 Austin
-Austin
 Austina
 Austine
 Ava
 Ave
 Aveline
 Averell
-Averil
 Averil
 Averill
 Avery
@@ -703,10 +678,8 @@ Barret
 Barrett
 Barri
 Barrie
-Barrie
 Barris
 Barron
-Barry
 Barry
 Bart
 Bartel
@@ -742,7 +715,6 @@ Beatrice
 Beatrisa
 Beatrix
 Beatriz
-Beau
 Beau
 Beaufort
 Beauregard
@@ -791,8 +763,6 @@ Bennet
 Bennett
 Benni
 Bennie
-Bennie
-Benny
 Benny
 Benoite
 Benson
@@ -826,20 +796,17 @@ Bernhard
 Berni
 Bernice
 Bernie
-Bernie
 Bernita
 Berny
 Berri
 Berrie
 Berry
 Bert
-Bert
 Berta
 Berte
 Bertha
 Berthe
 Berti
-Bertie
 Bertie
 Bertina
 Bertine
@@ -883,11 +850,8 @@ Biddy
 Bidget
 Biff
 Bill
-Bill
 Billi
 Billie
-Billie
-Billy
 Billy
 Bing
 Binky
@@ -903,9 +867,7 @@ Bjorn
 Bjorne
 Blaine
 Blair
-Blair
 Blaire
-Blake
 Blake
 Blakelee
 Blakeley
@@ -927,13 +889,10 @@ Blondie
 Blondy
 Blythe
 Bo
-Bo
 Bob
 Bobbette
 Bobbi
 Bobbie
-Bobbie
-Bobby
 Bobby
 Bobette
 Bobina
@@ -966,7 +925,6 @@ Brandie
 Brandise
 Brandon
 Brandy
-Brandy
 Brant
 Brea
 Breanne
@@ -981,7 +939,6 @@ Brenn
 Brenna
 Brent
 Bret
-Brett
 Brett
 Brewer
 Brewster
@@ -1016,7 +973,6 @@ Briteny
 Britney
 Britni
 Britt
-Britt
 Britta
 Brittan
 Brittany
@@ -1031,10 +987,7 @@ Brodie
 Brody
 Bronson
 Brook
-Brook
 Brooke
-Brooke
-Brooks
 Brooks
 Bruce
 Brunella
@@ -1045,7 +998,6 @@ Bryan
 Bryana
 Bryant
 Bryce
-Bryn
 Bryn
 Bryna
 Brynn
@@ -1081,7 +1033,6 @@ Cain
 Caitlin
 Caitrin
 Cal
-Cal
 Caldwell
 Caleb
 Calhoun
@@ -1094,7 +1045,6 @@ Callie
 Cally
 Calvin
 Calypso
-Cam
 Cam
 Camala
 Camel
@@ -1109,7 +1059,6 @@ Camilla
 Camille
 Cammi
 Cammie
-Cammy
 Cammy
 Canada
 Candace
@@ -1130,7 +1079,6 @@ Carena
 Caresa
 Caressa
 Caresse
-Carey
 Carey
 Cari
 Caria
@@ -1155,8 +1103,6 @@ Carlene
 Carley
 Carli
 Carlie
-Carlie
-Carlin
 Carlin
 Carlina
 Carline
@@ -1184,7 +1130,6 @@ Carmelle
 Carmen
 Carmina
 Carmine
-Carmine
 Carmita
 Carmon
 Caro
@@ -1211,26 +1156,21 @@ Carrie
 Carrissa
 Carrol
 Carroll
-Carroll
 Carry
 Carson
 Carsten
 Carter
 Cary
-Cary
-Caryl
 Caryl
 Caryn
 Casandra
 Case
-Casey
 Casey
 Casi
 Casia
 Casie
 Caspar
 Casper
-Cass
 Cass
 Cassandra
 Cassandre
@@ -1241,7 +1181,6 @@ Cassi
 Cassie
 Cassondra
 Cassy
-Cat
 Cat
 Catarina
 Cate
@@ -1275,7 +1214,6 @@ Caty
 Cayla
 Cecelia
 Cecil
-Cecil
 Cecile
 Ceciley
 Cecilia
@@ -1301,7 +1239,6 @@ Celisse
 Celle
 Cesar
 Cesya
-Chad
 Chad
 Chadd
 Chaddie
@@ -1401,11 +1338,9 @@ Chloe
 Chloette
 Chloris
 Chris
-Chris
 Chriss
 Chrissa
 Chrissie
-Chrissy
 Chrissy
 Christ
 Christa
@@ -1420,11 +1355,9 @@ Christel
 Christen
 Christi
 Christian
-Christian
 Christiana
 Christiane
 Christiano
-Christie
 Christie
 Christin
 Christina
@@ -1436,7 +1369,6 @@ Christophe
 Christopher
 Christorpher
 Christos
-Christy
 Christy
 Christyna
 Chrisy
@@ -1464,14 +1396,11 @@ Cinnamon
 Cissie
 Cissy
 Clair
-Clair
-Claire
 Claire
 Clancy
 Clara
 Clarabelle
 Clarance
-Clare
 Clare
 Clarence
 Claresta
@@ -1493,7 +1422,6 @@ Clark
 Clarke
 Clary
 Claude
-Claude
 Claudelle
 Claudetta
 Claudette
@@ -1512,7 +1440,6 @@ Clayton
 Clea
 Cleland
 Clem
-Clem
 Clemence
 Clemens
 Clement
@@ -1520,7 +1447,6 @@ Clemente
 Clementia
 Clementina
 Clementine
-Clemmie
 Clemmie
 Clemmy
 Cleo
@@ -1551,7 +1477,6 @@ Codee
 Codi
 Codie
 Cody
-Cody
 Colbert
 Cole
 Coleen
@@ -1576,7 +1501,6 @@ Concordia
 Conney
 Conni
 Connie
-Connie
 Connolly
 Connor
 Conny
@@ -1590,7 +1514,6 @@ Constanta
 Constantia
 Constantin
 Constantina
-Constantine
 Constantine
 Constantinos
 Consuela
@@ -1622,7 +1545,6 @@ Corene
 Coretta
 Corette
 Corey
-Corey
 Cori
 Corie
 Corilla
@@ -1647,7 +1569,6 @@ Correy
 Corri
 Corrianne
 Corrie
-Corrie
 Corrina
 Corrine
 Corrinne
@@ -1656,19 +1577,16 @@ Cortese
 Cortney
 Corwin
 Cory
-Cory
 Cosetta
 Cosette
 Cosmo
 Costa
 Courtenay
 Courtney
-Courtney
 Craig
 Crawford
 Creighton
 Cresa
-Cris
 Cris
 Crissie
 Crissy
@@ -1717,7 +1635,6 @@ Dael
 Daffi
 Daffie
 Daffy
-Daffy
 Dafna
 Dagmar
 Dahlia
@@ -1727,11 +1644,9 @@ Daisi
 Daisie
 Daisy
 Dale
-Dale
 Dalenna
 Dalia
 Dalila
-Dallas
 Dallas
 Daloris
 Dalton
@@ -1743,19 +1658,16 @@ Damita
 Damon
 Dan
 Dana
-Dana
 Dane
 Danell
 Danella
 Danelle
 Danette
 Dani
-Dani
 Dania
 Danica
 Danice
 Danie
-Daniel
 Daniel
 Daniela
 Daniele
@@ -1768,8 +1680,6 @@ Danita
 Danna
 Danni
 Dannie
-Dannie
-Danny
 Danny
 Dannye
 Dante
@@ -1783,12 +1693,10 @@ Dara
 Darb
 Darbie
 Darby
-Darby
 Darcee
 Darcey
 Darci
 Darcie
-Darcy
 Darcy
 Darda
 Dareen
@@ -1813,13 +1721,11 @@ Darren
 Darrick
 Darrin
 Darryl
-Darryl
 Darsey
 Darsie
 Darth
 Darwin
 Darya
-Daryl
 Daryl
 Daryle
 Daryn
@@ -1856,7 +1762,6 @@ Dea
 Dean
 Deana
 Deane
-Deane
 Deanna
 Deanne
 Deb
@@ -1886,7 +1791,6 @@ Deidre
 Deina
 Deirdre
 Del
-Del
 Dela
 Delaney
 Delbert
@@ -1896,7 +1800,6 @@ Delia
 Delila
 Delilah
 Delinda
-Dell
 Dell
 Della
 Delly
@@ -1914,7 +1817,6 @@ Demetre
 Demetri
 Demetria
 Demetris
-Demetris
 Demetrius
 Demosthenis
 Dena
@@ -1925,9 +1827,7 @@ Denise
 Denna
 Denni
 Dennie
-Dennie
 Dennis
-Denny
 Denny
 Deny
 Denys
@@ -1954,10 +1854,8 @@ Deva
 Devan
 Devi
 Devin
-Devin
 Devina
 Devinne
-Devon
 Devon
 Devondra
 Devonna
@@ -2002,9 +1900,7 @@ Dinnie
 Dinny
 Dino
 Dion
-Dion
 Dione
-Dionis
 Dionis
 Dionne
 Dionysus
@@ -2034,7 +1930,6 @@ Dominic
 Dominica
 Dominick
 Dominique
-Dominique
 Don
 Dona
 Donal
@@ -2051,8 +1946,6 @@ Donnajean
 Donnamarie
 Donni
 Donnie
-Donnie
-Donny
 Donny
 Donovan
 Dora
@@ -2074,7 +1967,6 @@ Dorette
 Dorey
 Dori
 Doria
-Dorian
 Dorian
 Dorice
 Dorie
@@ -2100,7 +1992,6 @@ Dorry
 Dorthea
 Dorthy
 Dory
-Dory
 Dosi
 Dot
 Doti
@@ -2118,7 +2009,6 @@ Dove
 Doyle
 Drake
 Drea
-Drew
 Drew
 Dru
 Dryke
@@ -2184,8 +2074,6 @@ Ed
 Eda
 Eddi
 Eddie
-Eddie
-Eddy
 Eddy
 Ede
 Edee
@@ -2194,7 +2082,6 @@ Eden
 Edgar
 Edgardo
 Edi
-Edie
 Edie
 Edin
 Edita
@@ -2267,7 +2154,6 @@ Elisabet
 Elisabeth
 Elisabetta
 Elise
-Elisha
 Elisha
 Elissa
 Elita
@@ -2378,7 +2264,6 @@ Emmie
 Emmit
 Emmott
 Emmy
-Emmy
 Emmye
 Emogene
 Emory
@@ -2424,7 +2309,6 @@ Ericka
 Erik
 Erika
 Erin
-Erin
 Erina
 Erinn
 Erinna
@@ -2452,7 +2336,6 @@ Eryn
 Esau
 Esma
 Esmaria
-Esme
 Esme
 Esmeralda
 Esmerelda
@@ -2512,7 +2395,6 @@ Eve
 Eveleen
 Evelina
 Eveline
-Evelyn
 Evelyn
 Everard
 Everett
@@ -2583,7 +2465,6 @@ Federico
 Fedora
 Felecia
 Felicdad
-Felice
 Felice
 Felicia
 Felicio
@@ -2695,7 +2576,6 @@ Foster
 Fowler
 Fox
 Fran
-Fran
 France
 Francene
 Frances
@@ -2704,7 +2584,6 @@ Francesco
 Francesmary
 Francine
 Francis
-Francis
 Francisca
 Francisco
 Franciska
@@ -2712,12 +2591,9 @@ Francois
 Francoise
 Francyne
 Frank
-Frank
-Frankie
 Frankie
 Franklin
 Franklyn
-Franky
 Franky
 Franni
 Frannie
@@ -2728,12 +2604,9 @@ Fraser
 Frayda
 Frazier
 Fred
-Fred
 Freda
 Freddi
 Freddie
-Freddie
-Freddy
 Freddy
 Fredelia
 Frederic
@@ -2771,10 +2644,8 @@ Gabey
 Gabi
 Gabie
 Gabriel
-Gabriel
 Gabriela
 Gabriele
-Gabriell
 Gabriell
 Gabriella
 Gabrielle
@@ -2785,8 +2656,6 @@ Gaby
 Gae
 Gael
 Gail
-Gail
-Gale
 Gale
 Gale 
 Galen
@@ -2830,9 +2699,7 @@ Gavra
 Gavriel
 Gavrielle
 Gay
-Gay
 Gayla
-Gayle
 Gayle
 Gayleen
 Gaylene
@@ -2842,7 +2709,6 @@ Geeta
 Gelya
 Gen
 Gena
-Gene
 Gene
 Geneva
 Genevieve
@@ -2862,7 +2728,6 @@ Geoffrey
 Geoffry
 Georg
 George
-George
 Georgeanna
 Georgeanne
 Georgena
@@ -2871,12 +2736,10 @@ Georgeta
 Georgetta
 Georgette
 Georgia
-Georgia
 Georgiamay
 Georgiana
 Georgianna
 Georgianne
-Georgie
 Georgie
 Georgina
 Georgine
@@ -2894,23 +2757,19 @@ Gerhard
 Gerhardine
 Gerhardt
 Geri
-Geri
 Gerianna
 Gerianne
 Gerladina
 Germain
-Germaine
 Germaine
 Germana
 Gerold
 Gerome
 Gerrard
 Gerri
-Gerri
 Gerrie
 Gerrilee
 Gerrit
-Gerry
 Gerry
 Gershom
 Gershon
@@ -2951,7 +2810,6 @@ Gilburt
 Gilda
 Giles
 Gill
-Gill
 Gillan
 Gilles
 Gilli
@@ -2962,7 +2820,6 @@ Gilly
 Gina
 Ginelle
 Ginevra
-Ginger
 Ginger
 Ginni
 Ginnie
@@ -2993,10 +2850,8 @@ Gladis
 Gladys
 Gleda
 Glen
-Glen
 Glenda
 Glenine
-Glenn
 Glenn
 Glenna
 Glennie
@@ -3037,7 +2892,6 @@ Gordan
 Gordie
 Gordon
 Grace
-Grace
 Gracia
 Gracie
 Grady
@@ -3063,7 +2917,6 @@ Gregorio
 Gregory
 Greta
 Gretal
-Gretchen
 Gretchen
 Grete
 Gretel
@@ -3096,7 +2949,6 @@ Gunner
 Gunter
 Gunther
 Gunvor
-Gus
 Gus
 Gusella
 Gussi
@@ -3146,9 +2998,7 @@ Hakim
 Hal
 Hale
 Haleigh
-Haleigh
 Halette
-Haley
 Haley
 Hali
 Halie
@@ -3180,7 +3030,6 @@ Hanna
 Hannah
 Hanni
 Hannibal
-Hannibal
 Hannie
 Hannis
 Hanny
@@ -3195,7 +3044,6 @@ Hari
 Harlan
 Harland
 Harlene
-Harley
 Harley
 Harli
 Harlie
@@ -3245,8 +3093,6 @@ Hayley
 Hayward
 Haywood
 Hazel
-Hazel
-Heath
 Heath
 Heathcliff
 Heather
@@ -3287,7 +3133,6 @@ Hendrik
 Hendrika
 Henka
 Henri
-Henrie
 Henrie
 Henrieta
 Henrietta
@@ -3342,7 +3187,6 @@ Hezekiah
 Higgins
 Hilarie
 Hilary
-Hilary
 Hilbert
 Hilda
 Hildagard
@@ -3353,7 +3197,6 @@ Hildegarde
 Hildy
 Hill
 Hillard
-Hillary
 Hillary
 Hillel
 Hillery
@@ -3372,7 +3215,6 @@ Holley
 Holli
 Hollie
 Hollis
-Holly
 Holly
 Holly-Anne
 Hollyanne
@@ -3444,8 +3286,6 @@ Ignaz
 Ignazio
 Igor
 Ike
-Ike
-Ikey
 Ikey
 Ilana
 Ileana
@@ -3495,7 +3335,6 @@ Iolanthe
 Iona
 Iormina
 Ira
-Ira
 Irena
 Irene
 Irina
@@ -3507,7 +3346,6 @@ Irvine
 Irving
 Irwin
 Isa
-Isa
 Isaac
 Isaak
 Isabeau
@@ -3516,9 +3354,7 @@ Isabelita
 Isabella
 Isabelle
 Isador
-Isador
 Isadora
-Isadore
 Isadore
 Isahella
 Isaiah
@@ -3557,7 +3393,6 @@ Jack
 Jackelyn
 Jacki
 Jackie
-Jackie
 Jacklin
 Jacklyn
 Jackquelin
@@ -3583,7 +3418,6 @@ Jada
 Jade
 Jae
 Jaime
-Jaime
 Jaimie
 Jaine
 Jake
@@ -3594,10 +3428,8 @@ Jameson
 Jamey
 Jami
 Jamie
-Jamie
 Jamima
 Jammie
-Jan
 Jan
 Jana
 Janaya
@@ -3656,7 +3488,6 @@ Jaymee
 Jayne
 Jaynell
 Jazmin
-Jean
 Jean
 Jean-Christophe
 Jean-Francois
@@ -3727,7 +3558,6 @@ Jeraldine
 Jeralee
 Jeramie
 Jere
-Jere
 Jereme
 Jeremiah
 Jeremias
@@ -3736,13 +3566,11 @@ Jeremy
 Jeri
 Jermain
 Jermaine
-Jermaine
 Jermayne
 Jerold
 Jerome
 Jeromy
 Jerri
-Jerrie
 Jerrie
 Jerrilee
 Jerrilyn
@@ -3750,11 +3578,9 @@ Jerrine
 Jerrold
 Jerrome
 Jerry
-Jerry
 Jerrylee
 Jervis
 Jerzy
-Jess
 Jess
 Jessa
 Jessalin
@@ -3762,13 +3588,11 @@ Jessalyn
 Jessamine
 Jessamyn
 Jesse
-Jesse
 Jessee
 Jesselyn
 Jessey
 Jessi
 Jessica
-Jessie
 Jessie
 Jessika
 Jessy
@@ -3793,7 +3617,6 @@ Jimbo
 Jimmie
 Jimmy
 Jinny
-Jo
 Jo
 Jo Ann
 Jo-Ann
@@ -3827,10 +3650,7 @@ Jocelyne
 Jock
 Jodee
 Jodi
-Jodi
 Jodie
-Jodie
-Jody
 Jody
 Joe
 Joel
@@ -3844,7 +3664,6 @@ Joelly
 Joellyn
 Joelynn
 Joete
-Joey
 Joey
 Johan
 Johann
@@ -3884,7 +3703,6 @@ Jonie
 Jonis
 Jonny
 Jordain
-Jordan
 Jordan
 Jordana
 Jordanna
@@ -3932,20 +3750,16 @@ Joyous
 Juan
 Juana
 Juanita
-Juanita
 Jud
 Judah
 Judas
 Judd
 Jude
-Jude
 Judi
 Judie
 Judith
-Judith
 Juditha
 Judson
-Judy
 Judy
 Judye
 Juergen
@@ -3960,7 +3774,6 @@ Juliane
 Juliann
 Julianna
 Julianne
-Julie
 Julie
 Julienne
 Juliet
@@ -3978,7 +3791,6 @@ Junette
 Junia
 Junie
 Junina
-Justin
 Justin
 Justina
 Justine
@@ -4031,7 +3843,6 @@ Karalynn
 Kare
 Karee
 Kareem
-Karel
 Karel
 Karen
 Karena
@@ -4153,8 +3964,6 @@ Kelcie
 Kelcy
 Kelila
 Kellen
-Kellen
-Kelley
 Kelley
 Kelli
 Kellia
@@ -4162,9 +3971,7 @@ Kellie
 Kellina
 Kellsie
 Kelly
-Kelly
 Kellyann
-Kelsey
 Kelsey
 Kelsi
 Kelsy
@@ -4195,7 +4002,6 @@ Kerrie
 Kerrill
 Kerrin
 Kerry
-Kerry
 Kerstin
 Kesley
 Keslie
@@ -4217,7 +4023,6 @@ Kiersten
 Kikelia
 Kiley
 Kim
-Kim
 Kimball
 Kimberlee
 Kimberley
@@ -4237,14 +4042,12 @@ Kingsly
 Kingston
 Kinna
 Kip
-Kip
 Kipp
 Kippie
 Kippy
 Kira
 Kirbee
 Kirbie
-Kirby
 Kirby
 Kiri
 Kirk
@@ -4257,7 +4060,6 @@ Kirstyn
 Kissee
 Kissiah
 Kissie
-Kit
 Kit
 Kitti
 Kittie
@@ -4293,7 +4095,6 @@ Kostas
 Kourtney
 Kraig
 Kris
-Kris
 Krishna
 Krissie
 Krissy
@@ -4322,7 +4123,6 @@ Kurt
 Kurtis
 Kyla
 Kyle
-Kyle
 Kylen
 Kylie
 Kylila
@@ -4349,7 +4149,6 @@ Lana
 Lance
 Lancelot
 Lane
-Lane
 Lanette
 Laney
 Langston
@@ -4358,7 +4157,6 @@ Lanie
 Lanita
 Lanna
 Lanni
-Lanny
 Lanny
 Lara
 Laraine
@@ -4387,7 +4185,6 @@ Laureen
 Laurel
 Laurella
 Lauren
-Lauren
 Laurena
 Laurence
 Laurene
@@ -4398,7 +4195,6 @@ Laurette
 Lauri
 Laurianne
 Laurice
-Laurie
 Laurie
 Lauryn
 Lavena
@@ -4432,7 +4228,6 @@ Leanora
 Lebbie
 Leda
 Lee
-Lee
 LeeAnn
 Leeann
 Leeanne
@@ -4447,7 +4242,6 @@ Leia
 Leiah
 Leif
 Leigh
-Leigh
 Leigha
 Leighton
 Leila
@@ -4455,7 +4249,6 @@ Leilah
 Leisha
 Lela
 Lelah
-Leland
 Leland
 Lelia
 Lem
@@ -4502,9 +4295,7 @@ Leroy
 Les
 Leshia
 Lesley
-Lesley
 Lesli
-Leslie
 Leslie
 Lesly
 Lester
@@ -4561,20 +4352,15 @@ Lilly
 Lily
 Lilyan
 Lin
-Lin
 Lina
 Lincoln
-Lind
 Lind
 Linda
 Lindi
 Lindie
 Lindsay
-Lindsay
-Lindsey
 Lindsey
 Lindsy
-Lindy
 Lindy
 Linea
 Linell
@@ -4637,7 +4423,6 @@ Loni
 Lonna
 Lonni
 Lonnie
-Lonnie
 Lonny
 Lora
 Lorain
@@ -4649,7 +4434,6 @@ Loree
 Loreen
 Lorelei
 Lorelle
-Loren
 Loren
 Lorena
 Lorene
@@ -4670,11 +4454,9 @@ Lorine
 Lorita
 Lorna
 Lorne
-Lorne
 Lorraine
 Lorrayne
 Lorri
-Lorrie
 Lorrie
 Lorrin
 Lorry
@@ -4685,7 +4467,6 @@ Lotte
 Lotti
 Lottie
 Lotty
-Lou
 Lou
 Louella
 Louie
@@ -4699,7 +4480,6 @@ Lowell
 Luana
 Luanna
 Lucas
-Luce
 Luce
 Luci
 Lucia
@@ -4748,7 +4528,6 @@ Lydia
 Lydie
 Lyle
 Lyn
-Lyn
 Lynda
 Lynde
 Lyndel
@@ -4762,7 +4541,6 @@ Lynea
 Lynelle
 Lynett
 Lynette
-Lynn
 Lynn
 Lynna
 Lynne
@@ -4789,8 +4567,6 @@ Madalyn
 Maddalena
 Maddi
 Maddie
-Maddie
-Maddy
 Maddy
 Madel
 Madelaine
@@ -4953,7 +4729,6 @@ Mariele
 Marielle
 Mariellen
 Marietta
-Marietta
 Mariette
 Marigold
 Marijo
@@ -4967,7 +4742,6 @@ Marin
 Marina
 Marinna
 Mario
-Marion
 Marion
 Mariquilla
 Maris
@@ -5004,7 +4778,6 @@ Marlie
 Marlin
 Marline
 Marlo
-Marlo
 Marlon
 Marlow
 Marlowe
@@ -5038,12 +4811,10 @@ Marthena
 Marti
 Martica
 Martie
-Martie
 Martin
 Martina
 Martino
 Martita
-Marty
 Marty
 Martyn
 Martynne
@@ -5095,8 +4866,6 @@ Matthus
 Matti
 Mattias
 Mattie
-Mattie
-Matty
 Matty
 Maud
 Maude
@@ -5111,7 +4880,6 @@ Mauricio
 Maurie
 Maurine
 Maurise
-Maurise
 Maurita
 Maurits
 Mauritz
@@ -5119,10 +4887,8 @@ Maury
 Mavis
 Mavra
 Max
-Max
 Maxfield
 Maxi
-Maxie
 Maxie
 Maxim
 Maximilian
@@ -5140,8 +4906,6 @@ Maynard
 Maynord
 Mayor
 Mead
-Mead
-Meade
 Meade
 Meagan
 Meaghan
@@ -5161,7 +4925,6 @@ Mei
 Meier
 Meir
 Meira
-Mel
 Mel
 Mela
 Melamie
@@ -5212,7 +4975,6 @@ Mercie
 Mercy
 Meredeth
 Meredith
-Meredith
 Meredithe
 Merell
 Meridel
@@ -5225,7 +4987,6 @@ Meris
 Merissa
 Merl
 Merla
-Merle
 Merle
 Merlin
 Merlina
@@ -5243,15 +5004,12 @@ Merrile
 Merrilee
 Merrili
 Merrill
-Merrill
 Merrily
-Merry
 Merry
 Mersey
 Merv
 Mervin
 Merwin
-Meryl
 Meryl
 Meta
 Meyer
@@ -5266,13 +5024,10 @@ Michaeline
 Michaella
 Michail
 Michal
-Michal
 Michale
 Micheal
 Micheil
 Michel
-Michel
-Michele
 Michele
 Michelina
 Micheline
@@ -5282,8 +5037,6 @@ Mick
 Mickey
 Micki
 Mickie
-Mickie
-Micky
 Micky
 Midge
 Mignon
@@ -5306,7 +5059,6 @@ Milicent
 Milissent
 Milka
 Milli
-Millicent
 Millicent
 Millie
 Millisent
@@ -5392,14 +5144,12 @@ Mordecai
 Moreen
 Morena
 Morgan
-Morgan
 Morgana
 Morganica
 Morganne
 Morgen
 Moria
 Morissa
-Morlee
 Morlee
 Morley
 Morly
@@ -5423,7 +5173,6 @@ Moya
 Moyna
 Moyra
 Mozelle
-Muffin
 Muffin
 Mufi
 Mufinella
@@ -5494,7 +5243,6 @@ Napoleon
 Nara
 Nari
 Nariko
-Nat
 Nat
 Nata
 Natala
@@ -5585,16 +5333,13 @@ Niccolo
 Nichol
 Nicholas
 Nichole
-Nichole
 Nicholle
 Nichols
 Nick
 Nickey
 Nicki
 Nickie
-Nickie
 Nickolas
-Nicky
 Nicky
 Nico
 Nicol
@@ -5612,9 +5357,7 @@ Niels
 Nigel
 Nike
 Niki
-Niki
 Nikita
-Nikki
 Nikki
 Nikkie
 Nikolai
@@ -5646,7 +5389,6 @@ Noam
 Noami
 Noble
 Noe
-Noel
 Noel
 Noelani
 Noell
@@ -5736,7 +5478,6 @@ Olivier
 Oliy
 Olle
 Ollie
-Ollie
 Olly
 Olva
 Olwen
@@ -5820,8 +5561,6 @@ Paddie
 Paddy
 Padraig
 Page
-Page
-Paige
 Paige
 Pail
 Palmer
@@ -5852,7 +5591,6 @@ Pascal
 Pascale
 Pasquale
 Pat
-Pat
 Pate
 Patel
 Paten
@@ -5862,18 +5600,14 @@ Paton
 Patric
 Patrica
 Patrice
-Patrice
 Patricia
 Patricio
 Patrick
 Patrik
 Patrizia
 Patsy
-Patsy
 Patti
 Pattie
-Pattie
-Patty
 Patty
 Paul
 Paula
@@ -5905,14 +5639,11 @@ Peggy
 Peirce
 Pembroke
 Pen
-Pen
 Penelopa
 Penelope
 Penn
 Penni
 Pennie
-Pennie
-Penny
 Penny
 Penrod
 Pepe
@@ -5930,7 +5661,6 @@ Perla
 Perle
 Perri
 Perrine
-Perry
 Perry
 Persis
 Pet
@@ -5953,7 +5683,6 @@ Phaidra
 Phebe
 Phedra
 Phelia
-Phil
 Phil
 Philbert
 Philip
@@ -6002,7 +5731,6 @@ Plato
 Polly
 Pollyanna
 Pooh
-Pooh
 Poppy
 Porter
 Portia
@@ -6038,7 +5766,6 @@ Queada
 Queenie
 Quent
 Quentin
-Quentin
 Querida
 Quiggly
 Quigly
@@ -6048,7 +5775,6 @@ Quillan
 Quincey
 Quincy
 Quinlan
-Quinn
 Quinn
 Quint
 Quinta
@@ -6107,12 +5833,9 @@ Randee
 Randell
 Randene
 Randi
-Randi
-Randie
 Randie
 Randolf
 Randolph
-Randy
 Randy
 Ranee
 Rani
@@ -6134,7 +5857,6 @@ Raven
 Ravi
 Ravil
 Rawley
-Ray
 Ray
 Raychel
 Raye
@@ -6172,10 +5894,8 @@ Reeta
 Reeva
 Reg
 Regan
-Regan
 Regen
 Reggi
-Reggie
 Reggie
 Reggis
 Reggy
@@ -6205,7 +5925,6 @@ Renato
 Renaud
 Renault
 Rene
-Rene
 Renee
 Renel
 Renell
@@ -6219,7 +5938,6 @@ Reuben
 Reuven
 Revkah
 Rex
-Rey
 Rey
 Reyna
 Reynard
@@ -6261,14 +5979,10 @@ Rick
 Rickard
 Rickey
 Ricki
-Ricki
 Rickie
-Rickie
-Ricky
 Ricky
 Rik
 Riki
-Rikki
 Rikki
 Riley
 Rina
@@ -6293,7 +6007,6 @@ Robb
 Robbert
 Robbi
 Robbie
-Robbie
 Robbin
 Robby
 Robbyn
@@ -6302,7 +6015,6 @@ Robenia
 Robert
 Roberta
 Roberto
-Robin
 Robin
 Robina
 Robinet
@@ -6375,15 +6087,12 @@ Ronna
 Ronni
 Ronnica
 Ronnie
-Ronnie
-Ronny
 Ronny
 Roobbie
 Roosevelt
 Rora
 Rori
 Rorie
-Rory
 Rory
 Ros
 Rosa
@@ -6468,7 +6177,6 @@ Rubie
 Rubin
 Rubina
 Ruby
-Ruby
 Rudd
 Ruddie
 Ruddy
@@ -6515,7 +6223,6 @@ Sada
 Sadella
 Sadie
 Sal
-Sal
 Salem
 Salim
 Sallee
@@ -6534,12 +6241,10 @@ Salvador
 Salvatore
 Salvidor
 Sam
-Sam
 Samantha
 Samara
 Samaria
 Sammie
-Sammy
 Sammy
 Sampson
 Samson
@@ -6557,7 +6262,6 @@ Sandie
 Sandor
 Sandra
 Sandro
-Sandy
 Sandy
 Sandye
 Sanford
@@ -6581,8 +6285,6 @@ Sarina
 Sarine
 Sarita
 Sascha
-Sascha
-Sasha
 Sasha
 Sashenka
 Saudra
@@ -6591,7 +6293,6 @@ Sauncho
 Saunder
 Saunders
 Saunderson
-Saundra
 Saundra
 Savina
 Saw
@@ -6604,7 +6305,6 @@ Say
 Sayer
 Sayers
 Sayre
-Sayre
 Sayres
 Scarface
 Scarlet
@@ -6616,9 +6316,7 @@ Scott
 Scotti
 Scottie
 Scotty
-Scotty
 Seamus
-Sean
 Sean
 Seana
 Sebastian
@@ -6655,7 +6353,6 @@ Seymour
 Shadow
 Shaina
 Shaine
-Shaine
 Shalna
 Shalne
 Shalom
@@ -6669,14 +6366,12 @@ Shandie
 Shandra
 Shandy
 Shane
-Shane
 Shani
 Shanie
 Shanna
 Shannah
 Shannan
 Shannen
-Shannon
 Shannon
 Shanon
 Shanta
@@ -6700,14 +6395,11 @@ Sharron
 Sharyl
 Shaughn
 Shaun
-Shaun
 Shauna
 Shaw
 Shawn
-Shawn
 Shawna
 Shawnee
-Shay
 Shay
 Shayla
 Shaylah
@@ -6715,8 +6407,6 @@ Shaylyn
 Shaylynn
 Shayna
 Shayne
-Shayne
-Shea
 Shea
 Sheba
 Sheela
@@ -6738,13 +6428,10 @@ Shelagh
 Shelba
 Shelbi
 Shelby
-Shelby
 Shelden
 Sheldon
 Shelia
 Shell
-Shell
-Shelley
 Shelley
 Shelli
 Shellie
@@ -6812,7 +6499,6 @@ Sibelle
 Sibilla
 Sibley
 Sibyl
-Sibyl
 Sibylla
 Sibylle
 Sid
@@ -6847,7 +6533,6 @@ Simeon
 Simmonds
 Simon
 Simona
-Simone
 Simone
 Simonette
 Simonne
@@ -6898,9 +6583,7 @@ Sonia
 Sonja
 Sonni
 Sonnie
-Sonnie
 Sonnnie
-Sonny
 Sonny
 Sonya
 Sophey
@@ -6926,7 +6609,6 @@ Stacey
 Staci
 Stacia
 Stacie
-Stacy
 Stacy
 Stafani
 Staffard
@@ -7010,7 +6692,6 @@ Sullivan
 Sully
 Sumner
 Sunny
-Sunny
 Sunshine
 Susan
 Susana
@@ -7047,7 +6728,6 @@ Syd
 Sydel
 Sydelle
 Sydney
-Sydney
 Sylvan
 Sylvester
 Sylvia
@@ -7058,9 +6738,7 @@ Tabb
 Tabbatha
 Tabbi
 Tabbie
-Tabbie
 Tabbitha
-Tabby
 Tabby
 Taber
 Tabina
@@ -7080,8 +6758,6 @@ Talbot
 Talia
 Tallia
 Tallie
-Tallie
-Tally
 Tally
 Talya
 Talyah
@@ -7098,8 +6774,6 @@ Tamma
 Tammara
 Tammi
 Tammie
-Tammie
-Tammy
 Tammy
 Tamra
 Tan
@@ -7127,7 +6801,6 @@ Tarzan
 Tasha
 Tasia
 Tate
-Tate
 Tatiana
 Tatiania
 Tatum
@@ -7137,13 +6810,10 @@ Taylor
 Teador
 Teane
 Ted
-Ted
 Tedd
 Tedda
 Teddi
 Teddie
-Teddie
-Teddy
 Teddy
 Tedi
 Tedie
@@ -7179,12 +6849,10 @@ Terrel
 Terrell
 Terrence
 Terri
-Terri
 Terri-Jo
 Terrianne
 Terrie
 Terrill
-Terry
 Terry
 Terrye
 Tersina
@@ -7219,7 +6887,6 @@ Thedric
 Thedrick
 Thekla
 Thelma
-Theo
 Theo
 Theobald
 Theodor
@@ -7279,12 +6946,9 @@ Tiler
 Tillie
 Tilly
 Tim
-Tim
 Timi
 Timmi
 Timmie
-Timmie
-Timmy
 Timmy
 Timothea
 Timothee
@@ -7302,16 +6966,13 @@ Tito
 Titos
 Titus
 Tobe
-Tobe
 Tobey
 Tobi
 Tobiah
 Tobias
 Tobie
-Tobie
 Tobin
 Tobit
-Toby
 Toby
 Tobye
 Tod
@@ -7331,19 +6992,15 @@ Tomkin
 Tomlin
 Tommi
 Tommie
-Tommie
-Tommy
 Tommy
 Toni
 Tonia
 Tonie
 Tonnie
 Tony
-Tony
 Tonya
 Tootsie
 Tore
-Torey
 Torey
 Tori
 Torie
@@ -7365,14 +7022,10 @@ Townie
 Townsend
 Towny
 Trace
-Trace
 Tracee
-Tracey
 Tracey
 Traci
 Tracie
-Tracie
-Tracy
 Tracy
 Traver
 Travers
@@ -7478,11 +7131,9 @@ Vachel
 Vaclav
 Vail
 Val
-Val
 Valaree
 Valaria
 Valdemar
-Vale
 Vale
 Valeda
 Valencia
@@ -7491,7 +7142,6 @@ Valenka
 Valentia
 Valentin
 Valentina
-Valentine
 Valentine
 Valera
 Valeria
@@ -7505,7 +7155,6 @@ Vallie
 Vally
 Valma
 Valry
-Van
 Van
 Vance
 Vanda
@@ -7574,7 +7223,6 @@ Vilhelm
 Vilhelmina
 Vilma
 Vin
-Vin
 Vina
 Vince
 Vincent
@@ -7582,8 +7230,6 @@ Vincents
 Vinita
 Vinni
 Vinnie
-Vinnie
-Vinny
 Vinny
 Vinod
 Viola
@@ -7593,7 +7239,6 @@ Violet
 Violetta
 Violette
 Virge
-Virgie
 Virgie
 Virgil
 Virgilio
@@ -7650,10 +7295,7 @@ Wallace
 Wallache
 Wallas
 Wallie
-Wallie
 Wallis
-Wallis
-Wally
 Wally
 Walsh
 Walt
@@ -7723,7 +7365,6 @@ Whitaker
 Whitby
 Whitman
 Whitney
-Whitney
 Whittaker
 Wiatt
 Wilber
@@ -7753,14 +7394,11 @@ Willetta
 Willette
 Willey
 Willi
-Willi
 William
-Willie
 Willie
 Willis
 Willmott
 Willow
-Willy
 Willy
 Willyt
 Wilma
@@ -7788,9 +7426,7 @@ Winnah
 Winne
 Winni
 Winnie
-Winnie
 Winnifred
-Winny
 Winny
 Winona
 Winonah
@@ -7828,7 +7464,6 @@ Wylie
 Wylma
 Wyn
 Wyndham
-Wynn
 Wynn
 Wynne
 Wynnie
