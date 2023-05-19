@@ -57,4 +57,5 @@
         <item>Take time to reflect and recharge</item>
         <item>Embrace the joy of missing out (JOMO)</item>
     </string-array>
+    <string name="activate_weekly_time_button">Activate weekly time!</string>
 </resources>

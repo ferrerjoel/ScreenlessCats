@@ -37,6 +37,8 @@ class AppBlockerService : AccessibilityService() {
 
     private var limitTime: Long = 0
     private var remainingTimeToday: Long = 0
+
+    private var userHasActivatedWeeklyTime: Boolean = false
     private var limitTimeWeekly: Long = 0
     private var remainingTimeWeekly: Long = 0
 
@@ -66,20 +68,25 @@ class AppBlockerService : AccessibilityService() {
         sharedPreferencesApps = applicationContext.getSharedPreferences("LimitedApps", Context.MODE_PRIVATE)
 
         Log.d("BLOCK SERVICE", "SERVICE STARTED")
-        LocalBroadcastManager.getInstance(this).registerReceiver(timeUpdateReceiver, IntentFilter("TIME_UPDATE"))
+        val intentFilter = IntentFilter().apply {
+            addAction("TIME_UPDATE")
+            addAction("USER_HAS_UPDATED_WEEKLY")
+        }
+        LocalBroadcastManager.getInstance(this).registerReceiver(timeUpdateReceiver, intentFilter)
 
         // Load original timer value and start date
         limitTime = sharedPreferences.getLong("limitTime", 0)
-        limitTimeWeekly = sharedPreferences.getLong("limitWeeklyTime", 0)
+        limitTimeWeekly = sharedPreferences.getLong("limitTimeWeekly", 0)
 
         startDate = sharedPreferences.getString("startDate", "") ?: ""
         startDateWeekly = sharedPreferences.getString("startDateWeekly", "") ?: ""
+
         // We don't need to send a notification if the set time is not more than the notification time
-        if (limitTime > 600000) {
+        if (remainingTimeToday > 600000 || (userHasActivatedWeeklyTime && remainingTimeWeekly > 600000)) {
             tenMinuteNotificationSend = true
-        } else if (limitTime > 300000) {
+        } else if (remainingTimeToday > 300000 || (userHasActivatedWeeklyTime && remainingTimeWeekly > 300000)) {
             fiveMinuteNotificationSend = true
-        } else if (limitTime > 60000) {
+        } else if (remainingTimeToday > 60000 || (userHasActivatedWeeklyTime && remainingTimeWeekly > 60000)) {
             oneMinuteNotificationSend = true
         }
 
@@ -131,7 +138,9 @@ class AppBlockerService : AccessibilityService() {
 
     private fun checkTimeAndBlock() {
         if (remainingTimeToday > 0L) {
-            startTimer()
+            startTimer(false)
+        } else if (userHasActivatedWeeklyTime && remainingTimeWeekly > 0L){
+            startTimer(true)
         } else {
             // Prevent the blocked app from launching
             performGlobalAction(GLOBAL_ACTION_HOME)
@@ -145,7 +154,7 @@ class AppBlockerService : AccessibilityService() {
         Log.d("TIMER BLOCK", "SETUP TIMER CALLED")
         val currentDate = getCurrentDate()
         val isNewDay = isDifferentDay(startDate, currentDate)
-        val isNewWeek = isDifferentWeek(startDate, currentDate)
+        val isNewWeek = isDifferentWeek(startDateWeekly, currentDate)
 
         if (isNewDay) {
             Log.d("TIMER BLOCK", "NEW DAY")
@@ -154,6 +163,9 @@ class AppBlockerService : AccessibilityService() {
             resetNotificationFlags()
             startDate = currentDate
             saveTimerData(true)
+
+            restartUserHasActivatedWeeklyTime()
+
         } else {
             Log.d("TIMER BLOCK", "ELSE")
             // Restore the remaining time from SharedPreferences
@@ -167,36 +179,58 @@ class AppBlockerService : AccessibilityService() {
             //resetNotificationFlags()
             startDateWeekly = currentDate
             //saveTimerData(true)
+            saveWeeklyStartDate()
         } else {
             Log.d("TIMER BLOCK", "ELSE")
             // Restore the remaining time from SharedPreferences
-            remainingTimeWeekly = sharedPreferences.getLong("remainingTimeToday", limitTime)
+            remainingTimeWeekly = sharedPreferences.getLong("remainingTimeWeekly", limitTimeWeekly)
         }
 
         // Start or resume the timer
         // startTimer()
     }
 
-    private fun startTimer() {
+    private fun startTimer(isWeeklyTimer : Boolean) {
         if (!isTimerRunning){
-            Log.d("TIMER BLOCK", "TIMER STARTED")
             isTimerRunning = true
-            timer = object : CountDownTimer(remainingTimeToday, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    remainingTimeToday = millisUntilFinished
-                    sendTimeNotification()
-                    Log.d("TIMER BLOCK", remainingTimeToday.toString())
-                    // Update the remaining time in SharedPreferences
-                    saveTimerData(false)
-                }
+            if (!isWeeklyTimer) {
+                Log.d("TIMER BLOCK", "TIMER STARTED DAILY")
+                timer = object : CountDownTimer(remainingTimeToday, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        remainingTimeToday = millisUntilFinished
+                        sendTimeNotification()
+                        Log.d("TIMER BLOCK", remainingTimeToday.toString())
+                        // Update the remaining time in SharedPreferences
+                        saveTimerData(false)
+                    }
 
-                override fun onFinish() {
-                    // Timer finished, handle the desired action
-                    Log.d("TIMER BLOCK", "TIMER ON FINISH CALLED")
-                    remainingTimeToday = 0L
-                    checkTimeAndBlock()
-                }
-            }.start()
+                    override fun onFinish() {
+                        // Timer finished, handle the desired action
+                        Log.d("TIMER BLOCK", "TIMER ON FINISH CALLED")
+                        remainingTimeToday = 0L
+                        checkTimeAndBlock()
+                    }
+                }.start()
+            } else {
+                Log.d("TIMER BLOCK", "TIMER STARTED WEEKLY")
+                sendNotification("Weekly time activated!", "Remember that this time is not for common use!")
+                timer = object : CountDownTimer(remainingTimeWeekly, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        remainingTimeWeekly = millisUntilFinished
+                        sendTimeNotification()
+                        Log.d("TIMER BLOCK", remainingTimeWeekly.toString())
+                        // Update the remaining time in SharedPreferences
+                        saveTimerData(false)
+                    }
+
+                    override fun onFinish() {
+                        // Timer finished, handle the desired action
+                        Log.d("TIMER BLOCK", "TIMER ON FINISH CALLED")
+                        remainingTimeWeekly = 0L
+                        checkTimeAndBlock()
+                    }
+                }.start()
+            }
         }
     }
 
@@ -212,7 +246,14 @@ class AppBlockerService : AccessibilityService() {
     private fun saveTimerData(withDate : Boolean) {
         val editor = sharedPreferences.edit()
         editor.putLong("remainingTimeToday", remainingTimeToday)
+        editor.putLong("remainingTimeWeekly", remainingTimeWeekly)
         if (withDate) editor.putString("startDate", startDate)
+        editor.apply()
+    }
+
+    private fun saveWeeklyStartDate() {
+        val editor = sharedPreferences.edit()
+        editor.putString("startDateWeekly", startDateWeekly)
         editor.apply()
     }
 
@@ -230,6 +271,7 @@ class AppBlockerService : AccessibilityService() {
     }
 
     private fun isDifferentWeek(startDate: String, currentDate: String): Boolean {
+        if (startDate == "") return false
         val startCalendar = Calendar.getInstance()
         val currentCalendar = Calendar.getInstance()
         startCalendar.time = getDateFromString(startDate)
@@ -248,6 +290,8 @@ class AppBlockerService : AccessibilityService() {
     fun updateTimeValues() {
         limitTime = sharedPreferences.getLong("limitTime", 0)
         remainingTimeToday = sharedPreferences.getLong("remainingTimeToday", limitTime)
+        limitTimeWeekly = sharedPreferences.getLong("limitTimeWeekly", 0)
+        remainingTimeWeekly = sharedPreferences.getLong("remainingTimeWeekly", limitTime)
         Log.d("TIMER BLOCK", "$remainingTimeToday $limitTime")
     }
 
@@ -258,6 +302,9 @@ class AppBlockerService : AccessibilityService() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == "TIME_UPDATE") {
                 updateTimeValues()
+            }
+            if (intent?.action == "USER_HAS_UPDATED_WEEKLY") {
+                userHasActivatedWeeklyTime = sharedPreferences.getBoolean("userHasActivatedWeeklyTime", false)
             }
         }
     }
@@ -278,10 +325,11 @@ class AppBlockerService : AccessibilityService() {
         }
     }
 
-    private fun sendNotification(message: String) {
+    private fun sendNotification(message: String, customContent: String = "") {
+        val contentText = customContent.ifEmpty { "All your selected apps are going to be blocked!" }
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(message)
-            .setContentText("All your selected apps are going to be blocked!")
+            .setContentText(contentText)
             .setSmallIcon(R.drawable.cat)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
@@ -296,18 +344,24 @@ class AppBlockerService : AccessibilityService() {
     }
 
     private fun sendTimeNotification() {
-        if (!tenMinuteNotificationSend && remainingTimeToday <= 600000) {
-            sendNotification("10 minutes left")
+        val remainingTime = if (userHasActivatedWeeklyTime) remainingTimeWeekly else remainingTimeToday
+        if (!tenMinuteNotificationSend && remainingTime <= 600000) {
+            sendNotification("10 minutes left" + if (userHasActivatedWeeklyTime) " of weekly time! Watch out!" else "")
             tenMinuteNotificationSend = true
-        } else if (!fiveMinuteNotificationSend && remainingTimeToday <= 300000) {
-            sendNotification("5 minutes left")
+        } else if (!fiveMinuteNotificationSend && remainingTime <= 300000) {
+            sendNotification("5 minutes left" + if (userHasActivatedWeeklyTime) " of weekly time! Watch out!" else "")
             fiveMinuteNotificationSend = true
-        } else if (!oneMinuteNotificationSend && remainingTimeToday <= 60000) {
-            sendNotification("1 minute left")
+        } else if (!oneMinuteNotificationSend && remainingTime <= 60000) {
+            sendNotification("1 minute left" + if (userHasActivatedWeeklyTime) " of weekly time! Watch out!" else "")
             oneMinuteNotificationSend = true
         }
     }
 
-
+    private fun restartUserHasActivatedWeeklyTime() {
+        userHasActivatedWeeklyTime = false
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("userHasActivatedWeeklyTime", userHasActivatedWeeklyTime)
+        editor.apply()
+    }
 
 }

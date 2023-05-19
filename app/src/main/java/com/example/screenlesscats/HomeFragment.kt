@@ -1,6 +1,7 @@
 package com.example.screenlesscats
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.screenlesscats.data.Cat
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.auth.ktx.auth
@@ -33,7 +35,10 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
     private lateinit var weeklyTimeLeft : TextView
     private lateinit var catText : TextView
 
+    private lateinit var weeklyActivationButton : TextView
+
     private var limitTime: Long = 0
+    private var limitTimeWeekly: Long = 0
     private var remainingTimeToday: Long = 0
     private var remainingTimeWeekly: Long = 0
 
@@ -47,6 +52,8 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
 
         dailyTimeLeft = view.findViewById(R.id.daily_time_left_text)
         weeklyTimeLeft = view.findViewById(R.id.weekly_time_left_text)
+
+        weeklyActivationButton = view.findViewById(R.id.weekly_activation_time_button)
 
         catImage = view.findViewById(R.id.cat_home)
         catText = view.findViewById(R.id.cat_text)
@@ -104,11 +111,13 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
 
     private fun loadProgressBars() {
         limitTime = sharedPreferences.getLong("limitTime", 0)
+        limitTimeWeekly = sharedPreferences.getLong("limitTimeWeekly", 0)
+
         remainingTimeToday = sharedPreferences.getLong("remainingTimeToday", limitTime)
-        remainingTimeWeekly = sharedPreferences.getLong("remainingTimeWeekly", limitTime)
+        remainingTimeWeekly = sharedPreferences.getLong("remainingTimeWeekly", limitTimeWeekly)
 
         val dailyProgress = ((remainingTimeToday.toDouble() / limitTime.toDouble()) * 100).toInt()
-        val weeklyProgress = ((remainingTimeWeekly.toDouble() / limitTime.toDouble()) * 100).toInt()
+        val weeklyProgress = ((remainingTimeWeekly.toDouble() / limitTimeWeekly.toDouble()) * 100).toInt()
 
         dailyProgressBar.progress = dailyProgress
         weeklyProgressBar.progress = weeklyProgress
@@ -118,6 +127,8 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
 
         dailyTimeLeft.text = getString(R.string.daily_time_left, dailyHoursAndMinutes.first, dailyHoursAndMinutes.second)
         weeklyTimeLeft.text = getString(R.string.weekly_time_left, weeklyHoursAndMinutes.first, weeklyHoursAndMinutes.second)
+
+        showWeeklyButtonActivation()
     }
 
     private fun convertLongToHoursAndMinutes(millis: Long): Pair<Int, Int> {
@@ -126,6 +137,33 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         val minutes = ((totalSeconds % 3600) / 60).toInt()
 
         return Pair(hours, minutes)
+    }
+
+    private fun showWeeklyButtonActivation() {
+        if (remainingTimeToday == 0L && sharedPreferences.getBoolean("isLimitEnabled", false)) {
+
+            weeklyActivationButton.visibility = View.VISIBLE
+            if (sharedPreferences.getBoolean("userHasActivatedWeeklyTime", false)) {
+                    weeklyActivationButton.text = "Deactivate weekly time"
+            }
+
+            weeklyActivationButton.setOnClickListener() {
+                val editor = sharedPreferences.edit()
+                if (!sharedPreferences.getBoolean("userHasActivatedWeeklyTime", false)) {
+                    editor.putBoolean("userHasActivatedWeeklyTime", true)
+                    weeklyActivationButton.text = "Deactivate weekly time"
+                } else {
+                    editor.putBoolean("userHasActivatedWeeklyTime", false)
+                    weeklyActivationButton.text = getString(R.string.activate_weekly_time_button)
+                }
+                editor.apply()
+                val intent = Intent("USER_HAS_UPDATED_WEEKLY")
+                LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
+            }
+
+        } else {
+            weeklyActivationButton.visibility = View.GONE
+        }
     }
 
 }

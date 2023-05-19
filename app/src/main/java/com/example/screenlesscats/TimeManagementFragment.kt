@@ -208,7 +208,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
         editor?.putLong("limitTime", totalMilliseconds)
         editor?.putLong("remainingTimeToday", totalMilliseconds)
-        editor?.putLong("limitWeeklyTime", totalMillisecondsWeekly)
+        editor?.putLong("limitTimeWeekly", totalMillisecondsWeekly)
         editor?.putLong("remainingTimeWeekly", totalMillisecondsWeekly)
         editor?.apply()
 
