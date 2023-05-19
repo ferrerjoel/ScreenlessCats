@@ -57,4 +57,6 @@
         <item>Take time to reflect and recharge</item>
         <item>Embrace the joy of missing out (JOMO)</item>
     </string-array>
+    <string name="cat_pop_title">Congrats</string>
+    <string name="cat_pop_msg">You have recieved %1$d cats</string>
 </resources>
