@@ -18,6 +18,9 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 private const val CHANNEL_ID = "TimerNotificationChannel"
 
@@ -31,9 +34,14 @@ class AppBlockerService : AccessibilityService() {
     private lateinit var sharedPreferencesApps: SharedPreferences
 
     private lateinit var timer: CountDownTimer
+
     private var limitTime: Long = 0
     private var remainingTimeToday: Long = 0
+    private var limitTimeWeekly: Long = 0
+    private var remainingTimeWeekly: Long = 0
+
     private var startDate: String = ""
+    private var startDateWeekly: String = ""
 
     private var isTimerRunning: Boolean = false
 
@@ -62,7 +70,10 @@ class AppBlockerService : AccessibilityService() {
 
         // Load original timer value and start date
         limitTime = sharedPreferences.getLong("limitTime", 0)
+        limitTimeWeekly = sharedPreferences.getLong("limitWeeklyTime", 0)
+
         startDate = sharedPreferences.getString("startDate", "") ?: ""
+        startDateWeekly = sharedPreferences.getString("startDateWeekly", "") ?: ""
         // We don't need to send a notification if the set time is not more than the notification time
         if (limitTime > 600000) {
             tenMinuteNotificationSend = true
@@ -134,6 +145,7 @@ class AppBlockerService : AccessibilityService() {
         Log.d("TIMER BLOCK", "SETUP TIMER CALLED")
         val currentDate = getCurrentDate()
         val isNewDay = isDifferentDay(startDate, currentDate)
+        val isNewWeek = isDifferentWeek(startDate, currentDate)
 
         if (isNewDay) {
             Log.d("TIMER BLOCK", "NEW DAY")
@@ -146,6 +158,19 @@ class AppBlockerService : AccessibilityService() {
             Log.d("TIMER BLOCK", "ELSE")
             // Restore the remaining time from SharedPreferences
             remainingTimeToday = sharedPreferences.getLong("remainingTimeToday", limitTime)
+        }
+
+        if (isNewWeek) {
+            Log.d("TIMER BLOCK", "NEW WEEK")
+            // Reset the weekly timer to the original value at the start of a new week
+            remainingTimeWeekly = limitTimeWeekly
+            //resetNotificationFlags()
+            startDateWeekly = currentDate
+            //saveTimerData(true)
+        } else {
+            Log.d("TIMER BLOCK", "ELSE")
+            // Restore the remaining time from SharedPreferences
+            remainingTimeWeekly = sharedPreferences.getLong("remainingTimeToday", limitTime)
         }
 
         // Start or resume the timer
@@ -203,6 +228,22 @@ class AppBlockerService : AccessibilityService() {
         // Compare the start date with the current date
         return startDate != currentDate
     }
+
+    private fun isDifferentWeek(startDate: String, currentDate: String): Boolean {
+        val startCalendar = Calendar.getInstance()
+        val currentCalendar = Calendar.getInstance()
+        startCalendar.time = getDateFromString(startDate)
+        currentCalendar.time = getDateFromString(currentDate)
+
+        // Check if the week of the start date is different from the current week
+        return startCalendar.get(Calendar.WEEK_OF_YEAR) != currentCalendar.get(Calendar.WEEK_OF_YEAR)
+    }
+
+    private fun getDateFromString(dateString: String): Date {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return dateFormat.parse(dateString) ?: Date()
+    }
+
 
     fun updateTimeValues() {
         limitTime = sharedPreferences.getLong("limitTime", 0)
