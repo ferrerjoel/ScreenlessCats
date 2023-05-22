@@ -20,7 +20,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -158,57 +161,59 @@ class Home : AppCompatActivity() {
     /*
         Method to check if the user has cats to reclaim and collects them if necessary
      */
-    private fun checkNewCat(){
-            //Get date
-            val calendar = Calendar.getInstance()
+    private fun checkNewCat() {
+        //Get date
+        val calendar = Calendar.getInstance()
 
-            val currentDate =
-                "" + calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(
-                    Calendar.DAY_OF_MONTH
-                ) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
+        val currentDate =
+            "" + calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(
+                Calendar.DAY_OF_MONTH
+            ) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
 
-            //The user
-            val auth = Firebase.auth
-            val uid = auth.uid.toString()
-            //The user info in db
-            val ref =
-                FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app")
-                    .getReference(uid)
+        //The user
+        val auth = Firebase.auth
+        val uid = auth.uid.toString()
+        //The user info in db
+        val ref =
+            FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app")
+                .getReference(uid)
 
-            var maxId: Long = 1
-            ref.get().addOnSuccessListener {
-                //Day streak
-                var ds =
-                    Integer.parseInt(it.child("user_data").child("days_streaks").value.toString())
+        var maxId: Long = 1
+        ref.get().addOnSuccessListener { dataSnapshot ->
+            //Day streak
+            var ds =
+                Integer.parseInt(dataSnapshot.child("user_data").child("days_streaks").value.toString())
 
-                //Id from the last register of the limits
-                maxId = it.child("user_data").child("limits").childrenCount
-                //Last limit info
-                val limit = it.child("user_data").child("limits").child(maxId.toString())
+            //Id from the last register of the limits
+            maxId = dataSnapshot.child("user_data").child("limits").childrenCount
+            //Last limit info
+            val limit = dataSnapshot.child("user_data").child("limits").child(maxId.toString())
 
-                if (limit.exists()) {
-                    //Cats earned until this moment
-                    var catsEarned = Integer.parseInt(limit.child("Cats_earned").value.toString())
-                    val catsEarnedStart = catsEarned
+            if (limit.exists()) {
+                //Cats earned until this moment
+                var catsEarned = Integer.parseInt(limit.child("Cats_earned").value.toString())
+                val catsEarnedStart = catsEarned
 
-                    if (limit.child("Date_limit_ended").value.toString() == "") {
-                        //Convert current date and the date of the start of the limit to Date types
-                        val dateFormat =
-                            SimpleDateFormat(
-                                "yyyy-MM-dd HH:mm",
-                                Locale.getDefault()
-                            ) // Format of the dates
-                        val date1 = dateFormat.parse(currentDate)
-                        val date2 =
-                            dateFormat.parse(limit.child("Date_limit_defined").value.toString())
+                if (limit.child("Date_limit_ended").value.toString() == "") {
+                    //Convert current date and the date of the start of the limit to Date types
+                    val dateFormat =
+                        SimpleDateFormat(
+                            "yyyy-MM-dd HH:mm",
+                            Locale.getDefault()
+                        ) // Format of the dates
+                    val date1 = dateFormat.parse(currentDate)
+                    val date2 =
+                        dateFormat.parse(limit.child("Date_limit_defined").value.toString())
 
-                        //Time passed from one date to another in seconds
-                        val dif = date1.time - date2.time
-                        val seconds = dif / 1000
+                    //Time passed from one date to another in seconds
+                    val dif = date1.time - date2.time
+                    val seconds = dif / 1000
 
-                        //If the user lasted the defined time
-                        if (seconds > 60 * ds + 1) {
-                            //Update day streak
+                    //If the user lasted the defined time
+                    if (seconds > 60 * ds + 1) {
+                        //Update day streak
+                        val scope = CoroutineScope(Dispatchers.IO) // Create a coroutine scope bound to a specific job
+                        scope.launch {
                             while (ds.toLong() != (seconds / 60)) {
                                 ref.child("user_data").child("days_streaks").setValue(ds + 1)
                                 ds += 1
@@ -223,19 +228,22 @@ class Home : AppCompatActivity() {
                                 catsEarned += 1
                             }
                             //Pop up with the info
-                            showCatsEarned(catsEarned - catsEarnedStart)
-                            ref.child("user_data").child("limits").child(maxId.toString())
-                                .child("Cats_earned").setValue(ds)
+                            withContext(Dispatchers.Main) {
+                                showCatsEarned(catsEarned - catsEarnedStart)
+                                ref.child("user_data").child("limits").child(maxId.toString())
+                                    .child("Cats_earned").setValue(ds)
+                            }
                         }
-
                     }
                 }
-                val newDefinedTime: HashMap<String, Any> = HashMap()
-                newDefinedTime["Defined_screen_time"] = 0
-            }.addOnCanceledListener {
-                Log.d("BON DIA", "On Cancelled")
             }
+            val newDefinedTime: HashMap<String, Any> = HashMap()
+            newDefinedTime["Defined_screen_time"] = 0
+        }.addOnCanceledListener {
+            Log.d("BON DIA", "On Cancelled")
+        }
     }
+
 
     /**
      *
