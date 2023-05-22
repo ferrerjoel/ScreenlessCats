@@ -33,12 +33,14 @@ import java.util.Locale
 import kotlin.random.Random
 
 
+const val CHECK_NCAT_TIME = 172800
 class Home : AppCompatActivity() {
 
     private lateinit var bottomNavigationBar: BottomNavigationView
     private lateinit var topAppBar: MaterialToolbar
 
     private lateinit var auth: FirebaseAuth
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -202,15 +204,14 @@ class Home : AppCompatActivity() {
                             Locale.getDefault()
                         ) // Format of the dates
                     val date1 = dateFormat.parse(currentDate)
-                    val date2 =
-                        dateFormat.parse(limit.child("Date_limit_defined").value.toString())
+                    val date2 = dateFormat.parse(limit.child("Date_limit_defined").value.toString())
 
-                    //Time passed from one date to another in seconds
+                    //Time passed from one date to another in seconds-------------------------------------------------------
                     val dif = date1.time - date2.time
                     val seconds = dif / 1000
 
                     //If the user lasted the defined time
-                    if (seconds > 60 * ds + 1) {
+                    if (seconds > CHECK_NCAT_TIME * ds + 1) {
                         //Update day streak
                         val scope = CoroutineScope(Dispatchers.IO) // Create a coroutine scope bound to a specific job
                         scope.launch {
@@ -229,7 +230,7 @@ class Home : AppCompatActivity() {
                             }
                             //Pop up with the info
                             withContext(Dispatchers.Main) {
-                                showCatsEarned(catsEarned - catsEarnedStart)
+                                showCatsEarned(catsEarned - catsEarnedStart, ((seconds/86.400)+1).toInt())
                                 ref.child("user_data").child("limits").child(maxId.toString())
                                     .child("Cats_earned").setValue(ds)
                             }
@@ -325,11 +326,11 @@ class Home : AppCompatActivity() {
     /*
         Pop up with how many cats the user earned
      */
-    private fun showCatsEarned(catsEarned: Int) {
+    private fun showCatsEarned(catsEarned: Int, time: Int) {
         this.let {
             MaterialAlertDialogBuilder(it)
                 .setTitle(resources.getString(R.string.cat_pop_title))
-                .setMessage(resources.getString(R.string.cat_pop_msg, catsEarned))
+                .setMessage(resources.getString(R.string.cat_pop_msg, catsEarned, time))
                 .setNeutralButton(resources.getString(R.string.accept)) { dialog, which ->
                     // Respond to neutral button press
                 }
