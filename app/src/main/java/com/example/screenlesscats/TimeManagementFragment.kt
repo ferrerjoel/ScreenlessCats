@@ -31,6 +31,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
@@ -65,7 +67,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
     private lateinit var spinner : CircularProgressIndicator
 
-
+    private var loadAppsJob: Job? = null // Declare a nullable Job variable to keep track of the coroutine job
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -162,8 +164,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     }
 
     private fun loadAppsInBackground() {
-        // Using coroutines we can load the list while the user is in the fragment, and not make him wait until all apps are loaded
-        CoroutineScope(Dispatchers.IO).launch {
+        loadAppsJob = CoroutineScope(Dispatchers.IO).launch {
             packetManager = requireContext().packageManager
             phoneApps = packetManager.getInstalledApplications(PackageManager.GET_META_DATA)
 
@@ -188,10 +189,19 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
             }
 
             withContext(Dispatchers.Main) {
-                createAppList(requireView())
+                if (isActive && isAdded && view != null) {
+                    // Update the UI with the loaded app list
+                    createAppList(requireView())
+                }
             }
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        loadAppsJob?.cancel() // Cancel the coroutine when the view is destroyed to avoid unnecessary work
+    }
+
 
     /**
      * Saves the chosen time using SharedPreferences
