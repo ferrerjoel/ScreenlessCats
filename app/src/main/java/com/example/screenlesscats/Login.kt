@@ -28,52 +28,20 @@ class Login : AppCompatActivity() {
     private lateinit var password: TextInputEditText
     private lateinit var toRegisterBtn: Button
     private lateinit var loginBtn: Button
+    private lateinit var changePasswordBtn: Button
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
-        if(!isAccessServiceEnabled(this)){
-            requestAppAccessibilitySettings()
-        }
-
-
-        auth = Firebase.auth
-
-        email = findViewById<TextInputEditText>(R.id.email)
-
-        password = findViewById<TextInputEditText>(R.id.password)
-
-        toRegisterBtn = findViewById<Button>(R.id.toRegisterBtn)
-
-        loginBtn = findViewById<Button>(R.id.loginBtn)
-
-        toRegisterBtn.setOnClickListener {
-            val intent = Intent(this, Register::class.java)
-            startActivity(intent)
-        }
-        loginBtn.setOnClickListener {
-            signIn()
-        }
-    }
-
-    public override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and go to home directly.
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            val intent = Intent(this, Home::class.java)
-            startActivity(intent)
-            finish()
-        }
-    }
-
+    /*
+        Sign in method
+     */
     private fun signIn() {
+        //Check mail pattern
         if (!Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()) {
             email.error = getString(R.string.invalid_mail)
+        //Check password pattern
         } else if (password.text.toString().length < 6) {
             password.error = getString(R.string.invalid_pwd)
         } else {
+            //Sign in
             auth.signInWithEmailAndPassword(email.text.toString(), password.text.toString())
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -91,6 +59,49 @@ class Login : AppCompatActivity() {
                 }
         }
 
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
+
+        if(!isAccessServiceEnabled(this)){
+            requestAppAccessibilitySettings()
+        }
+
+
+        auth = Firebase.auth
+
+        email = findViewById(R.id.email)
+
+        password = findViewById(R.id.password)
+
+        toRegisterBtn = findViewById(R.id.toRegisterBtn)
+
+        loginBtn = findViewById(R.id.loginBtn)
+
+        toRegisterBtn.setOnClickListener {
+            val intent = Intent(this, Register::class.java)
+            startActivity(intent)
+        }
+        loginBtn.setOnClickListener {
+            signIn()
+        }
+        changePasswordBtn.setOnClickListener {
+            val intent = Intent(this, ResetPassword::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+    public override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and go to home directly.
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            val intent = Intent(this, Home::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun requestAppAccessibilitySettings() {

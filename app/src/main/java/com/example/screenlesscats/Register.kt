@@ -61,13 +61,18 @@ class Register : AppCompatActivity() {
 
 
     }
-
+    /*
+    Sign up the user to database
+     */
     private fun signUp(){
+        //Check mail pattern
         if (!Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()) {
             email.error = getString(R.string.invalid_mail)
+        //Check password pattern
         } else if (password.text.toString().length < 6) {
             password.error = getString(R.string.invalid_pwd)
         } else {
+            //Sign up
             auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -85,7 +90,9 @@ class Register : AppCompatActivity() {
                 }
         }
     }
-
+    /*
+    Insert user to database
+     */
     private fun updateUI(user: FirebaseUser?){
         if(user != null){
             val date = Calendar.getInstance().time

@@ -208,7 +208,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
         editor?.putLong("limitTime", totalMilliseconds)
         editor?.putLong("remainingTimeToday", totalMilliseconds)
-        editor?.putLong("limitTimeWeekly", totalMillisecondsWeekly)
+        editor?.putLong("limitWeeklyTime", totalMillisecondsWeekly)
         editor?.putLong("remainingTimeWeekly", totalMillisecondsWeekly)
         editor?.apply()
 
@@ -233,7 +233,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         limit["Date_limit_ended"] = ""
         limit["Cats_earned"] = 0
 
-        var maxId : Long = 0
+        var maxId : Long
         ref.child("limits").get().addOnSuccessListener {
             maxId = it.childrenCount
             Log.d("BON", maxId.toString())
@@ -341,7 +341,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         val toUpdate: HashMap<String, Any> = HashMap()
         toUpdate["Date_limit_ended"] = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
 
-        var maxId : Long = 1
+        var maxId : Long
         ref.get().addOnSuccessListener {
             maxId = it.child("limits").childrenCount
             ref.child("limits").child(maxId.toString()).updateChildren(toUpdate)

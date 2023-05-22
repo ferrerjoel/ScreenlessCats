@@ -67,12 +67,19 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         loadProgressBars()
     }
 
+    /*
+
+        Method called when the view is created to load a random cat which the user has
+     */
     private fun loadCat() {
+        //The user
         val auth = Firebase.auth
         val uid = auth.uid.toString()
 
+        //The cats he has in database
         val database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid).child("cats")
 
+        //Gets cats from the database
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 //Get all cats

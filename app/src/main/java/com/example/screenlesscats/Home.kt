@@ -18,6 +18,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -152,67 +155,100 @@ class Home : AppCompatActivity() {
         return prefString.contains("${context.packageName}/${context.packageName}.block.AppBlockerService")
     }
 
+    /*
+        Method to check if the user has cats to reclaim and collects them if necessary
+     */
     private fun checkNewCat(){
-        val calendar = Calendar.getInstance()
+            //Get date
+            val calendar = Calendar.getInstance()
 
-        val currentDate = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
+            val currentDate =
+                "" + calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(
+                    Calendar.DAY_OF_MONTH
+                ) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
 
-        val auth = Firebase.auth
-        val uid = auth.uid.toString()
+            //The user
+            val auth = Firebase.auth
+            val uid = auth.uid.toString()
+            //The user info in db
+            val ref =
+                FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app")
+                    .getReference(uid)
 
-        val ref = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid)
+            var maxId: Long = 1
+            ref.get().addOnSuccessListener {
+                //Day streak
+                var ds =
+                    Integer.parseInt(it.child("user_data").child("days_streaks").value.toString())
 
-        var maxId : Long = 1
-        ref.get().addOnSuccessListener {
-            var ds = Integer.parseInt(it.child("user_data").child("days_streaks").value.toString())
+                //Id from the last register of the limits
+                maxId = it.child("user_data").child("limits").childrenCount
+                //Last limit info
+                val limit = it.child("user_data").child("limits").child(maxId.toString())
 
+                if (limit.exists()) {
+                    //Cats earned until this moment
+                    var catsEarned = Integer.parseInt(limit.child("Cats_earned").value.toString())
+                    val catsEarnedStart = catsEarned
 
-            maxId = it.child("user_data").child("limits").childrenCount
-            val limit = it.child("user_data").child("limits").child(maxId.toString())
+                    if (limit.child("Date_limit_ended").value.toString() == "") {
+                        //Convert current date and the date of the start of the limit to Date types
+                        val dateFormat =
+                            SimpleDateFormat(
+                                "yyyy-MM-dd HH:mm",
+                                Locale.getDefault()
+                            ) // Format of the dates
+                        val date1 = dateFormat.parse(currentDate)
+                        val date2 =
+                            dateFormat.parse(limit.child("Date_limit_defined").value.toString())
 
-            if (limit.exists()) {
+                        //Time passed from one date to another in seconds
+                        val dif = date1.time - date2.time
+                        val seconds = dif / 1000
 
-                var catsEarned = Integer.parseInt(limit.child("Cats_earned").value.toString())
-                val catsEarnedStart = catsEarned
+                        //If the user lasted the defined time
+                        if (seconds > 60 * ds + 1) {
+                            //Update day streak
+                            while (ds.toLong() != (seconds / 60)) {
+                                ref.child("user_data").child("days_streaks").setValue(ds + 1)
+                                ds += 1
+                            }
+                            //Calculate how many cats does he have to reclaim
+                            val catsToGet = if (ds == 0) 1 else ds
 
-                if (limit.child("Date_limit_ended").value.toString() == "") {
-                    val dateFormat =
-                        SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()) // Format of the dates
-                    val date1 = dateFormat.parse(currentDate)
-                    val date2 = dateFormat.parse(limit.child("Date_limit_defined").value.toString())
-                    val dif = date1.time - date2.time
-                    val seconds = dif / 1000
-
-                    if (seconds > 60 * ds + 1) {
-                        while(ds.toLong() != (seconds/60)){
-                            ref.child("user_data").child("days_streaks").setValue(ds + 1)
-                            ds += 1
+                            //Reclaim cats and update
+                            while (catsEarned < catsToGet) {
+                                val newCat = getRewardCatInfo()
+                                ref.child("cats").child(newCat["name"].toString()).setValue(newCat)
+                                catsEarned += 1
+                            }
+                            //Pop up with the info
+                            showCatsEarned(catsEarned - catsEarnedStart)
+                            ref.child("user_data").child("limits").child(maxId.toString())
+                                .child("Cats_earned").setValue(ds)
                         }
-                        val catsToGet = if(ds==0) 1 else ds
-                        while (catsEarned <= catsToGet) {
-                            val newCat = getRewardCatInfo()
-                            ref.child("cats").child(newCat["name"].toString()).setValue(newCat)
-                            catsEarned += 1
-                        }
-                        showCatsEarned(catsEarned - catsEarnedStart)
-                        ref.child("user_data").child("limits").child(maxId.toString()).child("Cats_earned").setValue(ds + 1)
+
                     }
-
                 }
+                val newDefinedTime: HashMap<String, Any> = HashMap()
+                newDefinedTime["Defined_screen_time"] = 0
+            }.addOnCanceledListener {
+                Log.d("BON DIA", "On Cancelled")
             }
-            val newDefinedTime : HashMap<String, Any> = HashMap()
-            newDefinedTime["Defined_screen_time"] = 0
-        }.addOnCanceledListener {
-            Log.d("BON DIA", "On Cancelled")
-        }
+
 
 
     }
 
+    /**
+     *
+     * @return HashMap with cat info
+     */
     private fun getRewardCatInfo(): HashMap<String, Any> {
         val rarities = arrayOf("mythic", "legendary", "epic", "very_rare", "rare", "common")
         var r: String = ""
         val prob = arrayOf(0.005, 0.01, 0.05, 0.115, 0.5, 0.5)
+        //Gets a random rarity with probability
         val randomNumber = Random.nextDouble()
         for (i in prob.indices) {
             if (randomNumber <= prob[i]) {
@@ -221,16 +257,22 @@ class Home : AppCompatActivity() {
             }
         }
         if (r == "") r = rarities.last()
+        //Get random cat ID from all the cats of that rarity
         val length = countResources(r + '_', "drawable")
-
         val catID = Random.nextInt(0, length)
+
+        //Create cat
         val cat = HashMap<String, Any>()
         cat["id"] = catID
-        cat["name"] = getRandomWordFromRawFile(this, R.raw.cat_names) ?: "Sergi"
+        cat["name"] = getRandomWordFromRawFile(this, R.raw.cat_names) ?: "Sergi" //Random name from file
         cat["rarity"] = r
 
         return cat
     }
+
+    /**
+     *  Counts how many resources are in the type (ex. drawable) with wanted prefix
+     */
     private fun countResources(prefix: String, type: String): Int {
         var id: Long = -1
         var count = -1
@@ -243,14 +285,20 @@ class Home : AppCompatActivity() {
         }
         return count
     }
-    fun getRandomWordFromRawFile(context: Context, fileId: Int): String? {
+
+    /*
+        Gets random line from file
+     */
+    private fun getRandomWordFromRawFile(context: Context, fileId: Int): String? {
         val wordList = mutableListOf<String>()
 
         try {
+            //Open file with id
             val inputStream: InputStream = context.resources.openRawResource(fileId)
             val reader = BufferedReader(InputStreamReader(inputStream))
             var line: String?
 
+            //Read all lines and add them to a List
             while (reader.readLine().also { line = it } != null) {
                 wordList.add(line.orEmpty())
             }
@@ -264,10 +312,14 @@ class Home : AppCompatActivity() {
         if (wordList.isEmpty()) {
             return null
         }
-
+        //Get random line
         val randomIndex = Random.nextInt(wordList.size)
         return wordList[randomIndex]
     }
+
+    /*
+        Pop up with how many cats the user earned
+     */
     private fun showCatsEarned(catsEarned: Int) {
         this.let {
             MaterialAlertDialogBuilder(it)
