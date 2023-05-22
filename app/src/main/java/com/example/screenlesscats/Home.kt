@@ -235,9 +235,6 @@ class Home : AppCompatActivity() {
             }.addOnCanceledListener {
                 Log.d("BON DIA", "On Cancelled")
             }
-
-
-
     }
 
     /**

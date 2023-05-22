@@ -8,6 +8,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/how_this_works_option"
+        android:title="How this works"
+        android:contentDescription="Hello content"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/sign_out_option"
         android:title="Sign out"
         android:contentDescription="Hello content"

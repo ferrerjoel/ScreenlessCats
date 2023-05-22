@@ -277,6 +277,13 @@ class AppBlockerService : AccessibilityService() {
         startCalendar.time = getDateFromString(startDate)
         currentCalendar.time = getDateFromString(currentDate)
 
+        // Set the start day of the week (e.g., Calendar.MONDAY for a week starting on Monday)
+        val startDayOfWeek = Calendar.MONDAY
+
+        // Set the first day of the week in the calendars
+        startCalendar.firstDayOfWeek = startDayOfWeek
+        currentCalendar.firstDayOfWeek = startDayOfWeek
+
         // Check if the week of the start date is different from the current week
         return startCalendar.get(Calendar.WEEK_OF_YEAR) != currentCalendar.get(Calendar.WEEK_OF_YEAR)
     }
