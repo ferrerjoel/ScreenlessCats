@@ -67,6 +67,11 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         loadProgressBars()
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadProgressBars()
+    }
+
     /*
 
         Method called when the view is created to load a random cat which the user has
@@ -128,8 +133,14 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         val dailyProgress = ((remainingTimeToday.toDouble() / limitTime.toDouble()) * 100).toInt()
         val weeklyProgress = ((remainingTimeWeekly.toDouble() / limitTimeWeekly.toDouble()) * 100).toInt()
 
-        dailyProgressBar.progress = dailyProgress
-        weeklyProgressBar.progress = weeklyProgress
+        dailyProgressBar.postDelayed({
+            dailyProgressBar.progress = dailyProgress
+        }, 100) // Adjust the delay as needed
+
+        weeklyProgressBar.postDelayed({
+            weeklyProgressBar.progress = weeklyProgress
+        }, 100) // Adjust the delay as needed
+
 
         val dailyHoursAndMinutes = convertLongToHoursAndMinutes(remainingTimeToday)
         val weeklyHoursAndMinutes = convertLongToHoursAndMinutes(remainingTimeWeekly)

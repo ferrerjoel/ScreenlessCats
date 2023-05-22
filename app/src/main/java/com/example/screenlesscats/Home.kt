@@ -230,7 +230,7 @@ class Home : AppCompatActivity() {
                             }
                             //Pop up with the info
                             withContext(Dispatchers.Main) {
-                                showCatsEarned(catsEarned - catsEarnedStart, ((seconds/86.400)+1).toInt())
+                                showCatsEarned(catsEarned - catsEarnedStart, ((seconds/86400)).toInt())
                                 ref.child("user_data").child("limits").child(maxId.toString())
                                     .child("Cats_earned").setValue(ds)
                             }

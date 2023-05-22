@@ -14,6 +14,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.screenlesscats.block.AppBlockerService
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -66,9 +67,8 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         if(!isAccessServiceEnabled(this)){
-            requestAppAccessibilitySettings()
+            showPermissionsWarning()
         }
-
 
         auth = Firebase.auth
 
@@ -116,5 +116,20 @@ class Login : AppCompatActivity() {
         val prefString =
             Settings.Secure.getString(context.contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
         return prefString.contains("${context.packageName}/${context.packageName}.block.AppBlockerService")
+    }
+
+    private fun showPermissionsWarning() {
+        this.let {
+            MaterialAlertDialogBuilder(it)
+                .setTitle(resources.getString(R.string.we_need_accessibility_title))
+                .setMessage(resources.getString(R.string.we_need_accessibility))
+                .setNeutralButton(resources.getString(R.string.i_understand)) { dialog, which ->
+                    requestAppAccessibilitySettings()
+                }
+                .setOnDismissListener() {
+                    requestAppAccessibilitySettings()
+                }
+                .show()
+        }
     }
 }

@@ -63,4 +63,6 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="return_to_login">Return to login</string>
     <string name="send_email">Send Email</string>
+    <string name="we_need_accessibility_title">Accessibility settings</string>
+    <string name="we_need_accessibility">In order to be able to keep track of used apps and block them when the time ends we need accessibility settings!</string>
 </resources>
