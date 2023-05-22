@@ -253,7 +253,7 @@ class Home : AppCompatActivity() {
     private fun getRewardCatInfo(): HashMap<String, Any> {
         val rarities = arrayOf("mythic", "legendary", "epic", "very_rare", "rare", "common")
         var r: String = ""
-        val prob = arrayOf(0.005, 0.01, 0.05, 0.115, 0.5, 0.5)
+        val prob = arrayOf(0.005, 0.01, 0.05, 0.115, 0.22, 0.5)
         //Gets a random rarity with probability
         val randomNumber = Random.nextDouble()
         for (i in prob.indices) {
