@@ -269,7 +269,7 @@ class Home : AppCompatActivity() {
         //Create cat
         val cat = HashMap<String, Any>()
         cat["id"] = catID
-        cat["name"] = getRandomWordFromRawFile(this, R.raw.cat_names) ?: "Sergi" //Random name from file
+        cat["name"] = getRandomWordFromRawFile(this, R.raw.cat_names) ?: "Manolo" //Random name from file
         cat["rarity"] = r
 
         return cat

@@ -77,40 +77,42 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         val uid = auth.uid.toString()
 
         //The cats he has in database
-        val database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid).child("cats")
+        val database =
+            FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app")
+                .getReference(uid).child("cats")
 
         //Gets cats from the database
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                //Get all cats
-                val cats = dataSnapshot.children
+        database.get().addOnSuccessListener { dataSnapshot ->
+            //Get all cats
+            val cats = dataSnapshot.children
 
-                // Convert `cats` into a list
-                val catList = ArrayList<Cat>()
-                cats.forEach { s ->
-                    val cat = Cat(
-                        Integer.parseInt(s.child("id").value.toString()),
-                            s.child("rarity").value.toString(),
-                        s.child("rarity").value.toString()
-                        )
-                    catList.add(cat)
-                }
-                if (catList.size > 0) {
-                    // Generate a random index within the list size
-                    val randomIndex = (0 until catList.size).random()
-
-                    // Access the random cat
-                    val randomCat = catList[randomIndex]
-                    val imageID = requireContext().resources.getIdentifier("drawable/${randomCat.catRarity}_${randomCat.catId}", null, requireContext().packageName)
-                    catImage.setImageResource(imageID)
-                }
-                catText.text = resources.getStringArray(R.array.cat_phrases).random()
+            // Convert `cats` into a list
+            val catList = ArrayList<Cat>()
+            cats.forEach { s ->
+                val cat = Cat(
+                    Integer.parseInt(s.child("id").value.toString()),
+                    s.child("rarity").value.toString(),
+                    s.child("rarity").value.toString()
+                )
+                catList.add(cat)
             }
+            if (catList.size > 0) {
+                // Generate a random index within the list size
+                val randomIndex = (0 until catList.size).random()
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("BON DIA", "On Cancelled")
+                // Access the random cat
+                val randomCat = catList[randomIndex]
+                val imageID = requireContext().resources.getIdentifier(
+                    "drawable/${randomCat.catRarity}_${randomCat.catId}",
+                    null,
+                    requireContext().packageName
+                )
+                catImage.setImageResource(imageID)
             }
-        })
+            catText.text = resources.getStringArray(R.array.cat_phrases).random()
+        }.addOnCanceledListener {
+        Log.d("BON DIA", "On Cancelled")
+    }
 
 
 

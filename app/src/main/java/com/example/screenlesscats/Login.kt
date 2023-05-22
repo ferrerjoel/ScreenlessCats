@@ -80,6 +80,8 @@ class Login : AppCompatActivity() {
 
         loginBtn = findViewById(R.id.loginBtn)
 
+        changePasswordBtn = findViewById(R.id.changePasswordBtn)
+
         toRegisterBtn.setOnClickListener {
             val intent = Intent(this, Register::class.java)
             startActivity(intent)

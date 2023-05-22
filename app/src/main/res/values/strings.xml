@@ -59,7 +59,7 @@
     </string-array>
     <string name="activate_weekly_time_button">Activate weekly time!</string>
     <string name="cat_pop_title">Congrats</string>
-    <string name="cat_pop_msg">You have recieved %1$d cats</string>
+    <string name="cat_pop_msg">In exchange of your determination you have received %1$d cats. You have left this app for a total of %2$d days</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="return_to_login">Return to login</string>
     <string name="send_email">Send Email</string>
