@@ -31,7 +31,7 @@ class Info : AppCompatActivity() {
         database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid).child("user_data").child("dedication_value")
 
         database.get().addOnSuccessListener {
-            dedication.text = resources.getString(R.string.dedication_v, it.value)
+            dedication.text = resources.getString(R.string.dedication_v, it.value.toString().toFloat())
         }
 
     }
