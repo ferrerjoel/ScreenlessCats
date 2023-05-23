@@ -100,6 +100,11 @@ class Home : AppCompatActivity() {
                     signOut()
                     true
                 }
+                R.id.options_option -> {
+                    val intent = Intent(this, Options::class.java)
+                    startActivity(intent)
+                    true
+                }
                 R.id.give_accessibility_permissions -> {
                     requestAppAccessibilitySettings()
                     true
