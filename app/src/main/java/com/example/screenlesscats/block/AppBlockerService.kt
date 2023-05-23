@@ -47,6 +47,9 @@ class AppBlockerService : AccessibilityService() {
 
     private var isTimerRunning: Boolean = false
 
+    /**
+     * Some android systems have an app that shows above the games as an overlay, this ends the timer if we don't ignore it
+     */
     private val gamePackageApps = hashSetOf(
         "com.oplus.games",
         "com.sec.android.app.samsungapps",
@@ -60,6 +63,11 @@ class AppBlockerService : AccessibilityService() {
         "com.asus.gamecenter",
         "com.motorola.gametime",
         "com.htc.vr.games"
+    )
+
+    private val systemUIPackages = hashSetOf(
+        "com.android.systemui", // When checking notifications the timer stops and doesn't start again
+        "com.android.launcher"
     )
 
     override fun onCreate() {
@@ -116,7 +124,7 @@ class AppBlockerService : AccessibilityService() {
                     if (isCheckedPackage(packageName) && source != null) {
                         // Show a dialog indicating the app is blocked when the user tries to interact with it
                         checkTimeAndBlock()
-                    } else if (!gamePackageApps.contains(event.packageName)){
+                    } else if (!gamePackageApps.contains(event.packageName) && !systemUIPackages.contains(event.packageName)){
                         stopTimer()
                     }
                 }
@@ -312,6 +320,7 @@ class AppBlockerService : AccessibilityService() {
             }
             if (intent?.action == "USER_HAS_UPDATED_WEEKLY") {
                 userHasActivatedWeeklyTime = sharedPreferences.getBoolean("userHasActivatedWeeklyTime", false)
+                resetNotificationFlags()
             }
         }
     }
