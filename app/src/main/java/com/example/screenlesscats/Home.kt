@@ -191,6 +191,8 @@ class Home : AppCompatActivity() {
             var ds =
                 Integer.parseInt(dataSnapshot.child("user_data").child("days_streaks").value.toString())
 
+            var dedicationValue = dataSnapshot.child("user_data").child("dedication_value").value.toString().toFloat()
+
             //Id from the last register of the limits
             maxId = dataSnapshot.child("user_data").child("limits").childrenCount
             //Last limit info
@@ -217,6 +219,7 @@ class Home : AppCompatActivity() {
 
                     //If the user lasted the defined time
                     if (seconds > CHECK_NCAT_TIME * ds + 1) {
+                        ref.child("user_data").child("dedication_value").setValue(dedicationValue+0.027)
                         //Update day streak
                         val scope = CoroutineScope(Dispatchers.IO) // Create a coroutine scope bound to a specific job
                         scope.launch {
