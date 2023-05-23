@@ -16,6 +16,9 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".Options"
+            android:exported="false" />
+        <activity
             android:name=".Info"
             android:exported="false" />
         <activity
@@ -37,7 +40,7 @@
             android:name=".Home"
             android:configChanges="orientation"
             android:exported="false"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".block.AppBlockerService"

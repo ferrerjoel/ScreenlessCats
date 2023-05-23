@@ -14,6 +14,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/options_option"
+        android:title="Options"
+        android:contentDescription="Hello content"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/give_accessibility_permissions"
         android:title="Accessibility permissions"
         android:contentDescription="Hello content"
