@@ -1,5 +1,7 @@
 package com.example.screenlesscats
 
+import android.app.usage.UsageEvents
+import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -66,6 +68,8 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     private var searchQuery: String = ""
 
     private lateinit var spinner : CircularProgressIndicator
+
+    private val appUsageTimes: HashMap<String, Pair<Long, Long>> = HashMap()
 
     private var loadAppsJob: Job? = null // Declare a nullable Job variable to keep track of the coroutine job
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -178,9 +182,12 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                     if (packageName != "com.example.screenlesscats") {
                         val isChecked = sharedPreferencesApps.getBoolean(packageName, false)
                         if (isChecked) Log.d("DEBUG", packageName)
+                        val dailyUsage = getAppUsageTime(packageName)
                         apps.add(
                             AppData(
                                 appName,
+                                dailyUsage.first.toInt(),
+                                dailyUsage.second.toInt(),
                                 packageName,
                                 packetManager.getApplicationIcon(app),
                                 isChecked
@@ -296,13 +303,17 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
      */
     private fun filterApps(appList: List<AppData>, query: String): List<AppData> {
         return if (query.isBlank()) {
-            appList
+            appList.sortedWith(compareByDescending<AppData> { it.hoursToday }
+                .thenByDescending { it.minutesToday })
         } else {
             appList.filter { app ->
                 app.appName.contains(query, ignoreCase = true)
-            }
+            }.sortedWith(compareByDescending<AppData> { it.hoursToday }
+                .thenByDescending { it.minutesToday })
         }
     }
+
+
 
     /**
      * Warning shown when trying to change the time when you have the limit set
@@ -367,6 +378,52 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
             Log.d("BON DIA", "On Cancelled")
         }
 
+    }
+
+    private fun getAppUsageTime(packageName: String): Pair<Long, Long> {
+        // Check if the app usage time is already cached
+        if (appUsageTimes.containsKey(packageName)) {
+            return appUsageTimes[packageName]!!
+        }
+
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+
+        val usageStatsManager = requireContext().getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+
+        val queryEvents = usageStatsManager.queryEvents(
+            calendar.timeInMillis,
+            Calendar.getInstance().timeInMillis
+        )
+
+        var totalUsageTime = 0L
+        var startTime: Long? = null
+
+        while (queryEvents.hasNextEvent()) {
+            val event = UsageEvents.Event()
+            queryEvents.getNextEvent(event)
+
+            if ((event.eventType == UsageEvents.Event.ACTIVITY_RESUMED || event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) &&
+                event.packageName == packageName) {
+                startTime = event.timeStamp // Set the start time for the app
+            } else if ((event.eventType == UsageEvents.Event.ACTIVITY_PAUSED || event.eventType == UsageEvents.Event.MOVE_TO_BACKGROUND) &&
+                startTime != null && event.packageName == packageName) {
+                val usageTime = event.timeStamp - startTime
+                totalUsageTime += usageTime
+                startTime = null // Reset the start time for the next iteration
+            }
+        }
+
+        val hours = (totalUsageTime / (1000 * 60 * 60)).toInt()
+        val minutes = ((totalUsageTime % (1000 * 60 * 60)) / (1000 * 60)).toInt()
+
+        val appUsageTime = Pair(hours.toLong(), minutes.toLong())
+        appUsageTimes[packageName] = appUsageTime // Cache the app usage time
+
+        return appUsageTime
     }
 
 }
