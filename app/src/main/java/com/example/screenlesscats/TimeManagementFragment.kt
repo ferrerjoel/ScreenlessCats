@@ -59,6 +59,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     private lateinit var phoneApps : List<ApplicationInfo>
 
     private val apps = ArrayList<AppData>()
+    private var appsHaveBeenFetched : Boolean = false
     private lateinit var recyclerView : RecyclerView
 
     private var filterState: FilterState = FilterState.ALL
@@ -152,9 +153,11 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // Update the search query
-                searchQuery = s.toString().trim()
-                // Refresh the app list with the new search query
-                createAppList(view)
+                if (appsHaveBeenFetched) {
+                    searchQuery = s.toString().trim()
+                    // Refresh the app list with the new search query
+                    createAppList(view)
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -295,7 +298,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = AppListAdapter(filteredApps)
         spinner.visibility = View.GONE
-
+        appsHaveBeenFetched = true
     }
 
     /**
