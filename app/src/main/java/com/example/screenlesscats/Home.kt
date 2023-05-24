@@ -50,14 +50,14 @@ class Home : AppCompatActivity() {
         checkNewCat()
 
         if(!isAccessServiceEnabled(this)){
-         Snackbar.make(findViewById<View>(android.R.id.content), "Accessibility perms needed. Some functionalities will now work otherwise", Snackbar.LENGTH_LONG)
+         Snackbar.make(findViewById(android.R.id.content), "Accessibility perms needed. Some functionalities will now work otherwise", Snackbar.LENGTH_LONG)
              .setAction("Settings"){
                  requestAppAccessibilitySettings()
              }
              .show()
         }
 
-        bottomNavigationBar = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationBar = findViewById(R.id.bottom_navigation)
         topAppBar = findViewById(R.id.top_app_bar)
 
         auth = FirebaseAuth.getInstance()
@@ -230,7 +230,7 @@ class Home : AppCompatActivity() {
                             while (ds.toLong() != (seconds / 60)) {
                                 ref.child("user_data").child("days_streaks").setValue(ds + 1)
                                 ds += 1
-                                if(dedicationValue > 20)
+                                if(dedicationValue < 20)
                                     ref.child("user_data").child("dedication_value").setValue(dedicationValue+0.027)
                             }
                             //Calculate how many cats does he have to reclaim
