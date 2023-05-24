@@ -32,6 +32,14 @@
         app:layout_constraintTop_toTopOf="@+id/appBarLayout"
         tools:layout_editor_absoluteX="1dp">
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="24dp"
+            android:text="General"
+            android:textColor="?attr/colorPrimary" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

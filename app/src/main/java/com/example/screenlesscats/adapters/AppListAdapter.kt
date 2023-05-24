@@ -2,7 +2,6 @@ package com.example.screenlesscats.adapters
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,11 +19,13 @@ class AppListAdapter(private val appList: List<AppData>): RecyclerView.Adapter<A
 
     inner class AppListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val appNameTextView: TextView = itemView.findViewById(R.id.app_name)
+        private val usageTimeTextView: TextView = itemView.findViewById(R.id.daily_usage_tv)
         private val appIconImageView: ImageView = itemView.findViewById(R.id.app_icon)
         private val checkBox: CheckBox = itemView.findViewById(R.id.check_box)
 
         fun bind(app: AppData) {
             appNameTextView.text = app.appName
+            usageTimeTextView.text = itemView.resources.getString(R.string.daily_usage_app_list, app.hoursToday, app.minutesToday)
             appIconImageView.setImageDrawable(app.appIcon)
             checkBox.isChecked = app.checked // set checkbox state based on checked property
             checkBox.setOnCheckedChangeListener { _, isChecked ->

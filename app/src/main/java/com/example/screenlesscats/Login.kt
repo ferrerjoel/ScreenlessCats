@@ -1,5 +1,6 @@
 package com.example.screenlesscats
 
+import android.app.AppOpsManager
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
@@ -70,6 +71,8 @@ class Login : AppCompatActivity() {
             showPermissionsWarning()
         }
 
+        startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+
         auth = Firebase.auth
 
         email = findViewById(R.id.email)
@@ -107,10 +110,8 @@ class Login : AppCompatActivity() {
     }
 
     private fun requestAppAccessibilitySettings() {
-
         val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
         startActivity(intent)
-
     }
     private fun isAccessServiceEnabled(context: Context): Boolean {
         val prefString =
