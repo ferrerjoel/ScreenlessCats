@@ -9,7 +9,7 @@
 
     <item
         android:id="@+id/how_this_works_option"
-        android:title="How this works"
+        android:title="Help"
         android:contentDescription="Hello content"
         app:showAsAction="never" />
 

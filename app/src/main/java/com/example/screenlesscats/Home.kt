@@ -3,6 +3,7 @@ package com.example.screenlesscats
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -93,11 +94,15 @@ class Home : AppCompatActivity() {
         topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.about_us_option -> {
-                    // Handle edit text press
+                    showAboutUs()
                     true
                 }
                 R.id.sign_out_option -> {
                     signOut()
+                    true
+                }
+                R.id.how_this_works_option -> {
+                    showHowThisWorks()
                     true
                 }
                 R.id.options_option -> {
@@ -339,6 +344,38 @@ class Home : AppCompatActivity() {
             MaterialAlertDialogBuilder(it)
                 .setTitle(resources.getString(R.string.cat_pop_title))
                 .setMessage(resources.getString(R.string.cat_pop_msg, catsEarned, time))
+                .setNeutralButton(resources.getString(R.string.accept)) { dialog, which ->
+                    // Respond to neutral button press
+                }
+                .show()
+
+        }
+    }
+
+    private fun showAboutUs() {
+        this.let {
+            MaterialAlertDialogBuilder(it)
+                .setTitle(resources.getString(R.string.about_us_title))
+                .setMessage(resources.getString(R.string.about_us))
+                .setNeutralButton(resources.getString(R.string.amazing)) { dialog, which ->
+                    // Respond to neutral button press
+                }
+                .setPositiveButton("Donate us!") { dialog, which ->
+                    val uri: Uri =
+                        Uri.parse("https://www.paypal.com/paypalme/ferrerjoel")
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
+                }
+                .show()
+
+        }
+    }
+
+    private fun showHowThisWorks() {
+        this.let {
+            MaterialAlertDialogBuilder(it)
+                .setTitle(resources.getString(R.string.help_title))
+                .setMessage(resources.getString(R.string.help))
                 .setNeutralButton(resources.getString(R.string.accept)) { dialog, which ->
                     // Respond to neutral button press
                 }

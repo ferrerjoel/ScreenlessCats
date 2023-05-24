@@ -67,4 +67,9 @@
     <string name="we_need_accessibility">In order to be able to keep track of used apps and block them when the time ends we need accessibility settings!</string>
     <string name="options_week_starts">Week starts on Monday</string>
     <string name="dedication_v">With dedication value you can increase your probabilities of getting a cat of more quality\n\nYour current dedication value: %.2f.</string>
+    <string name="about_us_title">Who we are?</string>
+    <string name="about_us">Hello! We are two students of software development and we have made this application as a final project. We hope you like our app!</string>
+    <string name="amazing">Amazing!</string>
+    <string name="help_title">Help</string>
+    <string name="help">1. Select the apps you want to limit\n2. Set the time you want to spend and this apps (the time is shared for all thses apps!)\n3. Start the limit\n\nIf you have used all your daily time you are going to be able to use weekly time that you can activate only when you have spend all your daily time. This time restarts each week and it should be user outside common use!\n\nYou are also going to receive cats as a reward for your dedication if you don\'t end your limit.\n\nEnjoy!</string>
 </resources>
