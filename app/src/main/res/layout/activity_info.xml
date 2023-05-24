@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Info">
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -15,35 +16,26 @@
             android:id="@+id/top_app_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Info"
-            app:navigationIcon="@drawable/baseline_arrow_back_24" />
+            app:navigationIcon="@drawable/baseline_arrow_back_24"
+            app:title="Info" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="118dp" />
-
     <TextView
         android:id="@+id/textView"
-        android:layout_width="411dp"
+        android:layout_width="match_parent"
         android:layout_height="62dp"
         android:gravity="center"
         android:text="CAT PROBABILITY"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <ScrollView
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="613dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline5">
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,116 +47,134 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:text="@string/dedication_v">
-            </TextView>
+                android:layout_marginTop="20dp"
+                android:text="@string/dedication_v"></TextView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Common: 60%"
-                    android:layout_weight="1"/>
+                    android:text="Common: 60%" />
+
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/commons"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:src="@drawable/commons" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Rare: 22%"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:text="Rare: 22%" />
+
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/rares"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:src="@drawable/rares" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Very Rare: 11.5%"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:text="Very Rare: 11.5%" />
+
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/very_rare_0"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:src="@drawable/very_rare_0" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Epic: 5%"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:text="Epic: 5%" />
+
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/epic_0"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:src="@drawable/epic_0" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Legendary: 1%"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:text="Legendary: 1%" />
+
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/legendary_1"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:src="@drawable/legendary_1" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Mythic: 0.5%"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:text="Mythic: 0.5%" />
+
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/mythic_0"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:src="@drawable/mythic_0" />
             </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="The previous percentatges are the default value for each quality"/>
+                android:text="The previous percentatges are the default value for each quality" />
         </LinearLayout>
     </ScrollView>
 
