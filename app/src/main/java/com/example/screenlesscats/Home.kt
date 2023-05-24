@@ -33,7 +33,7 @@ import java.util.Locale
 import kotlin.random.Random
 
 
-const val CHECK_NCAT_TIME = 172800
+const val CHECK_NCAT_TIME = 60
 class Home : AppCompatActivity() {
 
     private lateinit var bottomNavigationBar: BottomNavigationView
@@ -219,20 +219,21 @@ class Home : AppCompatActivity() {
 
                     //If the user lasted the defined time
                     if (seconds > CHECK_NCAT_TIME * ds + 1) {
-                        ref.child("user_data").child("dedication_value").setValue(dedicationValue+0.027)
                         //Update day streak
                         val scope = CoroutineScope(Dispatchers.IO) // Create a coroutine scope bound to a specific job
                         scope.launch {
                             while (ds.toLong() != (seconds / 60)) {
                                 ref.child("user_data").child("days_streaks").setValue(ds + 1)
                                 ds += 1
+                                if(dedicationValue > 20)
+                                    ref.child("user_data").child("dedication_value").setValue(dedicationValue+0.027)
                             }
                             //Calculate how many cats does he have to reclaim
                             val catsToGet = if (ds == 0) 1 else ds
 
                             //Reclaim cats and update
                             while (catsEarned < catsToGet) {
-                                val newCat = getRewardCatInfo()
+                                val newCat = getRewardCatInfo(dedicationValue)
                                 ref.child("cats").child(newCat["name"].toString()).setValue(newCat)
                                 catsEarned += 1
                             }
@@ -258,12 +259,16 @@ class Home : AppCompatActivity() {
      *
      * @return HashMap with cat info
      */
-    private fun getRewardCatInfo(): HashMap<String, Any> {
+    private fun getRewardCatInfo(dedicationValue : Float): HashMap<String, Any> {
         val rarities = arrayOf("mythic", "legendary", "epic", "very_rare", "rare", "common")
         var r: String = ""
-        val prob = arrayOf(0.005, 0.01, 0.05, 0.115, 0.22, 0.5)
+        val prob = arrayOf(0.005, 0.01, 0.05, 0.115, 0.22, 0.6)
         //Gets a random rarity with probability
-        val randomNumber = Random.nextDouble()
+        var randomNumber = Random.nextDouble()
+
+        if(dedicationValue != 0f){
+            randomNumber -= (randomNumber * dedicationValue/100)
+        }
         for (i in prob.indices) {
             if (randomNumber <= prob[i]) {
                 r = rarities[i]
