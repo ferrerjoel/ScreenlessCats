@@ -268,11 +268,17 @@ class Home : AppCompatActivity() {
         val rarities = arrayOf("mythic", "legendary", "epic", "very_rare", "rare", "common")
         var r: String = ""
         val prob = arrayOf(0.005, 0.01, 0.05, 0.115, 0.22, 0.6)
+        val v05 = dedicationValue/(100*(prob[5] - prob[0]))
+        val v14 = dedicationValue /(100*(prob[4] - prob[1]))
+        val v23 = dedicationValue /(100*(prob[3] - prob[2]))
+        var realprob = arrayOf(prob[0]+v05, prob[1])
         //Gets a random rarity with probability
         var randomNumber = Random.nextDouble()
 
         if(dedicationValue != 0f){
-            randomNumber -= (randomNumber * dedicationValue/100)
+            do {
+                randomNumber -= (dedicationValue)
+            }while (randomNumber < 0)
         }
         for (i in prob.indices) {
             if (randomNumber <= prob[i]) {
