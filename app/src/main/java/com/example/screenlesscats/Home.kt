@@ -50,7 +50,7 @@ class Home : AppCompatActivity() {
         checkNewCat()
 
         if(!isAccessServiceEnabled(this)){
-         Snackbar.make(findViewById(android.R.id.content), "Accessibility perms needed. Some functionalities will now work otherwise", Snackbar.LENGTH_LONG)
+         Snackbar.make(findViewById(android.R.id.content), getString(R.string.snackbar_perms_needed), Snackbar.LENGTH_LONG)
              .setAction("Settings"){
                  requestAppAccessibilitySettings()
              }
