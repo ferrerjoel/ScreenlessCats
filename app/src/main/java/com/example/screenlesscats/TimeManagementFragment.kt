@@ -38,6 +38,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
+import kotlin.math.min
 
 
 class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
@@ -70,9 +71,9 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
     private lateinit var spinner : CircularProgressIndicator
 
-    private val appUsageTimes: HashMap<String, Pair<Long, Long>> = HashMap()
-
     private var loadAppsJob: Job? = null // Declare a nullable Job variable to keep track of the coroutine job
+    private var loadAppsUsageJob: Job? = null
+
     // These apps are considered system apps since come with the android system and can't be uninstalled, then we have to filter them
     private val preInstalledApps = hashSetOf(
         "com.google.android.googlequicksearchbox",
@@ -186,7 +187,11 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         })
 
         // Load apps in the background thread
+        // TODO: this works but can be optimized, if the user leaves the fragment while fetching usage data it breaks, so we start over
         if (apps.isEmpty()) {
+            loadAppsInBackground()
+        }  else if (!appsHaveBeenFetched && !(loadAppsJob?.isActive!! || loadAppsUsageJob?.isActive!!)){
+            apps.clear()
             loadAppsInBackground()
         }
 
@@ -205,12 +210,11 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                     if (packageName != "com.example.screenlesscats") {
                         val isChecked = sharedPreferencesApps.getBoolean(packageName, false)
                         if (isChecked) Log.d("DEBUG", packageName)
-                        val dailyUsage = getAppUsageTime(packageName)
                         apps.add(
                             AppData(
                                 appName,
-                                dailyUsage.first.toInt(),
-                                dailyUsage.second.toInt(),
+                                0,
+                                0,
                                 packageName,
                                 packetManager.getApplicationIcon(app),
                                 isChecked
@@ -221,19 +225,11 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
             }
 
             withContext(Dispatchers.Main) {
-                if (isActive && isAdded && view != null) {
-                    // Update the UI with the loaded app list
-                    createAppList(requireView())
-                }
+                // Update the UI with the loaded app list
+                updateAppUsageTimes(requireContext(), apps)
             }
         }
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        loadAppsJob?.cancel() // Cancel the coroutine when the view is destroyed to avoid unnecessary work
-    }
-
 
     /**
      * Saves the chosen time using SharedPreferences
@@ -318,7 +314,6 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = AppListAdapter(filteredApps)
         spinner.visibility = View.GONE
-        appsHaveBeenFetched = true
     }
 
     /**
@@ -335,8 +330,6 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                 .thenByDescending { it.minutesToday })
         }
     }
-
-
 
     /**
      * Warning shown when trying to change the time when you have the limit set
@@ -403,50 +396,64 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
     }
 
-    private fun getAppUsageTime(packageName: String): Pair<Long, Long> {
-        // Check if the app usage time is already cached
-        if (appUsageTimes.containsKey(packageName)) {
-            return appUsageTimes[packageName]!!
-        }
-
+    private fun updateAppUsageTimes(context : Context, appDataList: ArrayList<AppData>) {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
 
-        val usageStatsManager = requireContext().getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+        val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
 
-        val queryEvents = usageStatsManager.queryEvents(
-            calendar.timeInMillis,
-            Calendar.getInstance().timeInMillis
-        )
+        // Run the function in a background coroutine
+        loadAppsUsageJob = CoroutineScope(Dispatchers.Default).launch {
+            for (appData in appDataList) {
+                val packageName = appData.packageName
 
-        var totalUsageTime = 0L
-        var startTime: Long? = null
+                val queryEvents = usageStatsManager.queryEvents(
+                    calendar.timeInMillis,
+                    Calendar.getInstance().timeInMillis
+                )
 
-        while (queryEvents.hasNextEvent()) {
-            val event = UsageEvents.Event()
-            queryEvents.getNextEvent(event)
+                var totalUsageTime = 0L
+                var startTime: Long? = null
 
-            if ((event.eventType == UsageEvents.Event.ACTIVITY_RESUMED || event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) &&
-                event.packageName == packageName) {
-                startTime = event.timeStamp // Set the start time for the app
-            } else if ((event.eventType == UsageEvents.Event.ACTIVITY_PAUSED || event.eventType == UsageEvents.Event.MOVE_TO_BACKGROUND) &&
-                startTime != null && event.packageName == packageName) {
-                val usageTime = event.timeStamp - startTime
-                totalUsageTime += usageTime
-                startTime = null // Reset the start time for the next iteration
+                while (queryEvents.hasNextEvent()) {
+                    val event = UsageEvents.Event()
+                    queryEvents.getNextEvent(event)
+
+                    if ((event.eventType == UsageEvents.Event.ACTIVITY_RESUMED || event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) &&
+                        event.packageName == packageName) {
+                        startTime = event.timeStamp // Set the start time for the app
+                    } else if ((event.eventType == UsageEvents.Event.ACTIVITY_PAUSED || event.eventType == UsageEvents.Event.MOVE_TO_BACKGROUND) &&
+                        startTime != null && event.packageName == packageName) {
+                        val usageTime = event.timeStamp - startTime
+                        totalUsageTime += usageTime
+                        startTime = null // Reset the start time for the next iteration
+                    }
+                }
+
+                val hours = (totalUsageTime / (1000 * 60 * 60)).toInt()
+                val minutes = ((totalUsageTime % (1000 * 60 * 60)) / (1000 * 60)).toInt()
+
+                // Update the usage time values in the AppData object
+                withContext(Dispatchers.Main) {
+                    appData.hoursToday = hours
+                    appData.minutesToday = minutes
+                    Log.d("MAMA", "UPDATE UPDATE")
+                }
+            }
+
+            appsHaveBeenFetched = true
+
+            // Create the app list after updating all the app usage times
+            withContext(Dispatchers.Main) {
+                if (isActive && isAdded && view != null) {
+                    createAppList(requireView())
+                }
             }
         }
-
-        val hours = (totalUsageTime / (1000 * 60 * 60)).toInt()
-        val minutes = ((totalUsageTime % (1000 * 60 * 60)) / (1000 * 60)).toInt()
-
-        val appUsageTime = Pair(hours.toLong(), minutes.toLong())
-        appUsageTimes[packageName] = appUsageTime // Cache the app usage time
-
-        return appUsageTime
     }
+
 
 }
