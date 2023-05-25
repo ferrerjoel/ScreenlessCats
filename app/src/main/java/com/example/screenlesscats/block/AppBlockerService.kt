@@ -111,7 +111,7 @@ class AppBlockerService : AccessibilityService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         event?.let {
-            Log.d("EVENT BLOCK", event.eventType.toString() + " " + event.packageName)
+            // Log.d("EVENT BLOCK", event.eventType.toString() + " " + event.packageName)
             if (sharedPreferences.getBoolean("isLimitEnabled", false)) {
                 val packageName = event.packageName?.toString()
                 if (isCheckedPackage(packageName)) {
@@ -120,7 +120,7 @@ class AppBlockerService : AccessibilityService() {
                     //Log.d("BLOCK SERVICE EV", isCheckedPackage(event.packageName?.toString()).toString() + " " + sharedPreferences.getBoolean("isLimitEnabled", false))
                     // Check if the blocked app's window is focused
                     val source: AccessibilityNodeInfo? = event.source
-                    Log.d("EVENT TYPE", event.eventType.toString() + " " + event.action + " " + event.contentChangeTypes + isCheckedPackage(packageName) + " " +packageName)
+                    // Log.d("EVENT TYPE", event.eventType.toString() + " " + event.action + " " + event.contentChangeTypes + isCheckedPackage(packageName) + " " +packageName)
                     if (isCheckedPackage(packageName) && source != null) {
                         // Show a dialog indicating the app is blocked when the user tries to interact with it
                         checkTimeAndBlock()
@@ -145,6 +145,9 @@ class AppBlockerService : AccessibilityService() {
     }
 
     private fun checkTimeAndBlock() {
+
+        if (remainingTimeToday == 0L) checkNewDay()
+
         if (remainingTimeToday > 0L) {
             startTimer(false)
         } else if (userHasActivatedWeeklyTime && remainingTimeWeekly > 0L){
@@ -155,6 +158,23 @@ class AppBlockerService : AccessibilityService() {
 
             // Show a dialog indicating the app is blocked
             showToast(getString(R.string.toast_blocked_app))
+        }
+    }
+
+    private fun checkNewDay() {
+        startDate = sharedPreferences.getString("startDate", "") ?: ""
+        val currentDate = getCurrentDate()
+        val isNewDay = isDifferentDay(startDate, currentDate)
+        Log.d("TIMER BLOCK", sharedPreferences.getString("startDate", "") ?: "" + " " + currentDate)
+        if (isNewDay) {
+            Log.d("TIMER BLOCK", "NEW DAY")
+            // Reset the timer to the original value at the start of a new day
+            remainingTimeToday = limitTime
+            resetNotificationFlags()
+            startDate = currentDate
+            saveTimerData(true)
+
+            restartUserHasActivatedWeeklyTime()
         }
     }
 

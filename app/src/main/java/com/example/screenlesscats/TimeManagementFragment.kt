@@ -225,8 +225,9 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
             }
 
             withContext(Dispatchers.Main) {
-                // Update the UI with the loaded app list
-                updateAppUsageTimes(requireContext(), apps)
+                if (isActive && isAdded && view != null) {
+                    updateAppUsageTimes(requireContext(), apps)
+                }
             }
         }
     }
@@ -440,7 +441,6 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                 withContext(Dispatchers.Main) {
                     appData.hoursToday = hours
                     appData.minutesToday = minutes
-                    Log.d("MAMA", "UPDATE UPDATE")
                 }
             }
 

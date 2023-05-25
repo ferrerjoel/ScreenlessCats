@@ -7,8 +7,10 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.firebase.auth.FirebaseAuth
@@ -63,9 +65,13 @@ class Options : AppCompatActivity() {
 
         recoverSwitchPositions()
 
-        if (isAccessServiceEnabled(this)) accessibilityPerms.isEnabled = false
-        if (isUsagePermissionsEnabled(this)) usagePerms.isEnabled = false
+        checkButtonPermissions()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkButtonPermissions()
     }
 
     private fun recoverSwitchPositions() {
@@ -106,20 +112,11 @@ class Options : AppCompatActivity() {
         }
 
         fun requestAppAccessibilitySettings(context: Context) {
-            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-            context.startActivity(intent)
+            context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
         }
 
         fun requestAppUsageSettings(context: Context) {
-            val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                // Use ACTION_APP_USAGE_SETTINGS for API 29 (Android 10) and above
-                Intent(Settings.ACTION_APP_USAGE_SETTINGS)
-            } else {
-                // Use ACTION_USAGE_ACCESS_SETTINGS for API below 29
-                Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-            }
-            // Open the settings page
-            context.startActivity(intent)
+            context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
         }
     }
 
@@ -134,5 +131,10 @@ class Options : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         finish()
+    }
+
+    private fun checkButtonPermissions() {
+        if (isAccessServiceEnabled(this)) accessibilityPerms.isEnabled = false
+        if (isUsagePermissionsEnabled(this)) usagePerms.isEnabled = false
     }
 }
