@@ -21,6 +21,9 @@ class CatAdapter(private val cats: List<Cat>) : RecyclerView.Adapter<CatAdapter.
         return CatViewHolder(view)
     }
 
+    /**
+     *
+     */
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
         val cat = cats[position]
         val imageID = holder.itemView.context.resources.getIdentifier("drawable/${cat.catRarity}_${cat.catId}", null, holder.itemView.context.packageName)
