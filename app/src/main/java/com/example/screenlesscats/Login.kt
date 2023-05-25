@@ -1,20 +1,15 @@
 package com.example.screenlesscats
 
-import android.app.AppOpsManager
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import android.provider.Settings.SettingNotFoundException
-import android.text.TextUtils.SimpleStringSplitter
 import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.screenlesscats.block.AppBlockerService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -67,11 +62,13 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        if(!isAccessServiceEnabled(this)){
-            showPermissionsWarning()
+        if(!Options.isAccessServiceEnabled(this)){
+            showPermissionsAccessibilityWarning()
         }
 
-        startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+        if(!Options.isUsagePermissionsEnabled(this)){
+            showPermissionsUsageWarning()
+        }
 
         auth = Firebase.auth
 
@@ -98,6 +95,7 @@ class Login : AppCompatActivity() {
             finish()
         }
     }
+
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and go to home directly.
@@ -109,26 +107,31 @@ class Login : AppCompatActivity() {
         }
     }
 
-    private fun requestAppAccessibilitySettings() {
-        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-        startActivity(intent)
-    }
-    private fun isAccessServiceEnabled(context: Context): Boolean {
-        val prefString =
-            Settings.Secure.getString(context.contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
-        return prefString.contains("${context.packageName}/${context.packageName}.block.AppBlockerService")
-    }
-
-    private fun showPermissionsWarning() {
+    private fun showPermissionsAccessibilityWarning() {
         this.let {
             MaterialAlertDialogBuilder(it)
                 .setTitle(resources.getString(R.string.we_need_accessibility_title))
                 .setMessage(resources.getString(R.string.we_need_accessibility))
                 .setNeutralButton(resources.getString(R.string.i_understand)) { dialog, which ->
-                    requestAppAccessibilitySettings()
+                    Options.requestAppAccessibilitySettings(this)
                 }
                 .setOnDismissListener() {
-                    requestAppAccessibilitySettings()
+                    Options.requestAppAccessibilitySettings(this)
+                }
+                .show()
+        }
+    }
+
+    private fun showPermissionsUsageWarning() {
+        this.let {
+            MaterialAlertDialogBuilder(it)
+                .setTitle(resources.getString(R.string.we_need_usage_title))
+                .setMessage(resources.getString(R.string.we_need_usage))
+                .setNeutralButton(resources.getString(R.string.i_understand)) { dialog, which ->
+                    Options.requestAppUsageSettings(this)
+                }
+                .setOnDismissListener() {
+                    Options.requestAppUsageSettings(this)
                 }
                 .show()
         }

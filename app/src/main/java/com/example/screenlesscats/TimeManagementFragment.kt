@@ -73,6 +73,26 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     private val appUsageTimes: HashMap<String, Pair<Long, Long>> = HashMap()
 
     private var loadAppsJob: Job? = null // Declare a nullable Job variable to keep track of the coroutine job
+    // These apps are considered system apps since come with the android system and can't be uninstalled, then we have to filter them
+    private val preInstalledApps = hashSetOf(
+        "com.google.android.googlequicksearchbox",
+        "com.google.android.apps.maps",
+        "com.android.chrome",
+        "com.google.android.youtube",
+        "com.android.vending",
+        "com.google.android.music",
+        "com.google.android.apps.photos",
+        "com.google.android.gm",
+        "com.google.android.apps.docs",
+        "com.google.android.calendar",
+        "com.google.android.apps.tachyon",
+        "com.google.android.apps.magazines",
+        "com.google.android.play.games",
+        "com.google.android.talk",
+        "com.google.android.keep",
+        "com.google.android.contacts"
+    )
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -178,7 +198,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
             phoneApps = packetManager.getInstalledApplications(PackageManager.GET_META_DATA)
 
             for (app in phoneApps) {
-                if (app.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
+                if ((app.flags and ApplicationInfo.FLAG_SYSTEM == 0) || preInstalledApps.contains(app.packageName)){
                     val appName = packetManager.getApplicationLabel(app).toString()
                     val packageName = app.packageName
                     // We are going to exclude this app

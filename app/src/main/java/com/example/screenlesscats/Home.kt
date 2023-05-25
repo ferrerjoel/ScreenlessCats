@@ -97,10 +97,6 @@ class Home : AppCompatActivity() {
                     showAboutUs()
                     true
                 }
-                R.id.sign_out_option -> {
-                    signOut()
-                    true
-                }
                 R.id.how_this_works_option -> {
                     showHowThisWorks()
                     true
@@ -108,10 +104,6 @@ class Home : AppCompatActivity() {
                 R.id.options_option -> {
                     val intent = Intent(this, Options::class.java)
                     startActivity(intent)
-                    true
-                }
-                R.id.give_accessibility_permissions -> {
-                    requestAppAccessibilitySettings()
                     true
                 }
                 else -> false
@@ -125,16 +117,6 @@ class Home : AppCompatActivity() {
             replace(R.id.flFragment,fragment)
             commit()
         }
-    /**
-     * Signs out the user
-     */
-    private fun signOut() {
-        auth.signOut()
-        // Starts main screen
-        val intent= Intent(this, Login::class.java)
-        startActivity(intent)
-        finish()
-    }
 
     fun startBlockService() {
         val serviceClass = AppBlockerService::class.java
