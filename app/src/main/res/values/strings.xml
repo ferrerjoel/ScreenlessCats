@@ -74,4 +74,10 @@
     <string name="daily_usage_app_list">%1$d hours and %2$d minutes today</string>
     <string name="we_need_usage_title">Usage settings</string>
     <string name="we_need_usage">We also need app usage permissions, while this is optional, it will allow us to show which apps do you use most.</string>
+    <string name="common_60">Common\nBase: 60%%\nNow: %.2f%%</string>
+    <string name="rare_22">Rare\nBase: 22%%\nNow: %.2f%%</string>
+    <string name="very_rare_11_5">Very Rare\nBase:11.5%%\nNow: %.2f%%</string>
+    <string name="epic_5">Epic\nBase: 5%%\nNow: %.2f%%</string>
+    <string name="legendary_1">Legendary\nBase: 1%%\nNow: %.2f%%</string>
+    <string name="mythic_0_5">Mythic\nBase: 0.5%%\nNow: %.2f%%</string>
 </resources>

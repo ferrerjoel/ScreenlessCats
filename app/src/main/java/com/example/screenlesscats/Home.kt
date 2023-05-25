@@ -29,6 +29,7 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.text.SimpleDateFormat
+import java.util.Arrays
 import java.util.Calendar
 import java.util.Locale
 import kotlin.random.Random
@@ -213,7 +214,7 @@ class Home : AppCompatActivity() {
                                 ref.child("user_data").child("days_streaks").setValue(ds + 1)
                                 ds += 1
                                 if(dedicationValue < 20)
-                                    ref.child("user_data").child("dedication_value").setValue(dedicationValue+0.027)
+                                    ref.child("user_data").child("dedication_value").setValue(dedicationValue+0.0135)
                             }
                             //Calculate how many cats does he have to reclaim
                             val catsToGet = if (ds == 0) 1 else ds
@@ -247,28 +248,27 @@ class Home : AppCompatActivity() {
      * @return HashMap with cat info
      */
     private fun getRewardCatInfo(dedicationValue : Float): HashMap<String, Any> {
-        val rarities = arrayOf("mythic", "legendary", "epic", "very_rare", "rare", "common")
+        var rarities = arrayOf("mythic", "legendary", "epic", "very_rare", "rare", "common")
         var r: String = ""
         val prob = arrayOf(0.005, 0.01, 0.05, 0.115, 0.22, 0.6)
-        val v05 = dedicationValue/(100*(prob[5] - prob[0]))
-        val v14 = dedicationValue /(100*(prob[4] - prob[1]))
-        val v23 = dedicationValue /(100*(prob[3] - prob[2]))
-        var realprob = arrayOf(prob[0]+v05, prob[1])
+        val v25 = dedicationValue /100*(prob[5] - prob[2])
+        val v14 = dedicationValue /100*(prob[4] - prob[1])
+        val v03 = dedicationValue /100*(prob[3] - prob[0])
+        var realprob = arrayOf(prob[0]+v03, prob[1]+v14, prob[2]+v25, prob[3]-v03, prob[4]-v14, prob[5]-v25)
         //Gets a random rarity with probability
         var randomNumber = Random.nextDouble()
-
-        if(dedicationValue != 0f){
-            do {
-                randomNumber -= (dedicationValue)
-            }while (randomNumber < 0)
+        if(dedicationValue > 50) {
+            realprob = realprob.reversed().toTypedArray()
+            rarities = rarities.reversed().toTypedArray()
         }
-        for (i in prob.indices) {
-            if (randomNumber <= prob[i]) {
+        for (i in realprob.indices) {
+            if (randomNumber <= realprob[i]) {
                 r = rarities[i]
                 break
             }
         }
         if (r == "") r = rarities.last()
+
         //Get random cat ID from all the cats of that rarity
         val length = countResources(r + '_', "drawable")
         val catID = Random.nextInt(0, length)
