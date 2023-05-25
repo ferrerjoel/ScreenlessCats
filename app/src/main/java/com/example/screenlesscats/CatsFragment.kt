@@ -25,6 +25,7 @@ import com.google.firebase.ktx.Firebase
 // TODO: Rename parameter arguments, choose names that match
 
 class CatsFragment:Fragment(R.layout.fragment_cats) {
+    //var declaration
     private lateinit var cats : ArrayList<Cat>
 
     private lateinit var database: DatabaseReference
@@ -32,8 +33,12 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
     private lateinit var spinner : CircularProgressIndicator
     private lateinit var toInfoBtn : FloatingActionButton
 
+    /**
+     * On Cats Fragment creation
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //Get Spiner, Button
         spinner = view.findViewById(R.id.spinner)
 
         toInfoBtn = view.findViewById(R.id.floating_action_button)
@@ -42,18 +47,26 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
             val intent= Intent(it.context, Info::class.java)
             startActivity(intent)
         }
+        //Load all cats into array
         cats = ArrayList<Cat>()
         loadCats(view)
     }
 
+    /**
+     * Gets all cats from the db and loads them into a RecyclerView using createCatList()
+     */
     private fun loadCats(view : View) {
+        //Get user id
         auth = Firebase.auth
         val uid = auth.uid.toString()
 
+        //Db reference
         database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid).child("cats")
 
+        //Get user cats on real time
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                //Add cats into array
                 for(cat in dataSnapshot.children){
                     cats.add(Cat(
                         Integer.parseInt(cat.child("id").value.toString()),
@@ -61,7 +74,10 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
                         cat.child("rarity").value.toString()
                     ))
                 }
+                //Load to RecyclerView
                 createCatList(view)
+
+                //Hides spinner
                 spinner.visibility = View.GONE
 
             }
@@ -72,9 +88,18 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
         })
 
     }
+
+    /**
+     * Insert cats from array into a RecyclerView
+     */
     private fun createCatList(view: View){
+        //Get RecyclerView
         val catList = view.findViewById<RecyclerView>(R.id.cat_list)
+
+        //Add cats in rows of 3
         catList.layoutManager = GridLayoutManager(view.context, 3).apply {  }
+
+        //Add cats into RecyclerView
         catList.adapter = CatAdapter(cats)
     }
 }
