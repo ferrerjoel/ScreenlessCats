@@ -146,7 +146,7 @@ class AppBlockerService : AccessibilityService() {
 
     private fun checkTimeAndBlock() {
 
-        if (remainingTimeToday == 0L) checkNewDay()
+        if (remainingTimeToday == 0L) checkNewDayAndWeek()
 
         if (remainingTimeToday > 0L) {
             startTimer(false)
@@ -161,10 +161,14 @@ class AppBlockerService : AccessibilityService() {
         }
     }
 
-    private fun checkNewDay() {
+    private fun checkNewDayAndWeek() {
         startDate = sharedPreferences.getString("startDate", "") ?: ""
+        startDateWeekly = sharedPreferences.getString("startDateWeekly", "") ?: ""
+
         val currentDate = getCurrentDate()
         val isNewDay = isDifferentDay(startDate, currentDate)
+        val isNewWeek = isDifferentWeek(startDateWeekly, currentDate)
+
         Log.d("TIMER BLOCK", sharedPreferences.getString("startDate", "") ?: "" + " " + currentDate)
         if (isNewDay) {
             Log.d("TIMER BLOCK", "NEW DAY")
@@ -172,6 +176,15 @@ class AppBlockerService : AccessibilityService() {
             remainingTimeToday = limitTime
             resetNotificationFlags()
             startDate = currentDate
+            saveTimerData(true)
+
+            restartUserHasActivatedWeeklyTime()
+        }
+
+        if (isNewWeek) {
+            remainingTimeWeekly = limitTimeWeekly
+            resetNotificationFlags()
+            startDateWeekly = currentDate
             saveTimerData(true)
 
             restartUserHasActivatedWeeklyTime()
@@ -206,7 +219,7 @@ class AppBlockerService : AccessibilityService() {
             remainingTimeWeekly = limitTimeWeekly
             //resetNotificationFlags()
             startDateWeekly = currentDate
-            //saveTimerData(true)
+            saveTimerData(false)
             saveWeeklyStartDate()
         } else {
             Log.d("TIMER BLOCK", "ELSE")
@@ -299,7 +312,7 @@ class AppBlockerService : AccessibilityService() {
     }
 
     private fun isDifferentWeek(startDate: String, currentDate: String): Boolean {
-        if (startDate == "") return false
+        if (startDate == "") return true
         val startCalendar = Calendar.getInstance()
         val currentCalendar = Calendar.getInstance()
         startCalendar.time = getDateFromString(startDate)
@@ -326,7 +339,7 @@ class AppBlockerService : AccessibilityService() {
         limitTime = sharedPreferences.getLong("limitTime", 0)
         remainingTimeToday = sharedPreferences.getLong("remainingTimeToday", limitTime)
         limitTimeWeekly = sharedPreferences.getLong("limitTimeWeekly", 0)
-        remainingTimeWeekly = sharedPreferences.getLong("remainingTimeWeekly", limitTime)
+        remainingTimeWeekly = sharedPreferences.getLong("remainingTimeWeekly", limitTimeWeekly)
         Log.d("TIMER BLOCK", "$remainingTimeToday $limitTime")
     }
 
