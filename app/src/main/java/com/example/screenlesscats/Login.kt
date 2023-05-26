@@ -115,7 +115,7 @@ class Login : AppCompatActivity() {
                 .setNeutralButton(resources.getString(R.string.i_understand)) { dialog, which ->
                     Options.requestAppAccessibilitySettings(this)
                 }
-                .setOnDismissListener() {
+                .setOnDismissListener {
                     Options.requestAppAccessibilitySettings(this)
                 }
                 .show()
@@ -130,7 +130,7 @@ class Login : AppCompatActivity() {
                 .setNeutralButton(resources.getString(R.string.i_understand)) { dialog, which ->
                     Options.requestAppUsageSettings(this)
                 }
-                .setOnDismissListener() {
+                .setOnDismissListener {
                     Options.requestAppUsageSettings(this)
                 }
                 .show()

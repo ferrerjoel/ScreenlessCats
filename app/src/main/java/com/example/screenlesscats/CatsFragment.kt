@@ -43,7 +43,7 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
 
         toInfoBtn = view.findViewById(R.id.floating_action_button)
 
-        toInfoBtn.setOnClickListener(){
+        toInfoBtn.setOnClickListener {
             val intent= Intent(it.context, Info::class.java)
             startActivity(intent)
         }

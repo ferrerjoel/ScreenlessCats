@@ -59,7 +59,7 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         catText = view.findViewById(R.id.cat_text)
 
         val animation = AnimationUtils.loadAnimation(context, R.anim.cat_animation)
-        catImage.setOnClickListener() {
+        catImage.setOnClickListener {
             catImage.startAnimation(animation)
         }
 
@@ -167,7 +167,7 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
                     weeklyActivationButton.text = "Deactivate weekly time"
             }
 
-            weeklyActivationButton.setOnClickListener() {
+            weeklyActivationButton.setOnClickListener {
                 val editor = sharedPreferences.edit()
                 if (!sharedPreferences.getBoolean("userHasActivatedWeeklyTime", false)) {
                     editor.putBoolean("userHasActivatedWeeklyTime", true)

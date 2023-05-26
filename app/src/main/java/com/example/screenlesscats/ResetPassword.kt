@@ -24,7 +24,7 @@ class ResetPassword : AppCompatActivity() {
         email = findViewById(R.id.email)
         resetPwdBtn = findViewById(R.id.resetPwdBtn)
 
-        resetPwdBtn.setOnClickListener() {
+        resetPwdBtn.setOnClickListener {
             auth = FirebaseAuth.getInstance()
             // Mail validation
             // If it's not a mail
