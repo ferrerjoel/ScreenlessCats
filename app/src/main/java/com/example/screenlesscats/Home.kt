@@ -34,8 +34,15 @@ import java.util.Calendar
 import java.util.Locale
 import kotlin.random.Random
 
-
+/**
+ * Time till the user gets the next cat
+ */
 const val CHECK_NCAT_TIME = 172800
+
+/**
+ * Activity that manages the top bar, the menu bottom bar and all the three fragments
+ *
+ */
 class Home : AppCompatActivity() {
 
     private lateinit var bottomNavigationBar: BottomNavigationView
@@ -43,7 +50,11 @@ class Home : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
 
-
+    /**
+     * Initializes all the necessary components and checks accessibility permissions of the user
+     *
+     * @param savedInstanceState
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -113,12 +124,21 @@ class Home : AppCompatActivity() {
 
     }
 
+    /**
+     * Changes the current shown fragment
+     *
+     * @param fragment Fragment to set
+     */
     private fun setCurrentFragment(fragment: Fragment)=
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)
             commit()
         }
 
+    /**
+     * If the blocking accessibility service is not started for some reason we manually start it
+     *
+     */
     fun startBlockService() {
         val serviceClass = AppBlockerService::class.java
 

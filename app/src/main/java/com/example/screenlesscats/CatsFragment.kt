@@ -22,8 +22,11 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-// TODO: Rename parameter arguments, choose names that match
 
+/**
+ * This fragment is used to show all the cats the user has
+ *
+ */
 class CatsFragment:Fragment(R.layout.fragment_cats) {
     //var declaration
     private lateinit var cats : ArrayList<Cat>
@@ -34,7 +37,10 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
     private lateinit var toInfoBtn : FloatingActionButton
 
     /**
-     * On Cats Fragment creation
+     * Called when the view is created
+     *
+     * @param view
+     * @param savedInstanceState
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,6 +60,8 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
 
     /**
      * Gets all cats from the db and loads them into a RecyclerView using createCatList()
+     *
+     * @param view
      */
     private fun loadCats(view : View) {
         //Get user id
@@ -90,7 +98,9 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
     }
 
     /**
-     * Insert cats from array into a RecyclerView
+     * Calls the adapter of the Recycler view
+     *
+     * @param view
      */
     private fun createCatList(view: View){
         //Get RecyclerView

@@ -22,6 +22,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Channel id to receive local broadcasts
+ */
 private const val CHANNEL_ID = "TimerNotificationChannel"
 
 class AppBlockerService : AccessibilityService() {
@@ -48,7 +51,7 @@ class AppBlockerService : AccessibilityService() {
     private var isTimerRunning: Boolean = false
 
     /**
-     * Some android systems have an app that shows above the games as an overlay, this ends the timer if we don't ignore it
+     * Android systems have an app that shows above the games as an overlay, this ends the timer if we don't ignore it
      */
     private val gamePackageApps = hashSetOf(
         "com.oplus.games",
@@ -65,6 +68,9 @@ class AppBlockerService : AccessibilityService() {
         "com.htc.vr.games"
     )
 
+    /**
+     * System packages that the user can trigger when using an app
+     */
     private val systemUIPackages = hashSetOf(
         "com.android.systemui", // When checking notifications the timer stops and doesn't start again
         "com.android.launcher"
@@ -136,14 +142,29 @@ class AppBlockerService : AccessibilityService() {
         Log.d("TIMER BLOCK", "INTERRUPTED")
     }
 
+    /**
+     * Shows a toast
+     *
+     * @param message Message to show
+     */
     private fun showToast(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
 
+    /**
+     * Checks if a package is checked by the user
+     *
+     * @param packageName Package of the app to check
+     * @return True if the app has been checked
+     */
     private fun isCheckedPackage(packageName: String?): Boolean {
         return sharedPreferencesApps.getBoolean(packageName, false)
     }
 
+    /**
+     * Checks if the user has more time today, if not it doesn't allow the user to use the app. This function uses general actions to leave the app when the user tries to access them
+     *
+     */
     private fun checkTimeAndBlock() {
 
         if (remainingTimeToday == 0L) checkNewDayAndWeek()
@@ -161,6 +182,10 @@ class AppBlockerService : AccessibilityService() {
         }
     }
 
+    /**
+     * Checks if it's a different day besides the one the last daily time was used, same as for weekly time, checks if a week has passed since the weekly time was established. If so it sets a new time respectively.
+     *
+     */
     private fun checkNewDayAndWeek() {
         startDate = sharedPreferences.getString("startDate", "") ?: ""
         startDateWeekly = sharedPreferences.getString("startDateWeekly", "") ?: ""
@@ -191,6 +216,10 @@ class AppBlockerService : AccessibilityService() {
         }
     }
 
+    /**
+     * Prepares the app timer to be used, checks if it needs to set new daily or weekly times. And sets the timer needed for the circumstances (user is using weekly time, user doesn't have more time...)
+     *
+     */
     private fun setupTimer() {
         Log.d("TIMER BLOCK", "SETUP TIMER CALLED")
         val currentDate = getCurrentDate()
@@ -231,6 +260,11 @@ class AppBlockerService : AccessibilityService() {
         // startTimer()
     }
 
+    /**
+     * Starts the instance of the timer created by setupTimer(). Checks if the timer is already running, sets the time the user has left on the timer.
+     *
+     * @param isWeeklyTimer If set to true it starts a timer for weekly time instead of daily time
+     */
     private fun startTimer(isWeeklyTimer : Boolean) {
         if (!isTimerRunning){
             isTimerRunning = true
@@ -275,6 +309,10 @@ class AppBlockerService : AccessibilityService() {
         }
     }
 
+    /**
+     * Fully stops the timer
+     *
+     */
     private fun stopTimer() {
         if (::timer.isInitialized && isTimerRunning) {
             timer.cancel()
@@ -284,6 +322,11 @@ class AppBlockerService : AccessibilityService() {
         }
     }
 
+    /**
+     * Saves the remaining time the user has on daily and weekly basis.
+     *
+     * @param withDate True to also save the startDate of the daily timer
+     */
     private fun saveTimerData(withDate : Boolean) {
         val editor = sharedPreferences.edit()
         editor.putLong("remainingTimeToday", remainingTimeToday)
@@ -291,7 +334,7 @@ class AppBlockerService : AccessibilityService() {
         if (withDate) editor.putString("startDate", startDate)
         editor.apply()
     }
-
+    
     private fun saveWeeklyStartDate() {
         val editor = sharedPreferences.edit()
         editor.putString("startDateWeekly", startDateWeekly)
