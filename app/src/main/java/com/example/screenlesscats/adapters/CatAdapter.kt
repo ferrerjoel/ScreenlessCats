@@ -1,6 +1,7 @@
 package com.example.screenlesscats.adapters
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,7 +37,9 @@ class CatAdapter(private val cats: List<Cat>) : RecyclerView.Adapter<CatAdapter.
             holder.itemView.context.packageName
         )
         holder.catName.text = cat.catName
+        Log.d("CAT", cat.catRarity)
         when (cat.catRarity) {
+            "common" -> holder.catName.setTextColor(2)
             "rare" -> holder.catName.setTextColor(Color.parseColor("#ADD8E6"))
             "very_rare" -> holder.catName.setTextColor(Color.parseColor("#4682B4"))
             "epic" -> holder.catName.setTextColor(Color.parseColor("#d29bfd"))
