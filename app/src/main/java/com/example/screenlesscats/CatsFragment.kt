@@ -1,7 +1,6 @@
 package com.example.screenlesscats
 
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -19,7 +18,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 
@@ -27,34 +25,28 @@ import com.google.firebase.ktx.Firebase
  * This fragment is used to show all the cats the user has
  *
  */
-class CatsFragment:Fragment(R.layout.fragment_cats) {
-    //var declaration
-    private lateinit var cats : ArrayList<Cat>
+class CatsFragment : Fragment(R.layout.fragment_cats) {
+
+    private lateinit var cats: ArrayList<Cat>
 
     private lateinit var database: DatabaseReference
-    private lateinit var auth : FirebaseAuth
-    private lateinit var spinner : CircularProgressIndicator
-    private lateinit var toInfoBtn : FloatingActionButton
+    private lateinit var auth: FirebaseAuth
+    private lateinit var spinner: CircularProgressIndicator
+    private lateinit var toInfoBtn: FloatingActionButton
 
-    /**
-     * Called when the view is created
-     *
-     * @param view
-     * @param savedInstanceState
-     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //Get Spiner, Button
+        //Get Spinner, Button
         spinner = view.findViewById(R.id.spinner)
 
         toInfoBtn = view.findViewById(R.id.floating_action_button)
 
         toInfoBtn.setOnClickListener {
-            val intent= Intent(it.context, Info::class.java)
+            val intent = Intent(it.context, Info::class.java)
             startActivity(intent)
         }
         //Load all cats into array
-        cats = ArrayList<Cat>()
+        cats = ArrayList()
         loadCats(view)
     }
 
@@ -63,24 +55,28 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
      *
      * @param view
      */
-    private fun loadCats(view : View) {
+    private fun loadCats(view: View) {
         //Get user id
         auth = Firebase.auth
         val uid = auth.uid.toString()
 
         //Db reference
-        database = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid).child("cats")
+        database =
+            FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app")
+                .getReference(uid).child("cats")
 
         //Get user cats on real time
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 //Add cats into array
-                for(cat in dataSnapshot.children){
-                    cats.add(Cat(
-                        Integer.parseInt(cat.child("id").value.toString()),
-                        cat.child("name").value.toString(),
-                        cat.child("rarity").value.toString()
-                    ))
+                for (cat in dataSnapshot.children) {
+                    cats.add(
+                        Cat(
+                            Integer.parseInt(cat.child("id").value.toString()),
+                            cat.child("name").value.toString(),
+                            cat.child("rarity").value.toString()
+                        )
+                    )
                 }
                 //Load to RecyclerView
                 createCatList(view)
@@ -102,12 +98,12 @@ class CatsFragment:Fragment(R.layout.fragment_cats) {
      *
      * @param view
      */
-    private fun createCatList(view: View){
+    private fun createCatList(view: View) {
         //Get RecyclerView
         val catList = view.findViewById<RecyclerView>(R.id.cat_list)
 
         //Add cats in rows of 3
-        catList.layoutManager = GridLayoutManager(view.context, 3).apply {  }
+        catList.layoutManager = GridLayoutManager(view.context, 3).apply { }
 
         //Add cats into RecyclerView
         catList.adapter = CatAdapter(cats)

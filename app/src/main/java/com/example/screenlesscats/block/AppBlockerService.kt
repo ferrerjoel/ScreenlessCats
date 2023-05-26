@@ -79,7 +79,8 @@ class AppBlockerService : AccessibilityService() {
     override fun onCreate() {
         super.onCreate()
         sharedPreferences = applicationContext.getSharedPreferences("Options", Context.MODE_PRIVATE)
-        sharedPreferencesApps = applicationContext.getSharedPreferences("LimitedApps", Context.MODE_PRIVATE)
+        sharedPreferencesApps =
+            applicationContext.getSharedPreferences("LimitedApps", Context.MODE_PRIVATE)
 
         Log.d("BLOCK SERVICE", "SERVICE STARTED")
         val intentFilter = IntentFilter().apply {
@@ -130,7 +131,10 @@ class AppBlockerService : AccessibilityService() {
                     if (isCheckedPackage(packageName) && source != null) {
                         // Show a dialog indicating the app is blocked when the user tries to interact with it
                         checkTimeAndBlock()
-                    } else if (!gamePackageApps.contains(event.packageName) && !systemUIPackages.contains(event.packageName)){
+                    } else if (!gamePackageApps.contains(event.packageName) && !systemUIPackages.contains(
+                            event.packageName
+                        )
+                    ) {
                         stopTimer()
                     }
                 }
@@ -171,7 +175,7 @@ class AppBlockerService : AccessibilityService() {
 
         if (remainingTimeToday > 0L) {
             startTimer(false)
-        } else if (userHasActivatedWeeklyTime && remainingTimeWeekly > 0L){
+        } else if (userHasActivatedWeeklyTime && remainingTimeWeekly > 0L) {
             startTimer(true)
         } else {
             // Prevent the blocked app from launching
@@ -194,7 +198,9 @@ class AppBlockerService : AccessibilityService() {
         val isNewDay = isDifferentDay(startDate, currentDate)
         val isNewWeek = isDifferentWeek(startDateWeekly, currentDate)
 
-        Log.d("TIMER BLOCK", sharedPreferences.getString("startDate", "") ?: "" + " " + currentDate)
+        Log.d("TIMER BLOCK",
+            sharedPreferences.getString("startDate", "") ?: (" $currentDate")
+        )
         if (isNewDay) {
             Log.d("TIMER BLOCK", "NEW DAY")
             // Reset the timer to the original value at the start of a new day
@@ -265,8 +271,8 @@ class AppBlockerService : AccessibilityService() {
      *
      * @param isWeeklyTimer If set to true it starts a timer for weekly time instead of daily time
      */
-    private fun startTimer(isWeeklyTimer : Boolean) {
-        if (!isTimerRunning){
+    private fun startTimer(isWeeklyTimer: Boolean) {
+        if (!isTimerRunning) {
             isTimerRunning = true
             if (!isWeeklyTimer) {
                 Log.d("TIMER BLOCK", "TIMER STARTED DAILY")
@@ -288,7 +294,10 @@ class AppBlockerService : AccessibilityService() {
                 }.start()
             } else {
                 Log.d("TIMER BLOCK", "TIMER STARTED WEEKLY")
-                sendNotification(getString(R.string.weekly_time_activated), getString(R.string.remember_that_this_time_is_not_for_common_use))
+                sendNotification(
+                    getString(R.string.weekly_time_activated),
+                    getString(R.string.remember_that_this_time_is_not_for_common_use)
+                )
                 timer = object : CountDownTimer(remainingTimeWeekly, 1000) {
                     override fun onTick(millisUntilFinished: Long) {
                         remainingTimeWeekly = millisUntilFinished
@@ -327,7 +336,7 @@ class AppBlockerService : AccessibilityService() {
      *
      * @param withDate True to also save the startDate of the daily timer
      */
-    private fun saveTimerData(withDate : Boolean) {
+    private fun saveTimerData(withDate: Boolean) {
         val editor = sharedPreferences.edit()
         editor.putLong("remainingTimeToday", remainingTimeToday)
         editor.putLong("remainingTimeWeekly", remainingTimeWeekly)
@@ -370,6 +379,13 @@ class AppBlockerService : AccessibilityService() {
         return startDate != currentDate
     }
 
+    /**
+     * Checks if two weeks are different, not if 7 days have elapsed between dates. It checks if two dates pertain into different weeks of a calendar
+     *
+     * @param startDate First week to compare
+     * @param currentDate Second week to compare
+     * @return True if the weeks are different
+     */
     private fun isDifferentWeek(startDate: String, currentDate: String): Boolean {
         if (startDate == "") return true
         val startCalendar = Calendar.getInstance()
@@ -388,6 +404,12 @@ class AppBlockerService : AccessibilityService() {
         return startCalendar.get(Calendar.WEEK_OF_YEAR) != currentCalendar.get(Calendar.WEEK_OF_YEAR)
     }
 
+    /**
+     * Formats a string into a date
+     *
+     * @param dateString String date to format
+     * @return The formatted date as yyyy-MM-dd
+     */
     private fun getDateFromString(dateString: String): Date {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         return dateFormat.parse(dateString) ?: Date()
@@ -411,7 +433,8 @@ class AppBlockerService : AccessibilityService() {
                 updateTimeValues()
             }
             if (intent?.action == "USER_HAS_UPDATED_WEEKLY") {
-                userHasActivatedWeeklyTime = sharedPreferences.getBoolean("userHasActivatedWeeklyTime", false)
+                userHasActivatedWeeklyTime =
+                    sharedPreferences.getBoolean("userHasActivatedWeeklyTime", false)
                 resetNotificationFlags()
             }
         }
@@ -434,14 +457,16 @@ class AppBlockerService : AccessibilityService() {
     }
 
     private fun sendNotification(message: String, customContent: String = "") {
-        val contentText = customContent.ifEmpty { getString(R.string.all_your_selected_apps_are_going_to_be_blocked) }
+        val contentText =
+            customContent.ifEmpty { getString(R.string.all_your_selected_apps_are_going_to_be_blocked) }
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(message)
             .setContentText(contentText)
             .setSmallIcon(R.drawable.cat)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(0, notificationBuilder.build())
     }
 
@@ -452,18 +477,28 @@ class AppBlockerService : AccessibilityService() {
     }
 
     private fun sendTimeNotification() {
-        val remainingTime = if (userHasActivatedWeeklyTime) remainingTimeWeekly else remainingTimeToday
+        val remainingTime =
+            if (userHasActivatedWeeklyTime) remainingTimeWeekly else remainingTimeToday
         if (!tenMinuteNotificationSend && remainingTime <= 600000) {
-            sendNotification(getString(R.string._10_minutes_left) + if (userHasActivatedWeeklyTime) getString(
-                            R.string.of_weekly_time_watch_out) else "")
+            sendNotification(
+                getString(R.string._10_minutes_left) + if (userHasActivatedWeeklyTime) getString(
+                    R.string.of_weekly_time_watch_out
+                ) else ""
+            )
             tenMinuteNotificationSend = true
         } else if (!fiveMinuteNotificationSend && remainingTime <= 300000) {
-            sendNotification(getString(R.string._5_minutes_left) + if (userHasActivatedWeeklyTime) getString(
-                R.string.of_weekly_time_watch_out) else "")
+            sendNotification(
+                getString(R.string._5_minutes_left) + if (userHasActivatedWeeklyTime) getString(
+                    R.string.of_weekly_time_watch_out
+                ) else ""
+            )
             fiveMinuteNotificationSend = true
         } else if (!oneMinuteNotificationSend && remainingTime <= 60000) {
-            sendNotification(getString(R.string._1_minute_left) + if (userHasActivatedWeeklyTime) getString(
-                R.string.of_weekly_time_watch_out) else "")
+            sendNotification(
+                getString(R.string._1_minute_left) + if (userHasActivatedWeeklyTime) getString(
+                    R.string.of_weekly_time_watch_out
+                ) else ""
+            )
             oneMinuteNotificationSend = true
         }
     }
