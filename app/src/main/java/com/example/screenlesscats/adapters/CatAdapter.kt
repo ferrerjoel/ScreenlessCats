@@ -1,5 +1,6 @@
 package com.example.screenlesscats.adapters
 
+import android.graphics.Color
 import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +29,13 @@ class CatAdapter(private val cats: List<Cat>) : RecyclerView.Adapter<CatAdapter.
         val cat = cats[position]
         val imageID = holder.itemView.context.resources.getIdentifier("drawable/${cat.catRarity}_${cat.catId}", null, holder.itemView.context.packageName)
         holder.catName.text = cat.catName
+        when (cat.catRarity) {
+            "rare" -> holder.catName.setTextColor(Color.parseColor("#ADD8E6"))
+            "very_rare" -> holder.catName.setTextColor(Color.parseColor("#4682B4"))
+            "epic" -> holder.catName.setTextColor(Color.parseColor("#d29bfd"))
+            "legendary" -> holder.catName.setTextColor(Color.parseColor("#FFEA00"))
+            "mythic" -> holder.catName.setTextColor(Color.parseColor("#C70039"))
+        }
         holder.catImage.setImageResource(imageID)
     }
 

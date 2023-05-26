@@ -35,7 +35,7 @@ import java.util.Locale
 import kotlin.random.Random
 
 
-const val CHECK_NCAT_TIME = 60
+const val CHECK_NCAT_TIME = 172800
 class Home : AppCompatActivity() {
 
     private lateinit var bottomNavigationBar: BottomNavigationView
@@ -255,6 +255,7 @@ class Home : AppCompatActivity() {
         val v14 = dedicationValue /100*(prob[4] - prob[1])
         val v03 = dedicationValue /100*(prob[3] - prob[0])
         var realprob = arrayOf(prob[0]+v03, prob[1]+v14, prob[2]+v25, prob[3]-v03, prob[4]-v14, prob[5]-v25)
+
         //Gets a random rarity with probability
         var randomNumber = Random.nextDouble()
         if(dedicationValue > 50) {

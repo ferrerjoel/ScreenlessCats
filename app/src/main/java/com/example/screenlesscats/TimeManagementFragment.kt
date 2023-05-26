@@ -37,7 +37,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 import kotlin.math.min
 
 
@@ -372,6 +374,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     }
 
     private fun endLimitFirebase(){
+        val TIMETOPENALITY = 172800
         val auth = Firebase.auth
         val uid = auth.uid.toString()
 
@@ -379,9 +382,12 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
         val calendar = Calendar.getInstance()
         val toUpdate: HashMap<String, Any> = HashMap()
-        toUpdate["Date_limit_ended"] = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
+        val dateEnded = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
+        toUpdate["Date_limit_ended"] = dateEnded
 
-        var maxId : Long
+
+
+        var maxId : Long = -1
         ref.get().addOnSuccessListener {
             maxId = it.child("limits").childrenCount
             ref.child("limits").child(maxId.toString()).updateChildren(toUpdate)
@@ -390,9 +396,25 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
             newDefinedTime["Defined_screen_time"] = 0
             ref.updateChildren(newDefinedTime)
             ref.child("days_streaks").setValue(0)
-            Log.d("BON", maxId.toString())
         }.addOnCanceledListener {
             Log.d("BON DIA", "On Cancelled")
+        }
+        ref.get().addOnSuccessListener {
+            var limitStarted = it.child("limits").child(maxId.toString()).child("Date_limit_defined").value.toString()
+
+            val dateFormat =
+                SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm",
+                    Locale.getDefault()
+                ) // Format of the dates
+            val dateStart = dateFormat.parse(limitStarted)
+            val dateEnd = dateFormat.parse(dateEnded)
+
+            val dif = dateEnd.time - dateStart.time
+            val currentDedicationValue = it.child("dedication_value").value.toString().toFloat()
+            if ((dif/1000 >= TIMETOPENALITY) && (currentDedicationValue > 0)){
+                ref.child("dedication_value").setValue(currentDedicationValue-0.0135)
+            }
         }
 
     }
