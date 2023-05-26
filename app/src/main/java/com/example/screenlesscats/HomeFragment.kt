@@ -164,14 +164,14 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
 
             weeklyActivationButton.visibility = View.VISIBLE
             if (sharedPreferences.getBoolean("userHasActivatedWeeklyTime", false)) {
-                    weeklyActivationButton.text = "Deactivate weekly time"
+                    weeklyActivationButton.text = getString(R.string.deactivate_weekly_time)
             }
 
             weeklyActivationButton.setOnClickListener {
                 val editor = sharedPreferences.edit()
                 if (!sharedPreferences.getBoolean("userHasActivatedWeeklyTime", false)) {
                     editor.putBoolean("userHasActivatedWeeklyTime", true)
-                    weeklyActivationButton.text = "Deactivate weekly time"
+                    weeklyActivationButton.text = getString(R.string.deactivate_weekly_time)
                 } else {
                     editor.putBoolean("userHasActivatedWeeklyTime", false)
                     weeklyActivationButton.text = getString(R.string.activate_weekly_time_button)

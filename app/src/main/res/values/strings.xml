@@ -88,4 +88,19 @@
     <string name="legendary_title">Legendary</string>
     <string name="mythic_title">Mythic</string>
     <string name="info_title">CAT PROBABILITY</string>
+    <string name="weekly_time_activated">Weekly time activated!</string>
+    <string name="remember_that_this_time_is_not_for_common_use">Remember that this time is not for common use!</string>
+    <string name="all_your_selected_apps_are_going_to_be_blocked">All your selected apps are going to be blocked!</string>
+    <string name="_10_minutes_left">10 minutes left</string>
+    <string name="_5_minutes_left">5 minutes left</string>
+    <string name="_1_minute_left">1 minute left</string>
+    <string name="of_weekly_time_watch_out">" of weekly time! Watch out!"</string>
+    <string name="deactivate_weekly_time">Deactivate weekly time</string>
+    <string name="authentication_failed">Authentication Failed</string>
+    <string name="registration_failed">Registration Failed</string>
+    <string name="user_registered_successfully">User registered successfully</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="email_sent">Email sent</string>
+    <string name="couldn_t_send_email">Couldn\'t send email</string>
+    <string name="select_daily_screen_time">Select daily screen time</string>
 </resources>

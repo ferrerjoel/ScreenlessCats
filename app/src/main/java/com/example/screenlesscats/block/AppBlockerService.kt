@@ -254,7 +254,7 @@ class AppBlockerService : AccessibilityService() {
                 }.start()
             } else {
                 Log.d("TIMER BLOCK", "TIMER STARTED WEEKLY")
-                sendNotification("Weekly time activated!", "Remember that this time is not for common use!")
+                sendNotification(getString(R.string.weekly_time_activated), getString(R.string.remember_that_this_time_is_not_for_common_use))
                 timer = object : CountDownTimer(remainingTimeWeekly, 1000) {
                     override fun onTick(millisUntilFinished: Long) {
                         remainingTimeWeekly = millisUntilFinished
@@ -375,7 +375,7 @@ class AppBlockerService : AccessibilityService() {
     }
 
     private fun sendNotification(message: String, customContent: String = "") {
-        val contentText = customContent.ifEmpty { "All your selected apps are going to be blocked!" }
+        val contentText = customContent.ifEmpty { getString(R.string.all_your_selected_apps_are_going_to_be_blocked) }
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(message)
             .setContentText(contentText)
@@ -395,13 +395,16 @@ class AppBlockerService : AccessibilityService() {
     private fun sendTimeNotification() {
         val remainingTime = if (userHasActivatedWeeklyTime) remainingTimeWeekly else remainingTimeToday
         if (!tenMinuteNotificationSend && remainingTime <= 600000) {
-            sendNotification("10 minutes left" + if (userHasActivatedWeeklyTime) " of weekly time! Watch out!" else "")
+            sendNotification(getString(R.string._10_minutes_left) + if (userHasActivatedWeeklyTime) getString(
+                            R.string.of_weekly_time_watch_out) else "")
             tenMinuteNotificationSend = true
         } else if (!fiveMinuteNotificationSend && remainingTime <= 300000) {
-            sendNotification("5 minutes left" + if (userHasActivatedWeeklyTime) " of weekly time! Watch out!" else "")
+            sendNotification(getString(R.string._5_minutes_left) + if (userHasActivatedWeeklyTime) getString(
+                R.string.of_weekly_time_watch_out) else "")
             fiveMinuteNotificationSend = true
         } else if (!oneMinuteNotificationSend && remainingTime <= 60000) {
-            sendNotification("1 minute left" + if (userHasActivatedWeeklyTime) " of weekly time! Watch out!" else "")
+            sendNotification(getString(R.string._1_minute_left) + if (userHasActivatedWeeklyTime) getString(
+                R.string.of_weekly_time_watch_out) else "")
             oneMinuteNotificationSend = true
         }
     }

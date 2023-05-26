@@ -83,7 +83,7 @@ class Register : AppCompatActivity() {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                        Snackbar.make(findViewById<View>(android.R.id.content), "Registration Failed", Snackbar.LENGTH_LONG)
+                        Snackbar.make(findViewById<View>(android.R.id.content), getString(R.string.registration_failed), Snackbar.LENGTH_LONG)
                             .show()
                     }
 
@@ -126,7 +126,7 @@ class Register : AppCompatActivity() {
 
             // Create a child with the values of playerData
             reference.child(userID).setValue(data)
-            Toast.makeText(this, "User registered successfully", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.user_registered_successfully), Toast.LENGTH_SHORT).show()
             finish()
         }
 

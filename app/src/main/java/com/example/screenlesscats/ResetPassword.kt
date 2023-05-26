@@ -29,7 +29,7 @@ class ResetPassword : AppCompatActivity() {
             // Mail validation
             // If it's not a mail
             if (!Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()) {
-                email.error = "Invalid Mail"
+                email.error = getString(R.string.invalid_email)
             } else {
                 Log.d("DEBUG", email.text.toString())
                 auth.sendPasswordResetEmail(email.text.toString())
@@ -39,7 +39,7 @@ class ResetPassword : AppCompatActivity() {
                                 findViewById<View>(
                                     android.R.id.content
                                 ),
-                                "Email sent",
+                                getString(R.string.email_sent),
                                 com.google.android.material.snackbar.Snackbar.LENGTH_LONG
                             )
                                 .show()
@@ -52,7 +52,7 @@ class ResetPassword : AppCompatActivity() {
                                 findViewById<View>(
                                     android.R.id.content
                                 ),
-                                "Couldn't send email",
+                                getString(R.string.couldn_t_send_email),
                                 com.google.android.material.snackbar.Snackbar.LENGTH_LONG
                             )
                                 .show()

@@ -129,7 +129,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                 .setTimeFormat(TimeFormat.CLOCK_24H)
                 .setHour(1)
                 .setMinute(0)
-                .setTitleText("Select daily screen time")
+                .setTitleText(getString(R.string.select_daily_screen_time))
                 .build()
 
         timePicker.addOnPositiveButtonClickListener {
