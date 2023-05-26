@@ -334,13 +334,22 @@ class AppBlockerService : AccessibilityService() {
         if (withDate) editor.putString("startDate", startDate)
         editor.apply()
     }
-    
+
+    /**
+     * Saves the day the weekly time was started
+     *
+     */
     private fun saveWeeklyStartDate() {
         val editor = sharedPreferences.edit()
         editor.putString("startDateWeekly", startDateWeekly)
         editor.apply()
     }
 
+    /**
+     * Returns the current date as a string formatted in "year-month-day"
+     *
+     * @return The date as a string
+     */
     private fun getCurrentDate(): String {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -349,6 +358,13 @@ class AppBlockerService : AccessibilityService() {
         return "$year-$month-$day"
     }
 
+    /**
+     * Checks if two dates are different, and thus if it's a different date
+     *
+     * @param startDate First date to compare
+     * @param currentDate Second date to compare
+     * @return True if the dates are different
+     */
     private fun isDifferentDay(startDate: String, currentDate: String): Boolean {
         // Compare the start date with the current date
         return startDate != currentDate
