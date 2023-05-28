@@ -23,19 +23,27 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import java.util.Calendar
 
-
+/**
+ * Activity that allows the user to register into the Firebase server
+ *
+ */
 class Register : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
-    companion object{
-    private lateinit var username: TextInputEditText
+
+    companion object {
+        private lateinit var username: TextInputEditText
     }
+
     private lateinit var email: TextInputEditText
     private lateinit var password: TextInputEditText
     private lateinit var toLoginBtn: Button
     private lateinit var signupBtn: Button
 
-
-
+    /**
+     * Initializes the UI elements
+     *
+     * @param savedInstanceState
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -49,26 +57,28 @@ class Register : AppCompatActivity() {
         toLoginBtn = findViewById(R.id.toLoginBtn)
         signupBtn = findViewById(R.id.signupBtn)
 
-        toLoginBtn.setOnClickListener{
+        toLoginBtn.setOnClickListener {
             val intent = Intent(this, Login::class.java)
             startActivity(intent)
             finish()
         }
 
-        signupBtn.setOnClickListener{
+        signupBtn.setOnClickListener {
             signUp()
         }
 
 
     }
-    /*
-    Sign up the user to database
+
+    /**
+     * Signs the user into the firebase server using an username, an email and a password
+     *
      */
-    private fun signUp(){
+    private fun signUp() {
         //Check mail pattern
         if (!Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()) {
             email.error = getString(R.string.invalid_mail)
-        //Check password pattern
+            //Check password pattern
         } else if (password.text.toString().length < 6) {
             password.error = getString(R.string.invalid_pwd)
         } else {
@@ -83,18 +93,25 @@ class Register : AppCompatActivity() {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                        Snackbar.make(findViewById<View>(android.R.id.content), getString(R.string.registration_failed), Snackbar.LENGTH_LONG)
+                        Snackbar.make(
+                            findViewById<View>(android.R.id.content),
+                            getString(R.string.registration_failed),
+                            Snackbar.LENGTH_LONG
+                        )
                             .show()
                     }
 
                 }
         }
     }
-    /*
-    Insert user to database
+
+    /**
+     * Inserts the user data into de database
+     *
+     * @param user User to insert
      */
-    private fun updateUI(user: FirebaseUser?){
-        if(user != null){
+    private fun updateUI(user: FirebaseUser?) {
+        if (user != null) {
             val date = Calendar.getInstance().time
             val userID = user.uid
 
@@ -121,12 +138,17 @@ class Register : AppCompatActivity() {
             userData["limits"] = limits
 
             // We create a cursor and we give it a name
-            val database: FirebaseDatabase = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app")
+            val database: FirebaseDatabase =
+                FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app")
             val reference: DatabaseReference = database.getReference("")
 
             // Create a child with the values of playerData
             reference.child(userID).setValue(data)
-            Toast.makeText(this, getString(R.string.user_registered_successfully), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                getString(R.string.user_registered_successfully),
+                Toast.LENGTH_SHORT
+            ).show()
             finish()
         }
 

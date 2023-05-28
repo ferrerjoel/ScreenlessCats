@@ -198,7 +198,8 @@ class AppBlockerService : AccessibilityService() {
         val isNewDay = isDifferentDay(startDate, currentDate)
         val isNewWeek = isDifferentWeek(startDateWeekly, currentDate)
 
-        Log.d("TIMER BLOCK",
+        Log.d(
+            "TIMER BLOCK",
             sharedPreferences.getString("startDate", "") ?: (" $currentDate")
         )
         if (isNewDay) {
@@ -415,7 +416,10 @@ class AppBlockerService : AccessibilityService() {
         return dateFormat.parse(dateString) ?: Date()
     }
 
-
+    /**
+     * Updates the time values (remaining time and set time of daily and weekly) into the shared preferences
+     *
+     */
     fun updateTimeValues() {
         limitTime = sharedPreferences.getLong("limitTime", 0)
         remainingTimeToday = sharedPreferences.getLong("remainingTimeToday", limitTime)
@@ -425,7 +429,7 @@ class AppBlockerService : AccessibilityService() {
     }
 
     /**
-     * Every time a broadcast called "TIME_UPDATE" the function is going to be executed
+     * Every time a broadcast called "TIME_UPDATE" or "USER_HAS_UPDATED_WEEKLY" the function is going to be called respectively
      */
     private val timeUpdateReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -440,6 +444,10 @@ class AppBlockerService : AccessibilityService() {
         }
     }
 
+    /**
+     * Creates a notification channel to send notifications to the user
+     *
+     */
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "Timer Channel"
@@ -456,11 +464,17 @@ class AppBlockerService : AccessibilityService() {
         }
     }
 
-    private fun sendNotification(message: String, customContent: String = "") {
+    /**
+     * Sens a notification to the user via system notifications
+     *
+     * @param title Title of the notification
+     * @param customContent Content of the notification
+     */
+    private fun sendNotification(title: String, customContent: String = "") {
         val contentText =
             customContent.ifEmpty { getString(R.string.all_your_selected_apps_are_going_to_be_blocked) }
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(message)
+            .setContentTitle(title)
             .setContentText(contentText)
             .setSmallIcon(R.drawable.cat)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -470,12 +484,20 @@ class AppBlockerService : AccessibilityService() {
         notificationManager.notify(0, notificationBuilder.build())
     }
 
+    /**
+     * Resets all notification flags, this means that if the conditions are met the program is able to send again notifications for 10, 5 and 1 minute left
+     *
+     */
     private fun resetNotificationFlags() {
         oneMinuteNotificationSend = false
         fiveMinuteNotificationSend = false
         tenMinuteNotificationSend = false
     }
 
+    /**
+     * Sends a time notification if the conditions are met, for daily and weekly time
+     *
+     */
     private fun sendTimeNotification() {
         val remainingTime =
             if (userHasActivatedWeeklyTime) remainingTimeWeekly else remainingTimeToday
@@ -503,6 +525,10 @@ class AppBlockerService : AccessibilityService() {
         }
     }
 
+    /**
+     * Deactivates the saved shared preference that indicates if the user has activated weekly time, thus deactivating weekly time
+     *
+     */
     private fun restartUserHasActivatedWeeklyTime() {
         userHasActivatedWeeklyTime = false
         val editor = sharedPreferences.edit()

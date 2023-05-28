@@ -11,12 +11,21 @@ import androidx.compose.material3.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 
+/**
+ * Activity to allow the user to change it's password from the Firebase server
+ *
+ */
 class ResetPassword : AppCompatActivity() {
     lateinit var auth: FirebaseAuth //FIREBASE AUTH
 
-    private lateinit var email : TextInputEditText
-    private lateinit var resetPwdBtn : Button
+    private lateinit var email: TextInputEditText
+    private lateinit var resetPwdBtn: Button
 
+    /**
+     * Initializes UI elements and sets the logic to send an email to the user to reset the password
+     *
+     * @param savedInstanceState
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password)

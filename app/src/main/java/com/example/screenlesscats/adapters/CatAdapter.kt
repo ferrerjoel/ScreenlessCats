@@ -27,7 +27,7 @@ class CatAdapter(private val cats: List<Cat>) : RecyclerView.Adapter<CatAdapter.
     }
 
     /**
-     *
+     * Sets the view of the cat retrieving the cat data values
      */
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
         val cat = cats[position]
@@ -53,8 +53,14 @@ class CatAdapter(private val cats: List<Cat>) : RecyclerView.Adapter<CatAdapter.
         return cats.size
     }
 
+    /**
+     * Gets the id of the image and name text view of the cat container
+     *
+     * @constructor
+     *
+     * @param itemView View of the container of the cat
+     */
     class CatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         val catImage: ImageView = itemView.findViewById(R.id.cat_image)
         val catName: TextView = itemView.findViewById(R.id.cat_name)
     }

@@ -40,10 +40,15 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import kotlin.math.min
 
+/**
+ * Fragment dedicated to set the desired limit time and the apps that are going to be affected by this limit
+ *
+ */
 
-class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
+private const val TIME_TO_PENALTY = 172800
+
+class TimeManagementFragment : Fragment(R.layout.fragment_time_management) {
 
     private lateinit var setTimeButton: Button
     private lateinit var activateLimitButton: Button
@@ -55,28 +60,31 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     private var totalMilliseconds: Long = 0
     private var totalMillisecondsWeekly: Long = 0
 
-    private lateinit var sharedPreferences : SharedPreferences
-    private lateinit var sharedPreferencesApps : SharedPreferences
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var sharedPreferencesApps: SharedPreferences
 
     private lateinit var packetManager: PackageManager
-    private lateinit var phoneApps : List<ApplicationInfo>
+    private lateinit var phoneApps: List<ApplicationInfo>
 
     private val apps = ArrayList<AppData>()
-    private var appsHaveBeenFetched : Boolean = false
-    private lateinit var recyclerView : RecyclerView
+    private var appsHaveBeenFetched: Boolean = false
+    private lateinit var recyclerView: RecyclerView
 
     private var filterState: FilterState = FilterState.ALL
-    private lateinit var toggleButtonGroup : MaterialButtonToggleGroup
+    private lateinit var toggleButtonGroup: MaterialButtonToggleGroup
 
     private lateinit var searchBar: TextInputEditText
     private var searchQuery: String = ""
 
-    private lateinit var spinner : CircularProgressIndicator
+    private lateinit var spinner: CircularProgressIndicator
 
-    private var loadAppsJob: Job? = null // Declare a nullable Job variable to keep track of the coroutine job
+    private var loadAppsJob: Job? =
+        null // Declare a nullable Job variable to keep track of the coroutine job
     private var loadAppsUsageJob: Job? = null
 
-    // These apps are considered system apps since come with the android system and can't be uninstalled, then we have to filter them
+    /**
+     * These apps are considered system apps since come with the android system and can't be uninstalled, then we have to filter them
+     */
     private val preInstalledApps = hashSetOf(
         "com.google.android.googlequicksearchbox",
         "com.google.android.apps.maps",
@@ -96,6 +104,12 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         "com.google.android.contacts"
     )
 
+    /**
+     * Initializes UI elements and gets saved data on shared preferences
+     *
+     * @param view View of the fragment
+     * @param savedInstanceState
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -108,7 +122,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         limitMinutes = sharedPreferences.getInt("limitMinutes", 0)
         totalMilliseconds = sharedPreferences.getLong("limitTime", 0)
 
-        toggleButtonGroup = view.findViewById<MaterialButtonToggleGroup>(R.id.toggleButton)
+        toggleButtonGroup = view.findViewById(R.id.toggleButton)
 
         toggleButtonGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
@@ -152,11 +166,12 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         if (sharedPreferences.getBoolean("isLimitEnabled", false))
             activateLimitButton.setText(R.string.activate_limit_button_off)
 
-        activateLimitButton.setOnClickListener{
+        activateLimitButton.setOnClickListener {
             val editor = sharedPreferences.edit()
-            if (sharedPreferences.getBoolean("isLimitEnabled", false)){
+            if (sharedPreferences.getBoolean("isLimitEnabled", false)) {
                 showWarningEndLimit(editor, view)
             } else {
+                setLimitTime() // If the user ends the time and it starts it again we restart the timers even if the user haven't changed the time
                 editor?.putBoolean("isLimitEnabled", true)
                 activateLimitButton.setText(R.string.activate_limit_button_off)
                 editor?.apply()
@@ -165,7 +180,6 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                 (requireActivity() as Home).startBlockService()
                 uploadLimit(totalMilliseconds)
             }
-
         }
 
         searchBar = view.findViewById(R.id.search_bar)
@@ -192,20 +206,27 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         // TODO: this works but can be optimized, if the user leaves the fragment while fetching usage data it breaks, so we start over
         if (apps.isEmpty()) {
             loadAppsInBackground()
-        }  else if (!appsHaveBeenFetched && !(loadAppsJob?.isActive!! || loadAppsUsageJob?.isActive!!)){
+        } else if (!appsHaveBeenFetched && !(loadAppsJob?.isActive!! || loadAppsUsageJob?.isActive!!)) {
             apps.clear()
             loadAppsInBackground()
         }
 
     }
 
+    /**
+     * Fetches and saves all apps on the user phone, excluding the majority of system apps and this app itself
+     *
+     */
     private fun loadAppsInBackground() {
         loadAppsJob = CoroutineScope(Dispatchers.IO).launch {
             packetManager = requireContext().packageManager
             phoneApps = packetManager.getInstalledApplications(PackageManager.GET_META_DATA)
 
             for (app in phoneApps) {
-                if ((app.flags and ApplicationInfo.FLAG_SYSTEM == 0) || preInstalledApps.contains(app.packageName)){
+                if ((app.flags and ApplicationInfo.FLAG_SYSTEM == 0) || preInstalledApps.contains(
+                        app.packageName
+                    )
+                ) {
                     val appName = packetManager.getApplicationLabel(app).toString()
                     val packageName = app.packageName
                     // We are going to exclude this app
@@ -235,7 +256,7 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     }
 
     /**
-     * Saves the chosen time using SharedPreferences
+     * Saves the chosen limit time using SharedPreferences
      */
     private fun setLimitTime() {
         limitHours = timePicker.hour
@@ -259,26 +280,36 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
     }
 
-    private fun uploadLimit(totalMilliseconds : Long){
+    /**
+     * Uploads the created limit into the firebase for history purposes
+     *
+     * @param totalMilliseconds Total set time of the created limit in milliseconds
+     */
+    private fun uploadLimit(totalMilliseconds: Long) {
         val auth = Firebase.auth
         val uid = auth.uid.toString()
 
-        val ref = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid).child("user_data")
+        val ref =
+            FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app")
+                .getReference(uid).child("user_data")
 
         val limit: HashMap<String, Any> = HashMap()
 
         val calendar = Calendar.getInstance()
 
-        limit["Date_limit_defined"] = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
+        limit["Date_limit_defined"] =
+            "" + calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(
+                Calendar.DAY_OF_MONTH
+            ) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
         limit["Defined_screen_time"] = totalMilliseconds
         limit["Date_limit_ended"] = ""
         limit["Cats_earned"] = 0
 
-        var maxId : Long
+        var maxId: Long
         ref.child("limits").get().addOnSuccessListener {
             maxId = it.childrenCount
             Log.d("BON", maxId.toString())
-            ref.child("limits").child((maxId+1).toString()).setValue(limit)
+            ref.child("limits").child((maxId + 1).toString()).setValue(limit)
             ref.child("Defined_screen_time").setValue(totalMilliseconds)
         }.addOnCanceledListener {
             Log.d("BON DIA", "On Cancelled")
@@ -299,6 +330,8 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
     /**
      * Creates an app list, filtering using FilterState flags and calling the adapter
+     *
+     * @param view View of the fragment
      */
     private fun createAppList(view: View) {
         recyclerView = view.findViewById(R.id.app_list)
@@ -320,7 +353,11 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
     }
 
     /**
-     * Filters the app list, receives the app list to filter and a query from the search bar
+     * Filters the app list by usage time and if there is by search query, receives the app list to filter and a query from the search bar
+     *
+     * @param appList List of apps to filter
+     * @param query Filters the apps by if they contain this query string
+     * @return The filtered list
      */
     private fun filterApps(appList: List<AppData>, query: String): List<AppData> {
         return if (query.isBlank()) {
@@ -351,8 +388,11 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
     /**
      * Warning shown when trying to end the limit
+     *
+     * @param editor Shared preferences options editor
+     * @param view View of the fragment
      */
-    private fun showWarningEndLimit(editor : SharedPreferences.Editor, view: View) {
+    private fun showWarningEndLimit(editor: SharedPreferences.Editor, view: View) {
         context?.let {
             MaterialAlertDialogBuilder(it)
                 .setTitle(resources.getString(R.string.warning_title_end_limit))
@@ -373,26 +413,33 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
         }
     }
 
-    private fun endLimitFirebase(){
-        val TIMETOPENALITY = 172800
+    /**
+     * Ends the limit on Firebase, saving the correspondent data into the server
+     *
+     */
+    private fun endLimitFirebase() {
         val auth = Firebase.auth
         val uid = auth.uid.toString()
 
-        val ref = FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app").getReference(uid).child("user_data")
+        val ref =
+            FirebaseDatabase.getInstance("https://screenlesscats-default-rtdb.europe-west1.firebasedatabase.app")
+                .getReference(uid).child("user_data")
 
         val calendar = Calendar.getInstance()
         val toUpdate: HashMap<String, Any> = HashMap()
-        val dateEnded = ""+calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
+        val dateEnded =
+            "" + calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(
+                Calendar.DAY_OF_MONTH
+            ) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE)
         toUpdate["Date_limit_ended"] = dateEnded
 
 
-
-        var maxId : Long = -1
+        var maxId: Long = -1
         ref.get().addOnSuccessListener {
             maxId = it.child("limits").childrenCount
             ref.child("limits").child(maxId.toString()).updateChildren(toUpdate)
 
-            val newDefinedTime : HashMap<String, Any> = HashMap()
+            val newDefinedTime: HashMap<String, Any> = HashMap()
             newDefinedTime["Defined_screen_time"] = 0
             ref.updateChildren(newDefinedTime)
             ref.child("days_streaks").setValue(0)
@@ -400,7 +447,8 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
             Log.d("BON DIA", "On Cancelled")
         }
         ref.get().addOnSuccessListener {
-            var limitStarted = it.child("limits").child(maxId.toString()).child("Date_limit_defined").value.toString()
+            val limitStarted = it.child("limits").child(maxId.toString())
+                .child("Date_limit_defined").value.toString()
 
             val dateFormat =
                 SimpleDateFormat(
@@ -412,21 +460,27 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
 
             val dif = dateEnd.time - dateStart.time
             val currentDedicationValue = it.child("dedication_value").value.toString().toFloat()
-            if ((dif/1000 >= TIMETOPENALITY) && (currentDedicationValue > 0)){
-                ref.child("dedication_value").setValue(currentDedicationValue-0.0135)
+            if ((dif / 1000 >= TIME_TO_PENALTY) && (currentDedicationValue > 0)) {
+                ref.child("dedication_value").setValue(currentDedicationValue - 0.0135)
             }
         }
 
     }
 
-    private fun updateAppUsageTimes(context : Context, appDataList: ArrayList<AppData>) {
+    /**
+     * Fetches all usage app time of each app in the list and saves it as hours and minutes format
+     *
+     * @param context Context of the activity
+     * @param appDataList List of apps to fetch data
+     */
+    private fun updateAppUsageTimes(context: Context, appDataList: ArrayList<AppData>) {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
-
-        val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+        val usageStatsManager =
+            context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
 
         // Run the function in a background coroutine
         loadAppsUsageJob = CoroutineScope(Dispatchers.Default).launch {
@@ -446,10 +500,12 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
                     queryEvents.getNextEvent(event)
 
                     if ((event.eventType == UsageEvents.Event.ACTIVITY_RESUMED || event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) &&
-                        event.packageName == packageName) {
+                        event.packageName == packageName
+                    ) {
                         startTime = event.timeStamp // Set the start time for the app
                     } else if ((event.eventType == UsageEvents.Event.ACTIVITY_PAUSED || event.eventType == UsageEvents.Event.MOVE_TO_BACKGROUND) &&
-                        startTime != null && event.packageName == packageName) {
+                        startTime != null && event.packageName == packageName
+                    ) {
                         val usageTime = event.timeStamp - startTime
                         totalUsageTime += usageTime
                         startTime = null // Reset the start time for the next iteration
@@ -476,6 +532,4 @@ class TimeManagementFragment:Fragment(R.layout.fragment_time_management) {
             }
         }
     }
-
-
 }

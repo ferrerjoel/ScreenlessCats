@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,27 +14,24 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.screenlesscats.data.Cat
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 
-class HomeFragment:Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home) {
 
-    private lateinit var catImage : ImageView
-    private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var catImage: ImageView
+    private lateinit var sharedPreferences: SharedPreferences
 
-    private lateinit var dailyProgressBar : LinearProgressIndicator
-    private lateinit var weeklyProgressBar : LinearProgressIndicator
+    private lateinit var dailyProgressBar: LinearProgressIndicator
+    private lateinit var weeklyProgressBar: LinearProgressIndicator
 
-    private lateinit var dailyTimeLeft : TextView
-    private lateinit var weeklyTimeLeft : TextView
-    private lateinit var catText : TextView
+    private lateinit var dailyTimeLeft: TextView
+    private lateinit var weeklyTimeLeft: TextView
+    private lateinit var catText: TextView
 
-    private lateinit var weeklyActivationButton : TextView
+    private lateinit var weeklyActivationButton: TextView
 
     private var limitTime: Long = 0
     private var limitTimeWeekly: Long = 0
@@ -72,9 +68,9 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         loadProgressBars()
     }
 
-    /*
-
-        Method called when the view is created to load a random cat which the user has
+    /**
+     * Method called when the view is created to load a random cat which the user has
+     *
      */
     private fun loadCat() {
         //The user
@@ -116,13 +112,14 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
             }
             catText.text = resources.getStringArray(R.array.cat_phrases).random()
         }.addOnCanceledListener {
-        Log.d("BON DIA", "On Cancelled")
+            Log.d("BON DIA", "On Cancelled")
+        }
     }
 
-
-
-    }
-
+    /**
+     * Sets the text and the progress of the bars according to the saved values on the shared preferences
+     *
+     */
     private fun loadProgressBars() {
         limitTime = sharedPreferences.getLong("limitTime", 0)
         limitTimeWeekly = sharedPreferences.getLong("limitTimeWeekly", 0)
@@ -131,7 +128,8 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         remainingTimeWeekly = sharedPreferences.getLong("remainingTimeWeekly", limitTimeWeekly)
 
         val dailyProgress = ((remainingTimeToday.toDouble() / limitTime.toDouble()) * 100).toInt()
-        val weeklyProgress = ((remainingTimeWeekly.toDouble() / limitTimeWeekly.toDouble()) * 100).toInt()
+        val weeklyProgress =
+            ((remainingTimeWeekly.toDouble() / limitTimeWeekly.toDouble()) * 100).toInt()
 
         dailyProgressBar.postDelayed({
             dailyProgressBar.progress = dailyProgress
@@ -145,12 +143,26 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         val dailyHoursAndMinutes = convertLongToHoursAndMinutes(remainingTimeToday)
         val weeklyHoursAndMinutes = convertLongToHoursAndMinutes(remainingTimeWeekly)
 
-        dailyTimeLeft.text = getString(R.string.daily_time_left, dailyHoursAndMinutes.first, dailyHoursAndMinutes.second)
-        weeklyTimeLeft.text = getString(R.string.weekly_time_left, weeklyHoursAndMinutes.first, weeklyHoursAndMinutes.second)
+        dailyTimeLeft.text = getString(
+            R.string.daily_time_left,
+            dailyHoursAndMinutes.first,
+            dailyHoursAndMinutes.second
+        )
+        weeklyTimeLeft.text = getString(
+            R.string.weekly_time_left,
+            weeklyHoursAndMinutes.first,
+            weeklyHoursAndMinutes.second
+        )
 
         showWeeklyButtonActivation()
     }
 
+    /**
+     * Converts the time to hours and minutes
+     *
+     * @param millis Time in milliseconds to convert
+     * @return A pair containing in the first positions the hours and the second the minutes
+     */
     private fun convertLongToHoursAndMinutes(millis: Long): Pair<Int, Int> {
         val totalSeconds = millis / 1000
         val hours = (totalSeconds / 3600).toInt()
@@ -159,12 +171,16 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
         return Pair(hours, minutes)
     }
 
+    /**
+     * Shows a button to the user to activate the weekly time if the user has a limit activated and it has run out of daily time
+     *
+     */
     private fun showWeeklyButtonActivation() {
         if (remainingTimeToday == 0L && sharedPreferences.getBoolean("isLimitEnabled", false)) {
 
             weeklyActivationButton.visibility = View.VISIBLE
             if (sharedPreferences.getBoolean("userHasActivatedWeeklyTime", false)) {
-                    weeklyActivationButton.text = getString(R.string.deactivate_weekly_time)
+                weeklyActivationButton.text = getString(R.string.deactivate_weekly_time)
             }
 
             weeklyActivationButton.setOnClickListener {

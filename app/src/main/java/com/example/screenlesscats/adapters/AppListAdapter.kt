@@ -15,7 +15,7 @@ import com.example.screenlesscats.data.AppData
 /**
  * Adapter to show all apps in a recycler view
  *
- * @property appList
+ * @property appList The list of apps to populate the recycler view
  */
 class AppListAdapter(private val appList: List<AppData>) :
     RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {

@@ -1,13 +1,10 @@
 package com.example.screenlesscats
 
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import android.util.Patterns
-import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -17,7 +14,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-
+/**
+ * Activity that allows the user to log in with it's account using an email and a password
+ *
+ */
 class Login : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
@@ -27,14 +27,15 @@ class Login : AppCompatActivity() {
     private lateinit var loginBtn: Button
     private lateinit var changePasswordBtn: Button
 
-    /*
-        Sign in method
+    /**
+     * Method to sign in the user using an email and a password into the Firebase server
+     *
      */
     private fun signIn() {
         //Check mail pattern
         if (!Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()) {
             email.error = getString(R.string.invalid_mail)
-        //Check password pattern
+            //Check password pattern
         } else if (password.text.toString().length < 6) {
             password.error = getString(R.string.invalid_pwd)
         } else {
@@ -50,7 +51,11 @@ class Login : AppCompatActivity() {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.exception)
-                        Snackbar.make(findViewById<View>(android.R.id.content), getString(R.string.authentication_failed), Snackbar.LENGTH_LONG)
+                        Snackbar.make(
+                            findViewById(android.R.id.content),
+                            getString(R.string.authentication_failed),
+                            Snackbar.LENGTH_LONG
+                        )
                             .show()
                     }
                 }
@@ -58,15 +63,20 @@ class Login : AppCompatActivity() {
 
     }
 
+    /**
+     * Initializes the UI elements
+     *
+     * @param savedInstanceState
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        if(!Options.isAccessServiceEnabled(this)){
+        if (!Options.isAccessServiceEnabled(this)) {
             showPermissionsAccessibilityWarning()
         }
 
-        if(!Options.isUsagePermissionsEnabled(this)){
+        if (!Options.isUsagePermissionsEnabled(this)) {
             showPermissionsUsageWarning()
         }
 
@@ -96,6 +106,10 @@ class Login : AppCompatActivity() {
         }
     }
 
+    /**
+     * Checks if the user is already logged in, if so it redirects him into the home activity
+     *
+     */
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and go to home directly.
@@ -107,6 +121,10 @@ class Login : AppCompatActivity() {
         }
     }
 
+    /**
+     * Shows a warning asking for accessibility permissions
+     *
+     */
     private fun showPermissionsAccessibilityWarning() {
         this.let {
             MaterialAlertDialogBuilder(it)
@@ -122,6 +140,10 @@ class Login : AppCompatActivity() {
         }
     }
 
+    /**
+     * Shows a warning asking for usage permissions
+     *
+     */
     private fun showPermissionsUsageWarning() {
         this.let {
             MaterialAlertDialogBuilder(it)
