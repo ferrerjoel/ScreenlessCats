@@ -27,6 +27,10 @@ import java.util.Locale
  */
 private const val CHANNEL_ID = "TimerNotificationChannel"
 
+/**
+ * Accessibility service to track the apps the user is using in order to subtract time from the daily and weekly time if the user is using a selected app, and then block these apps. The service makes use of global actions to not allow the user to use a blocked app.
+ *
+ */
 class AppBlockerService : AccessibilityService() {
 
     private var oneMinuteNotificationSend: Boolean = false

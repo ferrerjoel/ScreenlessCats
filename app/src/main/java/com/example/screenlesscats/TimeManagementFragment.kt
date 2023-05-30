@@ -41,13 +41,16 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+
+/**
+ * Minimum time that the limit needs to have to receive a penalization
+ */
+private const val TIME_TO_PENALTY = 172800
+
 /**
  * Fragment dedicated to set the desired limit time and the apps that are going to be affected by this limit
  *
  */
-
-private const val TIME_TO_PENALTY = 172800
-
 class TimeManagementFragment : Fragment(R.layout.fragment_time_management) {
 
     private lateinit var setTimeButton: Button

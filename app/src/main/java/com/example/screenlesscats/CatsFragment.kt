@@ -106,6 +106,6 @@ class CatsFragment : Fragment(R.layout.fragment_cats) {
         catList.layoutManager = GridLayoutManager(view.context, 3).apply { }
 
         //Add cats into RecyclerView
-        catList.adapter = CatAdapter(cats)
+        catList.adapter = CatAdapter(cats, view.context)
     }
 }

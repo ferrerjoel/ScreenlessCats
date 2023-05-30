@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -33,7 +32,7 @@ import kotlin.random.Random
 /**
  * Time till the user gets the next cat
  */
-const val CHECK_NCAT_TIME = 172800
+private const val CHECK_NCAT_TIME = 172800
 
 /**
  * Activity that manages the top bar, the menu bottom bar and all the three fragments

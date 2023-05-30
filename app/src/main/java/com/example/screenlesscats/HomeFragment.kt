@@ -17,8 +17,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 
-// TODO: Rename parameter arguments, choose names that match
-
+/**
+ * Fragment dedicates to show the remaining daily and weekly time, tips, a random cat of the user and the button to activate weekly time if the requirements are met
+ *
+ */
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var catImage: ImageView
