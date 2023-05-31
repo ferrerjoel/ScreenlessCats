@@ -150,7 +150,7 @@ class TimeManagementFragment : Fragment(R.layout.fragment_time_management) {
                 .build()
 
         timePicker.addOnPositiveButtonClickListener {
-            setLimitTime()
+            setLimitTime(true)
             Log.d("DEBUG", (recyclerView.adapter as AppListAdapter).getCheckedApps().toString())
         }
 
@@ -174,7 +174,7 @@ class TimeManagementFragment : Fragment(R.layout.fragment_time_management) {
             if (sharedPreferences.getBoolean("isLimitEnabled", false)) {
                 showWarningEndLimit(editor, view)
             } else {
-                setLimitTime() // If the user ends the time and it starts it again we restart the timers even if the user haven't changed the time
+                setLimitTime(false) // If the user ends the time and it starts it again we restart the timers even if the user haven't changed the time
                 editor?.putBoolean("isLimitEnabled", true)
                 activateLimitButton.setText(R.string.activate_limit_button_off)
                 editor?.apply()
@@ -261,9 +261,11 @@ class TimeManagementFragment : Fragment(R.layout.fragment_time_management) {
     /**
      * Saves the chosen limit time using SharedPreferences
      */
-    private fun setLimitTime() {
-        limitHours = timePicker.hour
-        limitMinutes = timePicker.minute
+    private fun setLimitTime(isSetFromPicker : Boolean) {
+        if (isSetFromPicker) {
+            limitHours = timePicker.hour
+            limitMinutes = timePicker.minute
+        }
         totalMilliseconds = ((limitHours * 60 + limitMinutes) * 60 * 1000).toLong()
         totalMillisecondsWeekly = (600000 + (totalMilliseconds * 0.2) * 7).toLong()
 

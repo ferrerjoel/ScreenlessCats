@@ -47,14 +47,15 @@ class AppListAdapter(private val appList: List<AppData>) :
                 app.minutesToday
             )
             appIconImageView.setImageDrawable(app.appIcon)
+            checkBox.setOnCheckedChangeListener(null) // Remove previous listener to avoid conflicts
             checkBox.isChecked = app.checked // set checkbox state based on checked property
             checkBox.setOnCheckedChangeListener { _, isChecked ->
                 app.checked = isChecked // update checked property of AppData object
                 updateAppCheckedState(app.packageName, isChecked) // update shared preferences
             }
-            if (sharedPreferencesOptions.getBoolean("isLimitEnabled", false)) checkBox.isEnabled =
-                false
+            checkBox.isEnabled = !sharedPreferencesOptions.getBoolean("isLimitEnabled", false)
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppListViewHolder {
