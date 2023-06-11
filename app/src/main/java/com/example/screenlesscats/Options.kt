@@ -116,12 +116,11 @@ class Options : AppCompatActivity() {
          * @return True if the user has given out permissions
          */
         fun isAccessServiceEnabled(context: Context): Boolean {
-            val prefString =
-                Settings.Secure.getString(
-                    context.contentResolver,
-                    Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-                )
-            return prefString.contains("${context.packageName}/${context.packageName}.block.AppBlockerService")
+            val prefString = Settings.Secure.getString(
+                context.contentResolver,
+                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+            )
+            return prefString?.contains("${context.packageName}/${context.packageName}.block.AppBlockerService") == true
         }
 
         /**
