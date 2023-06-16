@@ -175,7 +175,7 @@ class AppBlockerService : AccessibilityService() {
      */
     private fun checkTimeAndBlock() {
 
-        if (remainingTimeToday == 0L) checkNewDayAndWeek()
+        checkNewDayAndWeek()
 
         if (remainingTimeToday > 0L) {
             startTimer(false)
